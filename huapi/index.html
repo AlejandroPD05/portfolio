@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huapi — Carta Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="menu-shell">
+
+<header class="menu-header">
+<p class="menu-eyebrow-img" aria-hidden="true">
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 3C10 3 4 9 4 17C4 25 10 31 17 31C24 31 30 25 30 17" stroke="#E8B23D" stroke-width="2" stroke-linecap="round"/>
+<circle cx="24" cy="10" r="2.4" fill="#C8654A"/>
+</svg>
+</p>
+<h1>Huapi</h1>
+<p class="menu-tagline">Cocina de campo y mar, isla adentro</p>
+</header>
+
+<nav class="tab-bar" id="tabBar">
+<a href="#entrantes" class="tab-btn active" data-target="entrantes">Entrantes</a>
+<a href="#principales" class="tab-btn" data-target="principales">Principales</a>
+<a href="#bebidas" class="tab-btn" data-target="bebidas">Bebidas</a>
+</nav>
+
+<main class="menu-body">
+
+<section class="category" id="entrantes" data-category>
+<h2 class="category-title">Entrantes</h2>
+<div class="dish">
+<div class="dish-head">
+<h2>Empanadas de pino</h2>
+<span class="price">6,50 €</span>
+</div>
+<p>Carne picada a cuchillo, cebolla confitada, aceituna y huevo cocido, horneadas.</p>
+<span class="dish-tag">Para compartir</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Tabla de choripanes</h2>
+<span class="price">8,90 €</span>
+</div>
+<p>Chorizo a la parrilla, pan casero y pebre de la huerta.</p>
+<span class="dish-tag dish-tag-spice">Picante suave</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Croquetas de queso ahumado</h2>
+<span class="price">5,80 €</span>
+</div>
+<p>Cremosas por dentro, crujientes por fuera, con alioli de ajo negro.</p>
+<span class="dish-tag">Vegetariano</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Ceviche Huapi</h2>
+<span class="price">9,50 €</span>
+</div>
+<p>Pescado blanco de temporada, leche de tigre, boniato asado y cilantro.</p>
+<span class="dish-tag">Sin gluten</span>
+</div>
+</section>
+
+<section class="category" id="principales" data-category>
+<h2 class="category-title">Principales</h2>
+<div class="dish">
+<div class="dish-head">
+<h2>Cazuela de mariscos</h2>
+<span class="price">15,90 €</span>
+</div>
+<p>Fondo de pescado, choritos, camarones y verduras de temporada.</p>
+<span class="dish-tag">Sin gluten</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Curanto en olla</h2>
+<span class="price">17,50 €</span>
+</div>
+<p>Carne, marisco, longaniza y papas cocinados lentamente al estilo tradicional.</p>
+<span class="dish-tag">Plato insignia</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Milcao relleno</h2>
+<span class="price">12,90 €</span>
+</div>
+<p>Pan de papa relleno de pulled pork y salsa ahumada de la casa.</p>
+<span class="dish-tag dish-tag-spice">Picante</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Risotto de champiñones silvestres</h2>
+<span class="price">13,50 €</span>
+</div>
+<p>Arroz cremoso, champiñones de bosque y virutas de queso curado.</p>
+<span class="dish-tag">Vegetariano</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Pastel de choclo</h2>
+<span class="price">11,90 €</span>
+</div>
+<p>Relleno de pollo y carne bajo una capa dulce de choclo gratinado.</p>
+<span class="dish-tag">Clásico de la casa</span>
+</div>
+</section>
+
+<section class="category" id="bebidas" data-category>
+<h2 class="category-title">Bebidas</h2>
+<div class="dish">
+<div class="dish-head">
+<h2>Mote con huesillo</h2>
+<span class="price">3,50 €</span>
+</div>
+<p>Bebida fría tradicional de durazno deshidratado y trigo mote.</p>
+<span class="dish-tag">Sin alcohol</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Chicha de manzana</h2>
+<span class="price">4,00 €</span>
+</div>
+<p>Fermentado artesanal de manzana, suave y ligeramente dulce.</p>
+<span class="dish-tag">Con alcohol</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Limonada de menta y jengibre</h2>
+<span class="price">3,20 €</span>
+</div>
+<p>Limón recién exprimido, menta fresca y un toque picante de jengibre.</p>
+<span class="dish-tag">Sin alcohol</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Cerveza artesanal Huapi</h2>
+<span class="price">4,50 €</span>
+</div>
+<p>Lager de elaboración local, ligera y de final seco.</p>
+<span class="dish-tag">Con alcohol</span>
+</div>
+
+<div class="dish">
+<div class="dish-head">
+<h2>Agua con gas</h2>
+<span class="price">2,20 €</span>
+</div>
+<p>Botella individual, bien fría.</p>
+<span class="dish-tag">Sin alcohol</span>
+</div>
+</section>
+
+</main>
+
+<footer class="menu-footer">
+<p>Huapi · Cocina de temporada</p>
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

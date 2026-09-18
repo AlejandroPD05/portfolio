@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alejandro — Helpdesk IT & Junior Web Developer</title>
+<meta name="description" content="Portfolio de Alejandro, técnico de soporte IT N1 y desarrollador web junior.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header" id="topbar">
+<div class="container header-inner">
+<a href="#inicio" class="logo">alejandro<span class="logo-dot">.dev</span></a>
+<div class="header-right">
+<nav class="site-nav" id="siteNav">
+<a href="#inicio" class="nav-link" data-section="inicio" data-i18n="navInicio">Inicio</a>
+<a href="#sobre-mi" class="nav-link" data-section="sobre-mi" data-i18n="navSobre">Sobre mí</a>
+<a href="#proyectos" class="nav-link" data-section="proyectos" data-i18n="navProyectos">Proyectos</a>
+<a href="#contacto" class="nav-link" data-section="contacto" data-i18n="navContacto">Contacto</a>
+</nav>
+<div class="header-actions">
+<button class="icon-toggle lang-toggle" id="langToggle" aria-label="View page in English">
+<span class="lang-code lang-en">EN</span>
+<span class="lang-code lang-es">ES</span>
+</button>
+<button class="icon-toggle mode-toggle" id="modeToggle" aria-label="Cambiar a modo día">
+<span class="mode-icon icon-sun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></span>
+<span class="mode-icon icon-moon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 1020.354 15.354z"></path></svg></span>
+</button>
+</div>
+<button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+<span></span><span></span><span></span>
+</button>
+</div>
+</div>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+<div class="container hero-inner">
+<div class="status-badge hero-anim" style="--d:0">
+<span class="status-dot status-ok"></span>
+<span data-i18n="heroStatus">Disponible para nuevas oportunidades</span>
+</div>
+<h1 class="hero-name hero-anim" style="--d:1">Alejandro<span class="cursor">_</span></h1>
+<p class="hero-role hero-anim" style="--d:2">Helpdesk IT & Junior Web Developer</p>
+<p class="hero-desc hero-anim" style="--d:3" data-i18n="heroDesc">Resuelvo incidencias del lado del usuario y construyo la interfaz que las previene. Un perfil a medio camino entre el soporte técnico y el desarrollo web.</p>
+<div class="hero-actions hero-anim" style="--d:4">
+<a href="#proyectos" class="btn btn-primary" data-i18n="btnVerProyectos">Ver proyectos</a>
+<a href="#contacto" class="btn btn-outline" data-i18n="btnContactar">Contactar</a>
+</div>
+</div>
+</section>
+
+<section id="sobre-mi" class="about">
+<div class="container">
+<h2 class="section-title" data-i18n="titleSobreMi">Sobre mí</h2>
+<div class="about-grid">
+<div class="about-text">
+<p class="reveal" data-i18n="aboutP1">Empecé resolviendo incidencias de soporte N1: usuarios bloqueados, redes que fallan, aplicaciones que no arrancan y tickets que hay que priorizar y cerrar contra reloj. Ese contacto diario con el problema real de quien usa la tecnología es lo que me llevó a querer construir yo mismo las herramientas, no solo repararlas.</p>
+<p class="reveal" data-i18n="aboutP2">Hoy combino esa experiencia con el desarrollo de aplicaciones web: maquetación responsiva, interactividad con JavaScript y las bases de backend necesarias para que una idea funcione de principio a fin. Sigo aprendiendo cada día, con la misma disciplina con la que se cierra un ticket bien documentado.</p>
+</div>
+<aside class="status-panel reveal">
+<div class="status-panel-head">
+<span class="status-dot status-ok"></span>
+perfil_actual.status
+</div>
+<dl class="status-list">
+<div class="status-row">
+<dt data-i18n="statRolLabel">rol</dt>
+<dd data-i18n="statRolValue">Técnico de Soporte IT — N1</dd>
+</div>
+<div class="status-row">
+<dt data-i18n="statEnfoqueLabel">enfoque</dt>
+<dd data-i18n="statEnfoqueValue">Desarrollo Web Frontend</dd>
+</div>
+<div class="status-row">
+<dt>stack</dt>
+<dd>HTML · CSS · JavaScript · SQL · Java</dd>
+</div>
+<div class="status-row">
+<dt data-i18n="statModoLabel">modo</dt>
+<dd data-i18n="statModoValue">Full-stack en formación</dd>
+</div>
+<div class="status-row">
+<dt data-i18n="statUbicacionLabel">ubicación</dt>
+<dd data-i18n="statUbicacionValue">España</dd>
+</div>
+</dl>
+</aside>
+</div>
+</div>
+</section>
+
+<section id="proyectos" class="projects">
+<div class="container">
+<h2 class="section-title" data-i18n="titleProyectos">Proyectos</h2>
+<div class="project-grid">
+
+<article class="project-card card-featured reveal">
+<div class="card-top">
+<span class="ticket-id">#004</span>
+<span class="tag tag-backend">Backend · Java / SQL</span>
+</div>
+<h3 data-i18n="projTicketingTitle">Simulador de Ticketing</h3>
+<p data-i18n="projTicketingDesc">Réplica funcional de un sistema de helpdesk: usuarios con rol de empleado o técnico, categorías de incidencia, tickets con prioridad y estado, e hilos de comentarios por ticket. Esquema relacional pensado para escalar a una aplicación Java real.</p>
+<div class="card-tags">
+<span class="pill">Java</span>
+<span class="pill">SQL</span>
+<span class="pill" data-i18n="pillRelational">Modelo relacional</span>
+</div>
+<a href="ticketing/index.html" class="card-link" target="_blank" rel="noopener noreferrer" data-i18n="linkSchema">Ver esquema del proyecto</a>
+</article>
+
+<article class="project-card reveal">
+<div class="card-top">
+<span class="ticket-id">#001</span>
+<span class="tag tag-frontend">Frontend · JavaScript</span>
+</div>
+<h3 data-i18n="projAsteroidesTitle">Juego de Asteroides</h3>
+<p data-i18n="projAsteroidesDesc">Clon del clásico arcade construido en Canvas y JavaScript puro: física de movimiento, colisiones, disparo y oleadas de dificultad creciente.</p>
+<div class="card-tags">
+<span class="pill">Canvas API</span>
+<span class="pill">JavaScript</span>
+</div>
+<a href="Asteroids/asteroids_js.html" class="card-link" target="_blank" rel="noopener noreferrer" data-i18n="linkDefault">Ver proyecto</a>
+</article>
+
+<article class="project-card reveal">
+<div class="card-top">
+<span class="ticket-id">#002</span>
+<span class="tag tag-frontend">Frontend · UI/UX</span>
+</div>
+<h3 data-i18n="projHuapiTitle">Carta Digital — Huapi</h3>
+<p data-i18n="projHuapiDesc">Menú digital responsivo para un negocio de comida local, con navegación por categorías y una interfaz pensada primero para móvil.</p>
+<div class="card-tags">
+<span class="pill">HTML/CSS</span>
+<span class="pill">JavaScript</span>
+<span class="pill">Mobile-first</span>
+</div>
+<a href="huapi/index.html" class="card-link" target="_blank" rel="noopener noreferrer" data-i18n="linkDefault">Ver proyecto</a>
+</article>
+
+<article class="project-card reveal">
+<div class="card-top">
+<span class="ticket-id">#003</span>
+<span class="tag tag-frontend" data-i18n="tagAnimacion">Frontend · Animación</span>
+</div>
+<h3 data-i18n="projWebAnimadaTitle">Web Animada</h3>
+<p data-i18n="projWebAnimadaDesc">Landing page de temática romántica construida como línea de tiempo, con animaciones CSS encadenadas y revelado de contenido al hacer scroll.</p>
+<div class="card-tags">
+<span class="pill">CSS Keyframes</span>
+<span class="pill">IntersectionObserver</span>
+</div>
+<a href="web-animada/index.html" class="card-link" target="_blank" rel="noopener noreferrer" data-i18n="linkDefault">Ver proyecto</a>
+</article>
+
+<article class="project-card reveal">
+<div class="card-top">
+<span class="ticket-id">#005</span>
+<span class="tag tag-frontend">Frontend · Theming</span>
+</div>
+<h3 data-i18n="projScriptUiTitle">Script de UI</h3>
+<p data-i18n="projScriptUiDesc">Fragmento de interfaz de un reproductor de vídeo al que un script inyecta un tema visual completo en verde oscuro y negro, sin tocar el HTML base.</p>
+<div class="card-tags">
+<span class="pill">CSS Injection</span>
+<span class="pill">DOM</span>
+</div>
+<a href="tema-ui/index.html" class="card-link" target="_blank" rel="noopener noreferrer" data-i18n="linkDefault">Ver proyecto</a>
+</article>
+
+</div>
+</div>
+</section>
+
+<section id="contacto" class="contact">
+<div class="container">
+<h2 class="section-title" data-i18n="titleContacto">Contacto</h2>
+<p class="contact-desc reveal" data-i18n="contactDesc">¿Buscas a alguien que entienda tanto el ticket como el código que lo evita? Hablemos.</p>
+<div class="contact-links">
+<a href="https://www.linkedin.com/in/alejandro-prieto-díez-73728426b" class="contact-link reveal" target="_blank" rel="noopener">
+<span class="contact-label">LinkedIn</span>
+<span class="contact-value">/in/alejandro-prieto-díez-73728426b</span>
+</a>
+<a href="https://github.com/AlejandroPD05" class="contact-link reveal" target="_blank" rel="noopener">
+<span class="contact-label">GitHub</span>
+<span class="contact-value">@AlejandroPD05</span>
+</a>
+<a href="mailto:alejandroprietodiez05@gmail.com" class="contact-link reveal">
+<span class="contact-label" data-i18n="labelCorreo">Correo</span>
+<span class="contact-value">alejandroprietodiez05@gmail.com</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-footer">
+<div class="container footer-inner">
+<span>© 2026 Alejandro Prieto Diez</span>
+<span data-i18n="footerBuilt">Construido con HTML, CSS y JavaScript</span>
+</div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
