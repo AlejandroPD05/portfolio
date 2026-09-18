@@ -791,15 +791,15 @@
                 }
             }
 
-            if (nave.x < 0 - nave.r) {
-                nave.x = lienzo.width + nave.r;
-            } else if (nave.x > lienzo.width + nave.r) {
-                nave.x = 0 - nave.r;
+            if (nave.x < nave.r) {
+                nave.x = nave.r;
+            } else if (nave.x > lienzo.width - nave.r) {
+                nave.x = lienzo.width - nave.r;
             }
-            if (nave.y < 0 - nave.r) {
-                nave.y = lienzo.height + nave.r;
-            } else if (nave.y > lienzo.height + nave.r) {
-                nave.y = 0 - nave.r;
+            if (nave.y < nave.r) {
+                nave.y = nave.r;
+            } else if (nave.y > lienzo.height - nave.r) {
+                nave.y = lienzo.height - nave.r;
             }
 
             for (var i = nave.laseres.length - 1; i >= 0; i--) {
@@ -820,15 +820,9 @@
                     nave.laseres[i].dist += Math.sqrt(Math.pow(nave.laseres[i].xv, 2) + Math.pow(nave.laseres[i].yv, 2));
                 }
 
-                if (nave.laseres[i].x < 0) {
-                    nave.laseres[i].x = lienzo.width;
-                } else if (nave.laseres[i].x > lienzo.width) {
-                    nave.laseres[i].x = 0;
-                }
-                if (nave.laseres[i].y < 0) {
-                    nave.laseres[i].y = lienzo.height;
-                } else if (nave.laseres[i].y > lienzo.height) {
-                    nave.laseres[i].y = 0;
+                if (nave.laseres[i].x < 0 || nave.laseres[i].x > lienzo.width || nave.laseres[i].y < 0 || nave.laseres[i].y > lienzo.height) {
+                    nave.laseres.splice(i, 1);
+                    continue;
                 }
             }
 
@@ -836,15 +830,19 @@
                 asteroides[i].x += asteroides[i].xv;
                 asteroides[i].y += asteroides[i].yv;
 
-                if (asteroides[i].x < 0 - asteroides[i].r) {
-                    asteroides[i].x = lienzo.width + asteroides[i].r;
-                } else if (asteroides[i].x > lienzo.width + asteroides[i].r) {
-                    asteroides[i].x = 0 - asteroides[i].r
+                if (asteroides[i].x < asteroides[i].r) {
+                    asteroides[i].x = asteroides[i].r;
+                    asteroides[i].xv = -asteroides[i].xv;
+                } else if (asteroides[i].x > lienzo.width - asteroides[i].r) {
+                    asteroides[i].x = lienzo.width - asteroides[i].r;
+                    asteroides[i].xv = -asteroides[i].xv;
                 }
-                if (asteroides[i].y < 0 - asteroides[i].r) {
-                    asteroides[i].y = lienzo.height + asteroides[i].r;
-                } else if (asteroides[i].y > lienzo.height + asteroides[i].r) {
-                    asteroides[i].y = 0 - asteroides[i].r
+                if (asteroides[i].y < asteroides[i].r) {
+                    asteroides[i].y = asteroides[i].r;
+                    asteroides[i].yv = -asteroides[i].yv;
+                } else if (asteroides[i].y > lienzo.height - asteroides[i].r) {
+                    asteroides[i].y = lienzo.height - asteroides[i].r;
+                    asteroides[i].yv = -asteroides[i].yv;
                 }
             }
         }
