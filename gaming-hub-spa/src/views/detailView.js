@@ -1,4 +1,5 @@
 import { getGameDetails } from '../api.js';
+import { translateToSpanish } from '../services/translator.js';
 
 export async function renderDetailView(queryParams) {
   const gameId = queryParams.get('id');
@@ -14,6 +15,9 @@ export async function renderDetailView(queryParams) {
 
   try {
     const game = await getGameDetails(gameId);
+
+    const rawDescription = game.description_raw || game.description || '';
+    const descriptionES = await translateToSpanish(rawDescription);
 
     container.innerHTML = `
       <article class="game-detail-hero" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), #07090e), url('${game.background_image_additional || game.background_image}')">
@@ -34,7 +38,7 @@ export async function renderDetailView(queryParams) {
       <section class="detail-body">
         <div class="description">
           <h2>Descripción</h2>
-          <p>${game.description_raw || game.description || 'Sin descripción disponible.'}</p>
+          <p>${descriptionES}</p>
         </div>
         
         <aside class="sidebar">
