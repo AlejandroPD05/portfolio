@@ -27,4 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
       setTheme(currentTheme === 'dark' ? 'light' : 'dark');
     });
   }
+
+  const logoLink = document.querySelector('.logo');
+  if (logoLink) {
+    logoLink.addEventListener('click', (e) => {
+      const currentHash = window.location.hash;
+      if (currentHash === '#/' || currentHash === '' || currentHash.startsWith('#/catalog')) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+    });
+  }
 });

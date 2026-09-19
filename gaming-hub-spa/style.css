@@ -69,6 +69,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  cursor: pointer;
 }
 
 .logo span {
@@ -79,6 +80,13 @@ body {
 .logo-icon {
   color: var(--accent-green);
   filter: drop-shadow(0 0 6px var(--accent-green));
+}
+
+.logo-icon-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .theme-toggle-btn {
@@ -742,39 +750,31 @@ body {
     justify-content: center;
     gap: 0.75rem;
   }
+
   .controls-section {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
 
-.search-bar {
-  flex: 1;
-  min-width: 200px;
-}
+  .search-bar {
+    flex: 1;
+    min-width: 200px;
+  }
 
-#search-input,
-#platform-select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  background-color: var(--bg-card, #121824);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  outline: none;
-}
+  #search-input,
+  #platform-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-card, #121824);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
 
-#platform-select {
-  cursor: pointer;
-}
-
-.logo-icon-img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  display: block;
-}
-
-
+  #platform-select {
+    cursor: pointer;
+  }
 }
