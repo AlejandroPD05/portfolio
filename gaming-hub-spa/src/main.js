@@ -34,10 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentHash = window.location.hash;
       if (currentHash === '#/' || currentHash === '' || currentHash.startsWith('#/catalog')) {
         e.preventDefault();
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
+        
+        if (window.scrollY > 0) {
+          const scrollTarget = { y: window.scrollY };
+          gsap.to(scrollTarget, {
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out',
+            onUpdate: () => {
+              window.scrollTo(0, scrollTarget.y);
+            }
+          });
+        }
       }
     });
   }
