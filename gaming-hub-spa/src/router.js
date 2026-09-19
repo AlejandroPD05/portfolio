@@ -38,6 +38,8 @@ export class Router {
     }
 
     this.app.innerHTML = '';
+    window.scrollTo(0, 0);
+
     const viewElement = await renderView(queryParams);
     this.app.appendChild(viewElement);
 

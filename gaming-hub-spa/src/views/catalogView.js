@@ -1,8 +1,10 @@
 import { getGames } from '../api.js';
 import { init3DTilt, animateLootDrop } from '../animations.js';
 
-export async function renderCatalogView(queryParams = {}) {
+export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const searchQuery = queryParams.get('search') || '';
+  const currentGenre = queryParams.get('genres') || '';
+  const currentOrdering = queryParams.get('ordering') || '-rating';
   let currentPage = 1;
 
   const container = document.createElement('div');
@@ -11,14 +13,39 @@ export async function renderCatalogView(queryParams = {}) {
     <section class="hero-section">
       <h1>Abre la <span>DEX</span> de los Videojuegos</h1>
       <p class="hero-subtitle">Descubre títulos legendarios, calificaciones de Metacritic y análisis en tiempo real.</p>
-      <form id="search-form" class="search-box">
-        <input 
-          type="text" 
-          id="search-input" 
-          placeholder="Buscar un juego (ej. Zelda, Cyberpunk, Elden Ring)..." 
-          value="${searchQuery}"
-        />
-        <button type="submit">Explorar</button>
+      
+      <form id="search-form" class="search-box-wrapper">
+        <div class="search-box">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Buscar un juego (ej. Zelda, Cyberpunk, Elden Ring)..." 
+            value="${searchQuery}"
+          />
+          <button type="submit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Explorar</span>
+          </button>
+        </div>
+
+        <div class="filters-row">
+          <select id="filter-genre" class="filter-select">
+            <option value="">Todos los Géneros</option>
+            <option value="action" ${currentGenre === 'action' ? 'selected' : ''}>Acción</option>
+            <option value="role-playing-games-rpg" ${currentGenre === 'role-playing-games-rpg' ? 'selected' : ''}>RPG</option>
+            <option value="shooter" ${currentGenre === 'shooter' ? 'selected' : ''}>Shooter</option>
+            <option value="adventure" ${currentGenre === 'adventure' ? 'selected' : ''}>Aventura</option>
+            <option value="indie" ${currentGenre === 'indie' ? 'selected' : ''}>Indie</option>
+            <option value="strategy" ${currentGenre === 'strategy' ? 'selected' : ''}>Estrategia</option>
+          </select>
+
+          <select id="filter-ordering" class="filter-select">
+            <option value="-rating" ${currentOrdering === '-rating' ? 'selected' : ''}>Mejor Valorados</option>
+            <option value="-released" ${currentOrdering === '-released' ? 'selected' : ''}>Novedades</option>
+            <option value="-added" ${currentOrdering === '-added' ? 'selected' : ''}>Más Populares</option>
+            <option value="name" ${currentOrdering === 'name' ? 'selected' : ''}>Nombre (A-Z)</option>
+          </select>
+        </div>
       </form>
     </section>
 
@@ -88,11 +115,20 @@ export async function renderCatalogView(queryParams = {}) {
         loadMoreBtn.disabled = true;
         loadMoreBtn.textContent = 'Cargando juegos...';
 
-        const data = await getGames({ page: page, search: searchQuery, pageSize: 12 });
+        const genreVal = container.querySelector('#filter-genre').value;
+        const orderingVal = container.querySelector('#filter-ordering').value;
+
+        const data = await getGames({ 
+          page: page, 
+          search: searchQuery, 
+          genres: genreVal,
+          ordering: orderingVal,
+          pageSize: 12 
+        });
 
         if (!data.results || data.results.length === 0) {
           if (page === 1) {
-            grid.innerHTML = `<p class="empty-state">No se encontró botín para "${searchQuery}".</p>`;
+            grid.innerHTML = `<p class="empty-state">No se encontró botín para esta búsqueda o filtro.</p>`;
           }
           loadMoreBtn.style.display = 'none';
           return;
@@ -126,7 +162,7 @@ export async function renderCatalogView(queryParams = {}) {
 
       } catch (err) {
         if (page === 1) {
-          grid.innerHTML = `<p class="error-state">Ocurrió un error al saquear la base de datos. Revisa tu API Key.</p>`;
+          grid.innerHTML = `<p class="error-state">Ocurrió un error al saquear la base de datos.</p>`;
         }
         loadMoreBtn.disabled = false;
         loadMoreBtn.textContent = 'Reintentar';
@@ -146,7 +182,15 @@ export async function renderCatalogView(queryParams = {}) {
     if (e.target.id === 'search-form') {
       e.preventDefault();
       const query = container.querySelector('#search-input').value.trim();
-      window.location.hash = query ? `#/catalog?search=${encodeURIComponent(query)}` : '#/';
+      const genre = container.querySelector('#filter-genre').value;
+      const ordering = container.querySelector('#filter-ordering').value;
+
+      const params = new URLSearchParams();
+      if (query) params.set('search', query);
+      if (genre) params.set('genres', genre);
+      if (ordering) params.set('ordering', ordering);
+
+      window.location.hash = `#/catalog?${params.toString()}`;
     }
   });
 
