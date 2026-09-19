@@ -9,7 +9,7 @@ export async function renderCatalogView(queryParams = {}) {
   container.className = 'catalog-page';
   container.innerHTML = `
     <section class="hero-section">
-      <h1>Abre la <span>Dex</span> de los Videojuegos</h1>
+      <h1>Abre la <span>DEX</span> de los Videojuegos</h1>
       <p class="hero-subtitle">Descubre títulos legendarios, calificaciones de Metacritic y análisis en tiempo real.</p>
       <form id="search-form" class="search-box">
         <input 
@@ -26,7 +26,7 @@ export async function renderCatalogView(queryParams = {}) {
       ${Array(12).fill('<div class="skeleton-card"></div>').join('')}
     </section>
 
-    <div class="load-more-wrapper" style="text-align: center; margin: 3rem 0;">
+    <div class="load-more-wrapper">
       <button id="load-more-btn" class="btn-load-more">Mostrar más botín</button>
     </div>
   `;
@@ -102,11 +102,19 @@ export async function renderCatalogView(queryParams = {}) {
           grid.innerHTML = '';
         }
 
-        const newCardsHTML = data.results.map(createGameCardHTML).join('');
-        grid.insertAdjacentHTML('beforeend', newCardsHTML);
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = data.results.map(createGameCardHTML).join('');
+        const newCards = Array.from(tempDiv.children);
 
-        animateLootDrop('.game-card');
-        init3DTilt('.game-card');
+        newCards.forEach(card => {
+          card.classList.add('fresh-card');
+          grid.appendChild(card);
+        });
+
+        animateLootDrop('.fresh-card');
+        init3DTilt('.fresh-card');
+
+        newCards.forEach(card => card.classList.remove('fresh-card'));
 
         if (!data.next) {
           loadMoreBtn.style.display = 'none';
