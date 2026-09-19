@@ -31,7 +31,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   container.className = 'catalog-page';
   container.innerHTML = `
     <section class="hero-section">
-      <h1>Abre la <span>DEX</span> de los Videojuegos</h1>
+      <h1>Abre el <span>STASH</span> de los Videojuegos</h1>
       <p class="hero-subtitle">Descubre títulos legendarios, calificaciones de Metacritic y análisis en tiempo real.</p>
       
       <form id="search-form" class="search-box-wrapper">
