@@ -7,6 +7,8 @@ export async function getGames({
   pageSize = 12, 
   genres = '', 
   platforms = '', 
+  parent_platforms = '',
+  dates = '',
   ordering = '-rating' 
 } = {}) {
   try {
@@ -20,6 +22,12 @@ export async function getGames({
     }
     if (platforms) {
       url += `&platforms=${platforms}`;
+    }
+    if (parent_platforms) {
+      url += `&parent_platforms=${parent_platforms}`;
+    }
+    if (dates) {
+      url += `&dates=${dates}`;
     }
 
     const response = await fetch(url);

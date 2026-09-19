@@ -5,6 +5,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const searchQuery = queryParams.get('search') || '';
   const currentGenreStr = queryParams.get('genres') || '';
   const selectedGenres = currentGenreStr ? currentGenreStr.split(',') : [];
+  const currentPlatform = queryParams.get('parent_platforms') || '';
   const currentOrdering = queryParams.get('ordering') || '-rating';
   let currentPage = 1;
 
@@ -14,6 +15,16 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     'upcoming': 'Próximos Lanzamientos',
     '-added': 'Más Populares',
     'name': 'Nombre (A-Z)'
+  };
+
+  const platformLabels = {
+    '': 'Todas las plataformas',
+    '1': 'PC',
+    '2': 'PlayStation',
+    '3': 'Xbox',
+    '7': 'Nintendo',
+    '4': 'iOS',
+    '8': 'Android'
   };
 
   const container = document.createElement('div');
@@ -49,7 +60,42 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
           </div>
 
           <input type="hidden" id="filter-genre-val" value="${currentGenreStr}" />
+          <input type="hidden" id="filter-platform-val" value="${currentPlatform}" />
           <input type="hidden" id="filter-ordering-val" value="${currentOrdering}" />
+
+          <div class="custom-dropdown-wrapper">
+            <span class="dropdown-label">Plataforma:</span>
+            <div class="custom-dropdown" id="platform-dropdown">
+              <button type="button" class="dropdown-trigger" id="platform-dropdown-trigger">
+                <span class="selected-text" id="selected-platform-text">${platformLabels[currentPlatform] || 'Todas las plataformas'}</span>
+                <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              
+              <div class="dropdown-menu" id="platform-dropdown-menu">
+                <div class="dropdown-option ${currentPlatform === '' ? 'selected' : ''}" data-value="">
+                  Todas las plataformas
+                </div>
+                <div class="dropdown-option ${currentPlatform === '1' ? 'selected' : ''}" data-value="1">
+                  PC
+                </div>
+                <div class="dropdown-option ${currentPlatform === '2' ? 'selected' : ''}" data-value="2">
+                  PlayStation
+                </div>
+                <div class="dropdown-option ${currentPlatform === '3' ? 'selected' : ''}" data-value="3">
+                  Xbox
+                </div>
+                <div class="dropdown-option ${currentPlatform === '7' ? 'selected' : ''}" data-value="7">
+                  Nintendo
+                </div>
+                <div class="dropdown-option ${currentPlatform === '4' ? 'selected' : ''}" data-value="4">
+                  iOS
+                </div>
+                <div class="dropdown-option ${currentPlatform === '8' ? 'selected' : ''}" data-value="8">
+                  Android
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div class="custom-dropdown-wrapper">
             <span class="dropdown-label">Ordenar por:</span>
@@ -156,11 +202,13 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   function triggerSearch() {
     const query = container.querySelector('#search-input').value.trim();
     const genre = container.querySelector('#filter-genre-val').value;
+    const platform = container.querySelector('#filter-platform-val').value;
     const ordering = container.querySelector('#filter-ordering-val').value;
 
     const params = new URLSearchParams();
     if (query) params.set('search', query);
     if (genre) params.set('genres', genre);
+    if (platform) params.set('parent_platforms', platform);
     if (ordering) params.set('ordering', ordering);
 
     window.location.hash = `#/catalog?${params.toString()}`;
@@ -170,9 +218,14 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const grid = container.querySelector('#games-grid');
     const loadMoreBtn = container.querySelector('#load-more-btn');
     const genreChipsContainer = container.querySelector('#genre-chips');
-    const dropdownWrapper = container.querySelector('#ordering-dropdown');
-    const dropdownTrigger = container.querySelector('#dropdown-trigger');
-    const dropdownMenu = container.querySelector('#dropdown-menu');
+    
+    const orderingWrapper = container.querySelector('#ordering-dropdown');
+    const orderingTrigger = container.querySelector('#dropdown-trigger');
+    const orderingMenu = container.querySelector('#dropdown-menu');
+
+    const platformWrapper = container.querySelector('#platform-dropdown');
+    const platformTrigger = container.querySelector('#platform-dropdown-trigger');
+    const platformMenu = container.querySelector('#platform-dropdown-menu');
 
     genreChipsContainer.addEventListener('click', (e) => {
       const chip = e.target.closest('.genre-chip');
@@ -202,29 +255,54 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       triggerSearch();
     });
 
-    dropdownTrigger.addEventListener('click', (e) => {
+    platformTrigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      dropdownWrapper.classList.toggle('open');
+      orderingWrapper.classList.remove('open');
+      platformWrapper.classList.toggle('open');
     });
 
-    dropdownMenu.addEventListener('click', (e) => {
+    platformMenu.addEventListener('click', (e) => {
       const option = e.target.closest('.dropdown-option');
       if (!option) return;
 
-      dropdownMenu.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+      platformMenu.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+
+      const val = option.dataset.value;
+      container.querySelector('#filter-platform-val').value = val;
+      container.querySelector('#selected-platform-text').textContent = option.textContent.trim();
+
+      platformWrapper.classList.remove('open');
+      triggerSearch();
+    });
+
+    orderingTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      platformWrapper.classList.remove('open');
+      orderingWrapper.classList.toggle('open');
+    });
+
+    orderingMenu.addEventListener('click', (e) => {
+      const option = e.target.closest('.dropdown-option');
+      if (!option) return;
+
+      orderingMenu.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
       option.classList.add('selected');
 
       const val = option.dataset.value;
       container.querySelector('#filter-ordering-val').value = val;
       container.querySelector('#selected-ordering-text').textContent = option.textContent.trim();
 
-      dropdownWrapper.classList.remove('open');
+      orderingWrapper.classList.remove('open');
       triggerSearch();
     });
 
     document.addEventListener('click', (e) => {
-      if (!dropdownWrapper.contains(e.target)) {
-        dropdownWrapper.classList.remove('open');
+      if (!orderingWrapper.contains(e.target)) {
+        orderingWrapper.classList.remove('open');
+      }
+      if (!platformWrapper.contains(e.target)) {
+        platformWrapper.classList.remove('open');
       }
     });
 
@@ -234,6 +312,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
         loadMoreBtn.textContent = 'Cargando juegos...';
 
         const genreVal = container.querySelector('#filter-genre-val').value;
+        const platformVal = container.querySelector('#filter-platform-val').value;
         const orderingVal = container.querySelector('#filter-ordering-val').value;
 
         const todayStr = new Date().toISOString().split('T')[0];
@@ -251,6 +330,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
           page: page, 
           search: searchQuery, 
           genres: genreVal,
+          parent_platforms: platformVal,
           ordering: actualOrdering,
           pageSize: 12 
         };
