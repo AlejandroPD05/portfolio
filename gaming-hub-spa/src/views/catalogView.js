@@ -98,14 +98,23 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       : '';
     const genresText = game.genres ? game.genres.map(g => g.name).slice(0, 2).join(' • ') : 'Varios';
 
-    let rarity = 'rare';
-    let rarityLabel = 'RARE LOOT';
-    if (game.metacritic >= 85 || game.rating >= 4.4) {
+    let rarity = 'common';
+    let rarityLabel = 'COMÚN';
+
+    const score = game.metacritic || (game.rating ? game.rating * 20 : 0);
+
+    if (score >= 85 || game.rating >= 4.4) {
       rarity = 'legendary';
-      rarityLabel = 'LEGENDARY';
-    } else if (game.metacritic >= 75 || game.rating >= 3.8) {
+      rarityLabel = 'LEGENDARIO';
+    } else if (score >= 75 || game.rating >= 3.8) {
       rarity = 'epic';
-      rarityLabel = 'EPIC LOOT';
+      rarityLabel = 'ÉPICO';
+    } else if (score >= 60 || game.rating >= 3.0) {
+      rarity = 'rare';
+      rarityLabel = 'RARO';
+    } else if (score >= 40 || game.rating >= 2.0) {
+      rarity = 'uncommon';
+      rarityLabel = 'POCO COMÚN';
     }
 
     return `

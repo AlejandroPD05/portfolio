@@ -6,8 +6,10 @@
   --accent-green-glow: rgba(0, 255, 135, 0.25);
   --rarity-legendary: #ffb700;
   --rarity-legendary-glow: rgba(255, 183, 0, 0.35);
-  --rarity-epic: #00ff87;
-  --rarity-rare: #00e5ff;
+  --rarity-epic: #a335ee;
+  --rarity-rare: #0070dd;
+  --rarity-uncommon: #00ff87;
+  --rarity-common: #718096;
   --text-primary: #f1f5f9;
   --text-secondary: #8a99ad;
   --border-color: rgba(255, 255, 255, 0.08);
@@ -354,14 +356,28 @@ body {
 }
 
 .game-card[data-rarity="legendary"]:hover {
-  border-color: var(--rarity-legendary);
-  box-shadow: 0 14px 35px rgba(0,0,0,0.5), 0 0 25px var(--rarity-legendary-glow);
+  border-color: #ffb700;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.5), 0 0 25px rgba(255, 183, 0, 0.35);
 }
 
-.game-card[data-rarity="epic"]:hover,
+.game-card[data-rarity="epic"]:hover {
+  border-color: #a335ee;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.5), 0 0 25px rgba(163, 53, 238, 0.35);
+}
+
 .game-card[data-rarity="rare"]:hover {
+  border-color: #0070dd;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.5), 0 0 25px rgba(0, 112, 221, 0.35);
+}
+
+.game-card[data-rarity="uncommon"]:hover {
   border-color: var(--accent-green);
   box-shadow: 0 14px 35px rgba(0,0,0,0.5), 0 0 25px var(--accent-green-glow);
+}
+
+.game-card[data-rarity="common"]:hover {
+  border-color: #718096;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.5), 0 0 15px rgba(113, 128, 150, 0.2);
 }
 
 .game-card a {
@@ -430,15 +446,27 @@ body {
 }
 
 .rarity-badge.epic {
+  background: rgba(163, 53, 238, 0.2);
+  color: #c056ff;
+  border: 1px solid #a335ee;
+}
+
+.rarity-badge.rare {
+  background: rgba(0, 112, 221, 0.2);
+  color: #00a2ff;
+  border: 1px solid #0070dd;
+}
+
+.rarity-badge.uncommon {
   background: rgba(0, 255, 135, 0.2);
   color: var(--accent-green);
   border: 1px solid var(--accent-green);
 }
 
-.rarity-badge.rare {
-  background: rgba(0, 229, 255, 0.2);
-  color: #00e5ff;
-  border: 1px solid #00e5ff;
+.rarity-badge.common {
+  background: rgba(138, 153, 173, 0.2);
+  color: #a0aec0;
+  border: 1px solid #718096;
 }
 
 .rating {
