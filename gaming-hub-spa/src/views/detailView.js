@@ -33,12 +33,38 @@ function getStoreSvgIcon(slug, url = '') {
   return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`;
 }
 
-function resolveStoreInfo(item) {
-  let name = item.store?.name || '';
-  let slug = item.store?.slug || '';
-  const url = item.url || '#';
+function mergeStores(gameStores = [], apiStores = []) {
+  const urlMap = new Map();
+  if (Array.isArray(apiStores)) {
+    apiStores.forEach(s => {
+      if (s.store_id && s.url) {
+        urlMap.set(s.store_id, s.url);
+      }
+    });
+  }
 
-  if (!name || !slug) {
+  if (gameStores.length > 0) {
+    return gameStores.map(item => {
+      const storeObj = item.store || {};
+      const storeId = storeObj.id || item.store_id;
+      const url = urlMap.get(storeId) || item.url || (storeObj.domain ? `https://${storeObj.domain}` : '#');
+      const name = storeObj.name || 'Tienda Digital';
+      const slug = storeObj.slug || '';
+
+      return {
+        name,
+        slug,
+        url,
+        icon: getStoreSvgIcon(slug, url)
+      };
+    });
+  }
+
+  return apiStores.map(item => {
+    const url = item.url || '#';
+    let name = 'Tienda Digital';
+    let slug = '';
+
     if (url.includes('steampowered.com')) { name = 'Steam'; slug = 'steam'; }
     else if (url.includes('playstation.com')) { name = 'PlayStation Store'; slug = 'playstation'; }
     else if (url.includes('microsoft.com') || url.includes('xbox.com')) { name = 'Xbox Store'; slug = 'xbox'; }
@@ -47,11 +73,9 @@ function resolveStoreInfo(item) {
     else if (url.includes('nintendo.com')) { name = 'Nintendo eShop'; slug = 'nintendo'; }
     else if (url.includes('apple.com')) { name = 'App Store'; slug = 'apple'; }
     else if (url.includes('google.com')) { name = 'Google Play'; slug = 'google-play'; }
-    else if (url.includes('itch.io')) { name = 'itch.io'; slug = 'itch'; }
-    else { name = 'Tienda Digital'; slug = 'store'; }
-  }
 
-  return { name, slug, url, icon: getStoreSvgIcon(slug, url) };
+    return { name, slug, url, icon: getStoreSvgIcon(slug, url) };
+  });
 }
 
 export async function renderDetailView(queryParams) {
@@ -75,20 +99,15 @@ export async function renderDetailView(queryParams) {
     const rawDescription = game.description_raw || game.description || '';
     const descriptionES = await translateToSpanish(rawDescription);
 
-    const storesList = (game.stores && game.stores.length > 0) 
-      ? game.stores 
-      : (storesData?.results || []);
+    const resolvedStores = mergeStores(game.stores, storesData?.results);
 
-    const storesHTML = storesList.length > 0
-      ? storesList.map(item => {
-          const storeInfo = resolveStoreInfo(item);
-          return `
-            <a href="${storeInfo.url}" target="_blank" rel="noopener noreferrer" class="store-button">
-              <span class="store-icon">${storeInfo.icon}</span>
-              <span>${storeInfo.name}</span>
-            </a>
-          `;
-        }).join('')
+    const storesHTML = resolvedStores.length > 0
+      ? resolvedStores.map(store => `
+          <a href="${store.url}" target="_blank" rel="noopener noreferrer" class="store-button" title="Ir a ${store.name}">
+            <span class="store-icon">${store.icon}</span>
+            <span>${store.name}</span>
+          </a>
+        `).join('')
       : '<p class="no-data">No hay enlaces directos a tiendas disponibles.</p>';
 
     container.innerHTML = `
