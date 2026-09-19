@@ -12,6 +12,22 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const defaultGenres = ['', 'action', 'role-playing-games-rpg', 'shooter', 'adventure', 'indie', 'strategy'];
   const customSelectedGenres = selectedGenres.filter(g => !defaultGenres.includes(g));
 
+  const availableGenres = [
+    { value: 'puzzle', label: 'Puzzle' },
+    { value: 'racing', label: 'Carreras' },
+    { value: 'simulation', label: 'Simulación' },
+    { value: 'arcade', label: 'Arcade' },
+    { value: 'platformer', label: 'Plataformas' },
+    { value: 'massively-multiplayer', label: 'MMO / Multijugador' },
+    { value: 'sports', label: 'Deportes' },
+    { value: 'fighting', label: 'Lucha' },
+    { value: 'casual', label: 'Casual' },
+    { value: 'family', label: 'Familiar' },
+    { value: 'board-games', label: 'Juegos de mesa' },
+    { value: 'educational', label: 'Educativo' },
+    { value: 'card', label: 'Cartas' }
+  ];
+
   const orderingLabels = {
     '-rating': 'Mejor Valorados',
     '-released': 'Novedades',
@@ -64,23 +80,9 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
               ${customSelectedGenres.map(g => `<button type="button" class="genre-chip active custom-chip" data-genre="${g}">${g.replace(/-/g, ' ')}</button>`).join('')}
             </div>
 
-            <div class="genre-search-input-box">
-              <input type="text" id="genre-search-input" list="genres-list" placeholder="+ Buscar/añadir otro género (Enter)..." />
-              <datalist id="genres-list">
-                <option value="puzzle">Puzzle</option>
-                <option value="racing">Carreras</option>
-                <option value="simulation">Simulación</option>
-                <option value="arcade">Arcade</option>
-                <option value="platformer">Plataformas</option>
-                <option value="massively-multiplayer">MMO / Multijugador</option>
-                <option value="sports">Deportes</option>
-                <option value="fighting">Lucha</option>
-                <option value="casual">Casual</option>
-                <option value="family">Familiar</option>
-                <option value="board-games">Juegos de mesa</option>
-                <option value="educational">Educativo</option>
-                <option value="card">Cartas</option>
-              </datalist>
+            <div class="genre-search-input-box" id="genre-search-wrapper">
+              <input type="text" id="genre-search-input" autocomplete="off" placeholder="+ Buscar/añadir otro género (Enter)..." />
+              <div class="genre-suggestions-dropdown" id="genre-suggestions-menu"></div>
             </div>
           </div>
 
@@ -230,6 +232,8 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const loadMoreBtn = container.querySelector('#load-more-btn');
     const genreChipsContainer = container.querySelector('#genre-chips');
     const genreSearchInput = container.querySelector('#genre-search-input');
+    const genreSearchWrapper = container.querySelector('#genre-search-wrapper');
+    const genreSuggestionsMenu = container.querySelector('#genre-suggestions-menu');
     
     const orderingWrapper = container.querySelector('#ordering-dropdown');
     const orderingTrigger = container.querySelector('#dropdown-trigger');
@@ -239,7 +243,66 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const platformTrigger = container.querySelector('#platform-dropdown-trigger');
     const platformMenu = container.querySelector('#platform-dropdown-menu');
 
-    // Manejo de clicks en los chips de géneros
+    function addGenreChipAndSearch(slug, label) {
+      let existingChip = genreChipsContainer.querySelector(`.genre-chip[data-genre="${slug}"]`);
+
+      if (!existingChip) {
+        const newChip = document.createElement('button');
+        newChip.type = 'button';
+        newChip.className = 'genre-chip active custom-chip';
+        newChip.dataset.genre = slug;
+        newChip.textContent = label || slug.replace(/-/g, ' ');
+        genreChipsContainer.appendChild(newChip);
+      } else {
+        existingChip.classList.add('active');
+      }
+
+      const todosChip = genreChipsContainer.querySelector('.genre-chip[data-genre=""]');
+      if (todosChip) todosChip.classList.remove('active');
+
+      const activeGenres = Array.from(genreChipsContainer.querySelectorAll('.genre-chip.active'))
+        .map(c => c.dataset.genre)
+        .filter(g => g !== '');
+
+      container.querySelector('#filter-genre-val').value = activeGenres.join(',');
+      genreSearchInput.value = '';
+      genreSuggestionsMenu.classList.remove('open');
+      triggerSearch();
+    }
+
+    function renderSuggestions() {
+      const query = genreSearchInput.value.trim().toLowerCase();
+      const filtered = availableGenres.filter(g => 
+        g.label.toLowerCase().includes(query) || g.value.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        genreSuggestionsMenu.innerHTML = '';
+        genreSuggestionsMenu.classList.remove('open');
+        return;
+      }
+
+      const currentActive = container.querySelector('#filter-genre-val').value.split(',');
+
+      genreSuggestionsMenu.innerHTML = filtered.map(g => {
+        const isSelected = currentActive.includes(g.value);
+        return `<div class="genre-suggestion-item ${isSelected ? 'selected' : ''}" data-value="${g.value}" data-label="${g.label}">
+          ${g.label}
+        </div>`;
+      }).join('');
+
+      genreSuggestionsMenu.classList.add('open');
+    }
+
+    genreSearchInput.addEventListener('focus', renderSuggestions);
+    genreSearchInput.addEventListener('input', renderSuggestions);
+
+    genreSuggestionsMenu.addEventListener('click', (e) => {
+      const item = e.target.closest('.genre-suggestion-item');
+      if (!item) return;
+      addGenreChipAndSearch(item.dataset.value, item.dataset.label);
+    });
+
     genreChipsContainer.addEventListener('click', (e) => {
       const chip = e.target.closest('.genre-chip');
       if (!chip) return;
@@ -268,43 +331,24 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       triggerSearch();
     });
 
-    // Manejo del input de búsqueda de otros géneros (al pulsar Enter)
     genreSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         const rawVal = genreSearchInput.value.trim().toLowerCase();
         if (!rawVal) return;
 
-        const genreSlug = rawVal.replace(/\s+/g, '-');
-        let existingChip = genreChipsContainer.querySelector(`.genre-chip[data-genre="${genreSlug}"]`);
+        const matched = availableGenres.find(g => g.label.toLowerCase() === rawVal || g.value === rawVal);
+        const slug = matched ? matched.value : rawVal.replace(/\s+/g, '-');
+        const label = matched ? matched.label : rawVal;
 
-        if (!existingChip) {
-          const newChip = document.createElement('button');
-          newChip.type = 'button';
-          newChip.className = 'genre-chip active custom-chip';
-          newChip.dataset.genre = genreSlug;
-          newChip.textContent = rawVal;
-          genreChipsContainer.appendChild(newChip);
-        } else {
-          existingChip.classList.add('active');
-        }
-
-        const todosChip = genreChipsContainer.querySelector('.genre-chip[data-genre=""]');
-        if (todosChip) todosChip.classList.remove('active');
-
-        const activeGenres = Array.from(genreChipsContainer.querySelectorAll('.genre-chip.active'))
-          .map(c => c.dataset.genre)
-          .filter(g => g !== '');
-
-        container.querySelector('#filter-genre-val').value = activeGenres.join(',');
-        genreSearchInput.value = '';
-        triggerSearch();
+        addGenreChipAndSearch(slug, label);
       }
     });
 
     platformTrigger.addEventListener('click', (e) => {
       e.stopPropagation();
       orderingWrapper.classList.remove('open');
+      genreSuggestionsMenu.classList.remove('open');
       platformWrapper.classList.toggle('open');
     });
 
@@ -326,6 +370,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     orderingTrigger.addEventListener('click', (e) => {
       e.stopPropagation();
       platformWrapper.classList.remove('open');
+      genreSuggestionsMenu.classList.remove('open');
       orderingWrapper.classList.toggle('open');
     });
 
@@ -350,6 +395,9 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       }
       if (!platformWrapper.contains(e.target)) {
         platformWrapper.classList.remove('open');
+      }
+      if (!genreSearchWrapper.contains(e.target)) {
+        genreSuggestionsMenu.classList.remove('open');
       }
     });
 

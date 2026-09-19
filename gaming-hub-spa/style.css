@@ -600,139 +600,6 @@ body {
   box-shadow: none;
 }
 
-.game-detail-hero {
-  position: relative;
-  min-height: 380px;
-  background-size: cover;
-  background-position: center;
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  border: 1px solid var(--border-color);
-}
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: var(--text-primary);
-  text-decoration: none;
-  background: rgba(15, 19, 28, 0.75);
-  backdrop-filter: blur(8px);
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  border: 1px solid var(--border-color);
-  width: fit-content;
-  transition: background 0.3s ease;
-}
-
-.back-btn:hover {
-  background: var(--accent-green);
-  color: #000;
-}
-
-.hero-info h1 {
-  font-size: 2.75rem;
-  font-weight: 900;
-  margin-bottom: 0.75rem;
-}
-
-.meta-tags {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.meta-tags span {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-  padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  border: 1px solid var(--border-color);
-}
-
-.detail-body {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-}
-
-.sidebar {
-  background: var(--bg-card);
-  padding: 1.5rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-}
-
-.sidebar h3 {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  color: var(--accent-green);
-}
-
-.sidebar h3:first-child {
-  margin-top: 0;
-}
-
-.sidebar ul {
-  list-style: none;
-  color: var(--text-secondary);
-}
-
-.stores-section {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.stores-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: var(--accent-green);
-}
-
-.stores-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.store-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.65rem 1.1rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.25s ease;
-}
-
-.store-button:hover {
-  border-color: var(--accent-green);
-  background: var(--bg-card-hover);
-  color: var(--accent-green);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--accent-green-glow);
-}
-
-.store-icon {
-  display: flex;
-  align-items: center;
-  color: var(--accent-green);
-}
-
-
-
 .genre-filter-wrapper {
   display: flex;
   flex-direction: column;
@@ -742,6 +609,7 @@ body {
 }
 
 .genre-search-input-box {
+  position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -765,6 +633,76 @@ body {
   border-color: var(--accent-green);
   border-style: solid;
   box-shadow: 0 0 12px var(--accent-green-glow);
+}
+
+.genre-suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem;
+  z-index: 60;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.genre-suggestions-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.genre-suggestions-dropdown::-webkit-scrollbar {
+  width: 5px;
+}
+
+.genre-suggestions-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.genre-suggestions-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.genre-suggestions-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.genre-suggestion-item {
+  padding: 0.6rem 0.85rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.genre-suggestion-item:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  padding-left: 1.1rem;
+}
+
+.genre-suggestion-item.selected {
+  color: var(--accent-green);
+  background: rgba(0, 255, 135, 0.08);
+  font-weight: 800;
+  border-left: 3px solid var(--accent-green);
 }
 
 .genre-chip.custom-chip {
@@ -818,5 +756,4 @@ body {
   #platform-select {
     cursor: pointer;
   }
-  
 }
