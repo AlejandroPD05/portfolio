@@ -9,6 +9,9 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const currentOrdering = queryParams.get('ordering') || '-rating';
   let currentPage = 1;
 
+  const defaultGenres = ['', 'action', 'role-playing-games-rpg', 'shooter', 'adventure', 'indie', 'strategy'];
+  const customSelectedGenres = selectedGenres.filter(g => !defaultGenres.includes(g));
+
   const orderingLabels = {
     '-rating': 'Mejor Valorados',
     '-released': 'Novedades',
@@ -49,14 +52,36 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
         </div>
 
         <div class="filters-container">
-          <div class="genre-chips-container" id="genre-chips">
-            <button type="button" class="genre-chip ${selectedGenres.length === 0 ? 'active' : ''}" data-genre="">Todos</button>
-            <button type="button" class="genre-chip ${selectedGenres.includes('action') ? 'active' : ''}" data-genre="action">Acción</button>
-            <button type="button" class="genre-chip ${selectedGenres.includes('role-playing-games-rpg') ? 'active' : ''}" data-genre="role-playing-games-rpg">RPG</button>
-            <button type="button" class="genre-chip ${selectedGenres.includes('shooter') ? 'active' : ''}" data-genre="shooter">Shooter</button>
-            <button type="button" class="genre-chip ${selectedGenres.includes('adventure') ? 'active' : ''}" data-genre="adventure">Aventura</button>
-            <button type="button" class="genre-chip ${selectedGenres.includes('indie') ? 'active' : ''}" data-genre="indie">Indie</button>
-            <button type="button" class="genre-chip ${selectedGenres.includes('strategy') ? 'active' : ''}" data-genre="strategy">Estrategia</button>
+          <div class="genre-filter-wrapper">
+            <div class="genre-chips-container" id="genre-chips">
+              <button type="button" class="genre-chip ${selectedGenres.length === 0 ? 'active' : ''}" data-genre="">Todos</button>
+              <button type="button" class="genre-chip ${selectedGenres.includes('action') ? 'active' : ''}" data-genre="action">Acción</button>
+              <button type="button" class="genre-chip ${selectedGenres.includes('role-playing-games-rpg') ? 'active' : ''}" data-genre="role-playing-games-rpg">RPG</button>
+              <button type="button" class="genre-chip ${selectedGenres.includes('shooter') ? 'active' : ''}" data-genre="shooter">Shooter</button>
+              <button type="button" class="genre-chip ${selectedGenres.includes('adventure') ? 'active' : ''}" data-genre="adventure">Aventura</button>
+              <button type="button" class="genre-chip ${selectedGenres.includes('indie') ? 'active' : ''}" data-genre="indie">Indie</button>
+              <button type="button" class="genre-chip ${selectedGenres.includes('strategy') ? 'active' : ''}" data-genre="strategy">Estrategia</button>
+              ${customSelectedGenres.map(g => `<button type="button" class="genre-chip active custom-chip" data-genre="${g}">${g.replace(/-/g, ' ')}</button>`).join('')}
+            </div>
+
+            <div class="genre-search-input-box">
+              <input type="text" id="genre-search-input" list="genres-list" placeholder="+ Buscar/añadir otro género (Enter)..." />
+              <datalist id="genres-list">
+                <option value="puzzle">Puzzle</option>
+                <option value="racing">Carreras</option>
+                <option value="simulation">Simulación</option>
+                <option value="arcade">Arcade</option>
+                <option value="platformer">Plataformas</option>
+                <option value="massively-multiplayer">MMO / Multijugador</option>
+                <option value="sports">Deportes</option>
+                <option value="fighting">Lucha</option>
+                <option value="casual">Casual</option>
+                <option value="family">Familiar</option>
+                <option value="board-games">Juegos de mesa</option>
+                <option value="educational">Educativo</option>
+                <option value="card">Cartas</option>
+              </datalist>
+            </div>
           </div>
 
           <input type="hidden" id="filter-genre-val" value="${currentGenreStr}" />
@@ -72,27 +97,13 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
               </button>
               
               <div class="dropdown-menu" id="platform-dropdown-menu">
-                <div class="dropdown-option ${currentPlatform === '' ? 'selected' : ''}" data-value="">
-                  Todas las plataformas
-                </div>
-                <div class="dropdown-option ${currentPlatform === '1' ? 'selected' : ''}" data-value="1">
-                  PC
-                </div>
-                <div class="dropdown-option ${currentPlatform === '2' ? 'selected' : ''}" data-value="2">
-                  PlayStation
-                </div>
-                <div class="dropdown-option ${currentPlatform === '3' ? 'selected' : ''}" data-value="3">
-                  Xbox
-                </div>
-                <div class="dropdown-option ${currentPlatform === '7' ? 'selected' : ''}" data-value="7">
-                  Nintendo
-                </div>
-                <div class="dropdown-option ${currentPlatform === '4' ? 'selected' : ''}" data-value="4">
-                  iOS
-                </div>
-                <div class="dropdown-option ${currentPlatform === '8' ? 'selected' : ''}" data-value="8">
-                  Android
-                </div>
+                <div class="dropdown-option ${currentPlatform === '' ? 'selected' : ''}" data-value="">Todas las plataformas</div>
+                <div class="dropdown-option ${currentPlatform === '1' ? 'selected' : ''}" data-value="1">PC</div>
+                <div class="dropdown-option ${currentPlatform === '2' ? 'selected' : ''}" data-value="2">PlayStation</div>
+                <div class="dropdown-option ${currentPlatform === '3' ? 'selected' : ''}" data-value="3">Xbox</div>
+                <div class="dropdown-option ${currentPlatform === '7' ? 'selected' : ''}" data-value="7">Nintendo</div>
+                <div class="dropdown-option ${currentPlatform === '4' ? 'selected' : ''}" data-value="4">iOS</div>
+                <div class="dropdown-option ${currentPlatform === '8' ? 'selected' : ''}" data-value="8">Android</div>
               </div>
             </div>
           </div>
@@ -218,6 +229,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const grid = container.querySelector('#games-grid');
     const loadMoreBtn = container.querySelector('#load-more-btn');
     const genreChipsContainer = container.querySelector('#genre-chips');
+    const genreSearchInput = container.querySelector('#genre-search-input');
     
     const orderingWrapper = container.querySelector('#ordering-dropdown');
     const orderingTrigger = container.querySelector('#dropdown-trigger');
@@ -227,6 +239,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const platformTrigger = container.querySelector('#platform-dropdown-trigger');
     const platformMenu = container.querySelector('#platform-dropdown-menu');
 
+    // Manejo de clicks en los chips de géneros
     genreChipsContainer.addEventListener('click', (e) => {
       const chip = e.target.closest('.genre-chip');
       if (!chip) return;
@@ -253,6 +266,40 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
       container.querySelector('#filter-genre-val').value = activeGenres.join(',');
       triggerSearch();
+    });
+
+    // Manejo del input de búsqueda de otros géneros (al pulsar Enter)
+    genreSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const rawVal = genreSearchInput.value.trim().toLowerCase();
+        if (!rawVal) return;
+
+        const genreSlug = rawVal.replace(/\s+/g, '-');
+        let existingChip = genreChipsContainer.querySelector(`.genre-chip[data-genre="${genreSlug}"]`);
+
+        if (!existingChip) {
+          const newChip = document.createElement('button');
+          newChip.type = 'button';
+          newChip.className = 'genre-chip active custom-chip';
+          newChip.dataset.genre = genreSlug;
+          newChip.textContent = rawVal;
+          genreChipsContainer.appendChild(newChip);
+        } else {
+          existingChip.classList.add('active');
+        }
+
+        const todosChip = genreChipsContainer.querySelector('.genre-chip[data-genre=""]');
+        if (todosChip) todosChip.classList.remove('active');
+
+        const activeGenres = Array.from(genreChipsContainer.querySelectorAll('.genre-chip.active'))
+          .map(c => c.dataset.genre)
+          .filter(g => g !== '');
+
+        container.querySelector('#filter-genre-val').value = activeGenres.join(',');
+        genreSearchInput.value = '';
+        triggerSearch();
+      }
     });
 
     platformTrigger.addEventListener('click', (e) => {
