@@ -3,9 +3,17 @@ import { init3DTilt, animateLootDrop } from '../animations.js';
 
 export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const searchQuery = queryParams.get('search') || '';
-  const currentGenre = queryParams.get('genres') || '';
+  const currentGenreStr = queryParams.get('genres') || '';
+  const selectedGenres = currentGenreStr ? currentGenreStr.split(',') : [];
   const currentOrdering = queryParams.get('ordering') || '-rating';
   let currentPage = 1;
+
+  const orderingLabels = {
+    '-rating': 'Mejor Valorados',
+    '-released': 'Novedades',
+    '-added': 'Más Populares',
+    'name': 'Nombre (A-Z)'
+  };
 
   const container = document.createElement('div');
   container.className = 'catalog-page';
@@ -30,24 +38,45 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
         <div class="filters-container">
           <div class="genre-chips-container" id="genre-chips">
-            <button type="button" class="genre-chip ${currentGenre === '' ? 'active' : ''}" data-genre="">Todos</button>
-            <button type="button" class="genre-chip ${currentGenre === 'action' ? 'active' : ''}" data-genre="action">Acción</button>
-            <button type="button" class="genre-chip ${currentGenre === 'role-playing-games-rpg' ? 'active' : ''}" data-genre="role-playing-games-rpg">RPG</button>
-            <button type="button" class="genre-chip ${currentGenre === 'shooter' ? 'active' : ''}" data-genre="shooter">Shooter</button>
-            <button type="button" class="genre-chip ${currentGenre === 'adventure' ? 'active' : ''}" data-genre="adventure">Aventura</button>
-            <button type="button" class="genre-chip ${currentGenre === 'indie' ? 'active' : ''}" data-genre="indie">Indie</button>
-            <button type="button" class="genre-chip ${currentGenre === 'strategy' ? 'active' : ''}" data-genre="strategy">Estrategia</button>
+            <button type="button" class="genre-chip ${selectedGenres.length === 0 ? 'active' : ''}" data-genre="">Todos</button>
+            <button type="button" class="genre-chip ${selectedGenres.includes('action') ? 'active' : ''}" data-genre="action">Acción</button>
+            <button type="button" class="genre-chip ${selectedGenres.includes('role-playing-games-rpg') ? 'active' : ''}" data-genre="role-playing-games-rpg">RPG</button>
+            <button type="button" class="genre-chip ${selectedGenres.includes('shooter') ? 'active' : ''}" data-genre="shooter">Shooter</button>
+            <button type="button" class="genre-chip ${selectedGenres.includes('adventure') ? 'active' : ''}" data-genre="adventure">Aventura</button>
+            <button type="button" class="genre-chip ${selectedGenres.includes('indie') ? 'active' : ''}" data-genre="indie">Indie</button>
+            <button type="button" class="genre-chip ${selectedGenres.includes('strategy') ? 'active' : ''}" data-genre="strategy">Estrategia</button>
           </div>
 
-          <input type="hidden" id="filter-genre-val" value="${currentGenre}" />
+          <input type="hidden" id="filter-genre-val" value="${currentGenreStr}" />
+          <input type="hidden" id="filter-ordering-val" value="${currentOrdering}" />
 
-          <div class="ordering-wrapper">
-            <select id="filter-ordering" class="filter-select">
-              <option value="-rating" ${currentOrdering === '-rating' ? 'selected' : ''}>Mejor Valorados</option>
-              <option value="-released" ${currentOrdering === '-released' ? 'selected' : ''}>Novedades</option>
-              <option value="-added" ${currentOrdering === '-added' ? 'selected' : ''}>Más Populares</option>
-              <option value="name" ${currentOrdering === 'name' ? 'selected' : ''}>Nombre (A-Z)</option>
-            </select>
+          <div class="custom-dropdown-wrapper">
+            <span class="dropdown-label">Ordenar por:</span>
+            <div class="custom-dropdown" id="ordering-dropdown">
+              <button type="button" class="dropdown-trigger" id="dropdown-trigger">
+                <span class="selected-text" id="selected-ordering-text">${orderingLabels[currentOrdering] || 'Mejor Valorados'}</span>
+                <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              
+              <div class="dropdown-menu" id="dropdown-menu">
+                <div class="dropdown-option ${currentOrdering === '-rating' ? 'selected' : ''}" data-value="-rating">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  Mejor Valorados
+                </div>
+                <div class="dropdown-option ${currentOrdering === '-released' ? 'selected' : ''}" data-value="-released">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  Novedades
+                </div>
+                <div class="dropdown-option ${currentOrdering === '-added' ? 'selected' : ''}" data-value="-added">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Más Populares
+                </div>
+                <div class="dropdown-option ${currentOrdering === 'name' ? 'selected' : ''}" data-value="name">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6v12a3 3 0 0 0 3-3H6a3 3 0 0 0 3 3V6"/></svg>
+                  Nombre (A-Z)
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -113,7 +142,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   function triggerSearch() {
     const query = container.querySelector('#search-input').value.trim();
     const genre = container.querySelector('#filter-genre-val').value;
-    const ordering = container.querySelector('#filter-ordering').value;
+    const ordering = container.querySelector('#filter-ordering-val').value;
 
     const params = new URLSearchParams();
     if (query) params.set('search', query);
@@ -127,23 +156,62 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const grid = container.querySelector('#games-grid');
     const loadMoreBtn = container.querySelector('#load-more-btn');
     const genreChipsContainer = container.querySelector('#genre-chips');
-    const orderingSelect = container.querySelector('#filter-ordering');
+    const dropdownWrapper = container.querySelector('#ordering-dropdown');
+    const dropdownTrigger = container.querySelector('#dropdown-trigger');
+    const dropdownMenu = container.querySelector('#dropdown-menu');
 
     genreChipsContainer.addEventListener('click', (e) => {
       const chip = e.target.closest('.genre-chip');
       if (!chip) return;
 
-      genreChipsContainer.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
+      const clickedGenre = chip.dataset.genre;
+      const todosChip = genreChipsContainer.querySelector('.genre-chip[data-genre=""]');
 
-      const selectedGenre = chip.dataset.genre;
-      container.querySelector('#filter-genre-val').value = selectedGenre;
+      if (clickedGenre === '') {
+        genreChipsContainer.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+        todosChip.classList.add('active');
+      } else {
+        todosChip.classList.remove('active');
+        chip.classList.toggle('active');
 
+        const activeChips = genreChipsContainer.querySelectorAll('.genre-chip.active:not([data-genre=""])');
+        if (activeChips.length === 0) {
+          todosChip.classList.add('active');
+        }
+      }
+
+      const activeGenres = Array.from(genreChipsContainer.querySelectorAll('.genre-chip.active'))
+        .map(c => c.dataset.genre)
+        .filter(g => g !== '');
+
+      container.querySelector('#filter-genre-val').value = activeGenres.join(',');
       triggerSearch();
     });
 
-    orderingSelect.addEventListener('change', () => {
+    dropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownWrapper.classList.toggle('open');
+    });
+
+    dropdownMenu.addEventListener('click', (e) => {
+      const option = e.target.closest('.dropdown-option');
+      if (!option) return;
+
+      dropdownMenu.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+
+      const val = option.dataset.value;
+      container.querySelector('#filter-ordering-val').value = val;
+      container.querySelector('#selected-ordering-text').textContent = option.textContent.trim();
+
+      dropdownWrapper.classList.remove('open');
       triggerSearch();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdownWrapper.contains(e.target)) {
+        dropdownWrapper.classList.remove('open');
+      }
     });
 
     async function fetchAndAppendGames(page) {
@@ -152,7 +220,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
         loadMoreBtn.textContent = 'Cargando juegos...';
 
         const genreVal = container.querySelector('#filter-genre-val').value;
-        const orderingVal = orderingSelect.value;
+        const orderingVal = container.querySelector('#filter-ordering-val').value;
 
         const data = await getGames({ 
           page: page, 
@@ -164,7 +232,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
         if (!data.results || data.results.length === 0) {
           if (page === 1) {
-            grid.innerHTML = `<p class="empty-state">No se encontró botín para esta búsqueda o filtro.</p>`;
+            grid.innerHTML = `<p class="empty-state">No se encontró botín para esta combinación de filtros.</p>`;
           }
           loadMoreBtn.style.display = 'none';
           return;
