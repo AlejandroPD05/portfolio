@@ -343,7 +343,11 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
         if (!data.results || data.results.length === 0) {
           if (page === 1) {
-            grid.innerHTML = `<p class="empty-state">No se encontró botín para esta combinación de filtros.</p>`;
+            grid.innerHTML = `
+              <div class="empty-state">
+                <p>No se ha encontrado nada en el Stash bajo ese nombre o filtros.</p>
+              </div>
+            `;
           }
           loadMoreBtn.style.display = 'none';
           return;
@@ -377,7 +381,11 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
       } catch (err) {
         if (page === 1) {
-          grid.innerHTML = `<p class="error-state">Ocurrió un error al saquear la base de datos.</p>`;
+          grid.innerHTML = `
+            <div class="error-state">
+              <p>Ocurrió un error al saquear la base de datos.</p>
+            </div>
+          `;
         }
         loadMoreBtn.disabled = false;
         loadMoreBtn.textContent = 'Reintentar';
