@@ -3,6 +3,7 @@ import { init3DTilt, animateLootDrop } from '../animations.js';
 
 export async function renderCatalogView(queryParams = {}) {
   const searchQuery = queryParams.get('search') || '';
+  let currentPage = 1;
 
   const container = document.createElement('div');
   container.className = 'catalog-page';
@@ -24,72 +25,113 @@ export async function renderCatalogView(queryParams = {}) {
     <section class="games-grid" id="games-grid">
       ${Array(12).fill('<div class="skeleton-card"></div>').join('')}
     </section>
+
+    <div class="load-more-wrapper" style="text-align: center; margin: 3rem 0;">
+      <button id="load-more-btn" class="btn-load-more">Mostrar más botín</button>
+    </div>
   `;
+
+  function createGameCardHTML(game) {
+    const releaseYear = game.released ? game.released.split('-')[0] : 'N/A';
+    const platformsList = game.platforms 
+      ? game.platforms.slice(0, 3).map(p => `<span class="platform-pill">${p.platform.name}</span>`).join('') 
+      : '';
+    const genresText = game.genres ? game.genres.map(g => g.name).slice(0, 2).join(' • ') : 'Varios';
+
+    let rarity = 'rare';
+    let rarityLabel = 'RARE LOOT';
+    if (game.metacritic >= 85 || game.rating >= 4.4) {
+      rarity = 'legendary';
+      rarityLabel = 'LEGENDARY';
+    } else if (game.metacritic >= 75 || game.rating >= 3.8) {
+      rarity = 'epic';
+      rarityLabel = 'EPIC LOOT';
+    }
+
+    return `
+      <article class="game-card" data-id="${game.id}" data-rarity="${rarity}">
+        <a href="#/game?id=${game.id}">
+          <div class="card-media">
+            <img src="${game.background_image || 'https://via.placeholder.com/600x350'}" alt="${game.name}" loading="lazy" />
+            <div class="card-badges">
+              <span class="rarity-badge ${rarity}">${rarityLabel}</span>
+              <span class="rating">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                ${game.rating}
+              </span>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>${game.name}</h3>
+            <div class="card-info-row">
+              <span>${genresText}</span>
+              <span class="inline-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                ${releaseYear}
+              </span>
+            </div>
+            <div class="platform-pills">
+              ${platformsList}
+            </div>
+          </div>
+        </a>
+      </article>
+    `;
+  }
 
   setTimeout(async () => {
     const grid = container.querySelector('#games-grid');
-    try {
-      const data = await getGames({ search: searchQuery, pageSize: 12 });
-      
-      if (!data.results || data.results.length === 0) {
-        grid.innerHTML = `<p class="empty-state">No se encontró botín para "${searchQuery}".</p>`;
-        return;
-      }
+    const loadMoreBtn = container.querySelector('#load-more-btn');
 
-      grid.innerHTML = data.results.map(game => {
-        const releaseYear = game.released ? game.released.split('-')[0] : 'N/A';
-        const platformsList = game.platforms 
-          ? game.platforms.slice(0, 3).map(p => `<span class="platform-pill">${p.platform.name}</span>`).join('') 
-          : '';
-        const genresText = game.genres ? game.genres.map(g => g.name).slice(0, 2).join(' • ') : 'Varios';
+    async function fetchAndAppendGames(page) {
+      try {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = 'Cargando botín...';
 
-        let rarity = 'rare';
-        let rarityLabel = 'RARE LOOT';
-        if (game.metacritic >= 85 || game.rating >= 4.4) {
-          rarity = 'legendary';
-          rarityLabel = 'LEGENDARY';
-        } else if (game.metacritic >= 75 || game.rating >= 3.8) {
-          rarity = 'epic';
-          rarityLabel = 'EPIC LOOT';
+        const data = await getGames({ page: page, search: searchQuery, pageSize: 12 });
+
+        if (!data.results || data.results.length === 0) {
+          if (page === 1) {
+            grid.innerHTML = `<p class="empty-state">No se encontró botín para "${searchQuery}".</p>`;
+          }
+          loadMoreBtn.style.display = 'none';
+          return;
         }
 
-        return `
-          <article class="game-card" data-id="${game.id}" data-rarity="${rarity}">
-            <a href="#/game?id=${game.id}">
-              <div class="card-media">
-                <img src="${game.background_image || 'https://via.placeholder.com/600x350'}" alt="${game.name}" loading="lazy" />
-                <div class="card-badges">
-                  <span class="rarity-badge ${rarity}">${rarityLabel}</span>
-                  <span class="rating">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    ${game.rating}
-                  </span>
-                </div>
-              </div>
-              <div class="card-content">
-                <h3>${game.name}</h3>
-                <div class="card-info-row">
-                  <span>${genresText}</span>
-                  <span class="inline-icon">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    ${releaseYear}
-                  </span>
-                </div>
-                <div class="platform-pills">
-                  ${platformsList}
-                </div>
-              </div>
-            </a>
-          </article>
-        `;
-      }).join('');
+        if (page === 1) {
+          grid.innerHTML = '';
+        }
 
-      animateLootDrop('.game-card');
-      init3DTilt('.game-card');
+        const newCardsHTML = data.results.map(createGameCardHTML).join('');
+        grid.insertAdjacentHTML('beforeend', newCardsHTML);
 
-    } catch (err) {
-      grid.innerHTML = `<p class="error-state">Ocurrió un error al saquear la base de datos. Revisa tu API Key.</p>`;
+        animateLootDrop('.game-card');
+        init3DTilt('.game-card');
+
+        if (!data.next) {
+          loadMoreBtn.style.display = 'none';
+        } else {
+          loadMoreBtn.disabled = false;
+          loadMoreBtn.style.display = 'inline-block';
+          loadMoreBtn.textContent = 'Mostrar más botín';
+        }
+
+      } catch (err) {
+        if (page === 1) {
+          grid.innerHTML = `<p class="error-state">Ocurrió un error al saquear la base de datos. Revisa tu API Key.</p>`;
+        }
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.textContent = 'Reintentar';
+      }
     }
+
+    await fetchAndAppendGames(currentPage);
+
+    loadMoreBtn.addEventListener('click', () => {
+      currentPage++;
+      fetchAndAppendGames(currentPage);
+    });
+
   }, 0);
 
   container.addEventListener('submit', (e) => {
