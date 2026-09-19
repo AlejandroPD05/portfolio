@@ -23,7 +23,7 @@ export async function renderDetailView(queryParams) {
       <article class="game-detail-hero" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), #07090e), url('${game.background_image_additional || game.background_image}')">
         <a href="#/" class="back-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-          Volver al Vault
+          Volver a la DEX
         </a>
         <div class="hero-info">
           <h1>${game.name}</h1>

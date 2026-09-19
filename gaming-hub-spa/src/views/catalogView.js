@@ -86,7 +86,7 @@ export async function renderCatalogView(queryParams = {}) {
     async function fetchAndAppendGames(page) {
       try {
         loadMoreBtn.disabled = true;
-        loadMoreBtn.textContent = 'Cargando botín...';
+        loadMoreBtn.textContent = 'Cargando juegos...';
 
         const data = await getGames({ page: page, search: searchQuery, pageSize: 12 });
 
