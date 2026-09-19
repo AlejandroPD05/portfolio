@@ -28,23 +28,27 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
           </button>
         </div>
 
-        <div class="filters-row">
-          <select id="filter-genre" class="filter-select">
-            <option value="">Todos los Géneros</option>
-            <option value="action" ${currentGenre === 'action' ? 'selected' : ''}>Acción</option>
-            <option value="role-playing-games-rpg" ${currentGenre === 'role-playing-games-rpg' ? 'selected' : ''}>RPG</option>
-            <option value="shooter" ${currentGenre === 'shooter' ? 'selected' : ''}>Shooter</option>
-            <option value="adventure" ${currentGenre === 'adventure' ? 'selected' : ''}>Aventura</option>
-            <option value="indie" ${currentGenre === 'indie' ? 'selected' : ''}>Indie</option>
-            <option value="strategy" ${currentGenre === 'strategy' ? 'selected' : ''}>Estrategia</option>
-          </select>
+        <div class="filters-container">
+          <div class="genre-chips-container" id="genre-chips">
+            <button type="button" class="genre-chip ${currentGenre === '' ? 'active' : ''}" data-genre="">Todos</button>
+            <button type="button" class="genre-chip ${currentGenre === 'action' ? 'active' : ''}" data-genre="action">Acción</button>
+            <button type="button" class="genre-chip ${currentGenre === 'role-playing-games-rpg' ? 'active' : ''}" data-genre="role-playing-games-rpg">RPG</button>
+            <button type="button" class="genre-chip ${currentGenre === 'shooter' ? 'active' : ''}" data-genre="shooter">Shooter</button>
+            <button type="button" class="genre-chip ${currentGenre === 'adventure' ? 'active' : ''}" data-genre="adventure">Aventura</button>
+            <button type="button" class="genre-chip ${currentGenre === 'indie' ? 'active' : ''}" data-genre="indie">Indie</button>
+            <button type="button" class="genre-chip ${currentGenre === 'strategy' ? 'active' : ''}" data-genre="strategy">Estrategia</button>
+          </div>
 
-          <select id="filter-ordering" class="filter-select">
-            <option value="-rating" ${currentOrdering === '-rating' ? 'selected' : ''}>Mejor Valorados</option>
-            <option value="-released" ${currentOrdering === '-released' ? 'selected' : ''}>Novedades</option>
-            <option value="-added" ${currentOrdering === '-added' ? 'selected' : ''}>Más Populares</option>
-            <option value="name" ${currentOrdering === 'name' ? 'selected' : ''}>Nombre (A-Z)</option>
-          </select>
+          <input type="hidden" id="filter-genre-val" value="${currentGenre}" />
+
+          <div class="ordering-wrapper">
+            <select id="filter-ordering" class="filter-select">
+              <option value="-rating" ${currentOrdering === '-rating' ? 'selected' : ''}>Mejor Valorados</option>
+              <option value="-released" ${currentOrdering === '-released' ? 'selected' : ''}>Novedades</option>
+              <option value="-added" ${currentOrdering === '-added' ? 'selected' : ''}>Más Populares</option>
+              <option value="name" ${currentOrdering === 'name' ? 'selected' : ''}>Nombre (A-Z)</option>
+            </select>
+          </div>
         </div>
       </form>
     </section>
@@ -106,17 +110,49 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     `;
   }
 
+  function triggerSearch() {
+    const query = container.querySelector('#search-input').value.trim();
+    const genre = container.querySelector('#filter-genre-val').value;
+    const ordering = container.querySelector('#filter-ordering').value;
+
+    const params = new URLSearchParams();
+    if (query) params.set('search', query);
+    if (genre) params.set('genres', genre);
+    if (ordering) params.set('ordering', ordering);
+
+    window.location.hash = `#/catalog?${params.toString()}`;
+  }
+
   setTimeout(async () => {
     const grid = container.querySelector('#games-grid');
     const loadMoreBtn = container.querySelector('#load-more-btn');
+    const genreChipsContainer = container.querySelector('#genre-chips');
+    const orderingSelect = container.querySelector('#filter-ordering');
+
+    genreChipsContainer.addEventListener('click', (e) => {
+      const chip = e.target.closest('.genre-chip');
+      if (!chip) return;
+
+      genreChipsContainer.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      const selectedGenre = chip.dataset.genre;
+      container.querySelector('#filter-genre-val').value = selectedGenre;
+
+      triggerSearch();
+    });
+
+    orderingSelect.addEventListener('change', () => {
+      triggerSearch();
+    });
 
     async function fetchAndAppendGames(page) {
       try {
         loadMoreBtn.disabled = true;
         loadMoreBtn.textContent = 'Cargando juegos...';
 
-        const genreVal = container.querySelector('#filter-genre').value;
-        const orderingVal = container.querySelector('#filter-ordering').value;
+        const genreVal = container.querySelector('#filter-genre-val').value;
+        const orderingVal = orderingSelect.value;
 
         const data = await getGames({ 
           page: page, 
@@ -181,16 +217,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   container.addEventListener('submit', (e) => {
     if (e.target.id === 'search-form') {
       e.preventDefault();
-      const query = container.querySelector('#search-input').value.trim();
-      const genre = container.querySelector('#filter-genre').value;
-      const ordering = container.querySelector('#filter-ordering').value;
-
-      const params = new URLSearchParams();
-      if (query) params.set('search', query);
-      if (genre) params.set('genres', genre);
-      if (ordering) params.set('ordering', ordering);
-
-      window.location.hash = `#/catalog?${params.toString()}`;
+      triggerSearch();
     }
   });
 
