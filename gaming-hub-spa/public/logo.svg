@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0D2A5C"/>
+      <stop offset="1" stop-color="#071A3D"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#72FF32"/>
+      <stop offset="1" stop-color="#32C96B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer handheld / Pokédex silhouette -->
+  <g transform="rotate(-10 256 256)">
+    <path d="M105 50 L393 50 Q412 50 418 69 L458 418 Q461 443 437 451 L111 451 Q88 448 86 426 L67 83 Q65 58 89 53 Z"
+          fill="url(#body)" stroke="#02060D" stroke-width="12" stroke-linejoin="round"/>
+
+    <!-- Green edge -->
+    <path d="M105 64 L389 64 Q399 64 402 76 L441 414 Q443 430 428 434 L119 434 Q104 432 102 418 L83 86 Q82 70 105 64 Z"
+          fill="none" stroke="#72FF32" stroke-width="6" stroke-linejoin="round"/>
+
+    <!-- Top camera / Pokédex sensor -->
+    <path d="M76 103 L103 72 L177 72 L194 103 L194 151 L82 151 Z"
+          fill="#071A3D" stroke="#02060D" stroke-width="9" stroke-linejoin="round"/>
+    <circle cx="121" cy="108" r="32" fill="#02060D" stroke="#72FF32" stroke-width="7"/>
+    <circle cx="121" cy="108" r="20" fill="#123C76"/>
+    <circle cx="113" cy="100" r="6" fill="#C9F4FF"/>
+
+    <!-- Status lights -->
+    <circle cx="165" cy="88" r="7" fill="#72FF32" stroke="#02060D" stroke-width="4"/>
+    <circle cx="187" cy="88" r="7" fill="#32C96B" stroke="#02060D" stroke-width="4"/>
+    <circle cx="209" cy="88" r="7" fill="#72FF32" stroke="#02060D" stroke-width="4"/>
+
+    <!-- Main panel -->
+    <path d="M89 157 L405 157 L427 382 L108 382 Z"
+          fill="#06142E" stroke="#02060D" stroke-width="8" stroke-linejoin="round"/>
+
+    <!-- Central L / loot mark -->
+    <path d="M205 190 L262 190 L248 298 L333 268 L347 321 L219 356 L180 335 Z"
+          fill="url(#lime)" stroke="#02060D" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M205 190 L262 190 L248 298 L235 304 L194 282 Z"
+          fill="#8CFF43" opacity=".8"/>
+
+    <!-- Loot sparkle -->
+    <path d="M347 198 L354 216 L372 223 L354 230 L347 249 L340 230 L322 223 L340 216 Z"
+          fill="#72FF32" stroke="#02060D" stroke-width="5"/>
+
+    <!-- Bottom status bar -->
+    <rect x="177" y="393" width="158" height="16" rx="8" fill="#02060D"/>
+    <rect x="184" y="397" width="144" height="8" rx="4" fill="#72FF32"/>
+
+    <!-- Side hinge -->
+    <rect x="413" y="108" width="17" height="43" rx="6" fill="#72FF32" stroke="#02060D" stroke-width="5"/>
+    <rect x="431" y="350" width="17" height="43" rx="6" fill="#72FF32" stroke="#02060D" stroke-width="5"/>
+  </g>
+</svg>

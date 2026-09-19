@@ -768,4 +768,13 @@ body {
 #platform-select {
   cursor: pointer;
 }
+
+.logo-icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+
 }
