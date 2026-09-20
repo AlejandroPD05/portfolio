@@ -1,6 +1,8 @@
 import { getGames } from '../api.js';
 import { init3DTilt, animateLootDrop } from '../animations.js';
 
+let currentLayoutMode = 'grid';
+
 function escapeHTML(str) {
   if (!str) return '';
   return String(str).replace(/[&<>'"]/g, 
@@ -160,13 +162,24 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     </section>
 
     <div class="results-bar" id="results-bar">
-      <span class="results-count" id="results-count">Cargando juegos...</span>
-      <button type="button" class="btn-clear-filters" id="btn-clear-filters" style="display: none;">
-        &times; Limpiar filtros
-      </button>
+      <div class="results-info">
+        <span class="results-count" id="results-count">Cargando juegos...</span>
+        <button type="button" class="btn-clear-filters" id="btn-clear-filters" style="display: none;">
+          &times; Limpiar filtros
+        </button>
+      </div>
+
+      <div class="view-toggle-group">
+        <button type="button" id="btn-grid-view" class="view-btn ${currentLayoutMode === 'grid' ? 'active' : ''}" title="Vista en cuadrícula">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </button>
+        <button type="button" id="btn-list-view" class="view-btn ${currentLayoutMode === 'list' ? 'active' : ''}" title="Vista en lista">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        </button>
+      </div>
     </div>
 
-    <section class="games-grid" id="games-grid">
+    <section class="games-grid ${currentLayoutMode === 'list' ? 'list-mode' : ''}" id="games-grid">
       ${Array(12).fill('<div class="skeleton-card"></div>').join('')}
     </section>
 
@@ -278,7 +291,24 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const platformTrigger = container.querySelector('#platform-dropdown-trigger');
     const platformMenu = container.querySelector('#platform-dropdown-menu');
 
+    const gridBtn = container.querySelector('#btn-grid-view');
+    const listBtn = container.querySelector('#btn-list-view');
+
     checkActiveFiltersState();
+
+    gridBtn?.addEventListener('click', () => {
+      currentLayoutMode = 'grid';
+      gridBtn.classList.add('active');
+      listBtn.classList.remove('active');
+      grid.classList.remove('list-mode');
+    });
+
+    listBtn?.addEventListener('click', () => {
+      currentLayoutMode = 'list';
+      listBtn.classList.add('active');
+      gridBtn.classList.remove('active');
+      grid.classList.add('list-mode');
+    });
 
     function addGenreChipAndSearch(slug, label) {
       let existingChip = genreChipsContainer.querySelector(`.genre-chip[data-genre="${slug}"]`);
