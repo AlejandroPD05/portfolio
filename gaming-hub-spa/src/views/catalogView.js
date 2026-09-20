@@ -296,19 +296,28 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
     checkActiveFiltersState();
 
-    gridBtn?.addEventListener('click', () => {
-      currentLayoutMode = 'grid';
-      gridBtn.classList.add('active');
-      listBtn.classList.remove('active');
-      grid.classList.remove('list-mode');
-    });
+    function switchLayoutMode(newMode) {
+      if (currentLayoutMode === newMode) return;
+      currentLayoutMode = newMode;
+      grid.classList.add('view-switching');
 
-    listBtn?.addEventListener('click', () => {
-      currentLayoutMode = 'list';
-      listBtn.classList.add('active');
-      gridBtn.classList.remove('active');
-      grid.classList.add('list-mode');
-    });
+      if (currentLayoutMode === 'list') {
+        gridBtn.classList.remove('active');
+        listBtn.classList.add('active');
+        grid.classList.add('list-mode');
+      } else {
+        listBtn.classList.remove('active');
+        gridBtn.classList.add('active');
+        grid.classList.remove('list-mode');
+      }
+
+      setTimeout(() => {
+        grid.classList.remove('view-switching');
+      }, 300);
+    }
+
+    gridBtn?.addEventListener('click', () => switchLayoutMode('grid'));
+    listBtn?.addEventListener('click', () => switchLayoutMode('list'));
 
     function addGenreChipAndSearch(slug, label) {
       let existingChip = genreChipsContainer.querySelector(`.genre-chip[data-genre="${slug}"]`);
