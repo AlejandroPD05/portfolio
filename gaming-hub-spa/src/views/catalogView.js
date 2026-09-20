@@ -4,8 +4,9 @@ import { init3DTilt, animateLootDrop } from '../animations.js';
 export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const searchQuery = queryParams.get('search') || '';
   const currentGenreStr = queryParams.get('genres') || '';
-  const selectedGenres = currentGenreStr ? currentGenreStr.split(',') : [];
-  const currentPlatform = queryParams.get('parent_platforms') || '';
+  const selectedGenres = currentGenreStr ? currentGenreStr.split(',').filter(Boolean) : [];
+  const currentPlatformStr = queryParams.get('parent_platforms') || '';
+  const selectedPlatforms = currentPlatformStr ? currentPlatformStr.split(',').filter(Boolean) : [];
   const currentOrdering = queryParams.get('ordering') || '-rating';
   let currentPage = 1;
 
@@ -37,7 +38,6 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   };
 
   const platformLabels = {
-    '': 'Todas las plataformas',
     '1': 'PC',
     '2': 'PlayStation',
     '3': 'Xbox',
@@ -45,6 +45,12 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     '4': 'iOS',
     '8': 'Android'
   };
+
+  function getPlatformLabelText(selected) {
+    if (selected.length === 0) return 'Todas las plataformas';
+    if (selected.length === 1) return platformLabels[selected[0]] || 'Todas las plataformas';
+    return `${selected.length} plataformas`;
+  }
 
   const container = document.createElement('div');
   container.className = 'catalog-page';
@@ -87,25 +93,25 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
           </div>
 
           <input type="hidden" id="filter-genre-val" value="${currentGenreStr}" />
-          <input type="hidden" id="filter-platform-val" value="${currentPlatform}" />
+          <input type="hidden" id="filter-platform-val" value="${currentPlatformStr}" />
           <input type="hidden" id="filter-ordering-val" value="${currentOrdering}" />
 
           <div class="custom-dropdown-wrapper">
             <span class="dropdown-label">Plataforma:</span>
             <div class="custom-dropdown" id="platform-dropdown">
               <button type="button" class="dropdown-trigger" id="platform-dropdown-trigger">
-                <span class="selected-text" id="selected-platform-text">${platformLabels[currentPlatform] || 'Todas las plataformas'}</span>
+                <span class="selected-text" id="selected-platform-text">${getPlatformLabelText(selectedPlatforms)}</span>
                 <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </button>
               
               <div class="dropdown-menu" id="platform-dropdown-menu">
-                <div class="dropdown-option ${currentPlatform === '' ? 'selected' : ''}" data-value="">Todas las plataformas</div>
-                <div class="dropdown-option ${currentPlatform === '1' ? 'selected' : ''}" data-value="1">PC</div>
-                <div class="dropdown-option ${currentPlatform === '2' ? 'selected' : ''}" data-value="2">PlayStation</div>
-                <div class="dropdown-option ${currentPlatform === '3' ? 'selected' : ''}" data-value="3">Xbox</div>
-                <div class="dropdown-option ${currentPlatform === '7' ? 'selected' : ''}" data-value="7">Nintendo</div>
-                <div class="dropdown-option ${currentPlatform === '4' ? 'selected' : ''}" data-value="4">iOS</div>
-                <div class="dropdown-option ${currentPlatform === '8' ? 'selected' : ''}" data-value="8">Android</div>
+                <div class="dropdown-option ${selectedPlatforms.length === 0 ? 'selected' : ''}" data-value="">Todas las plataformas</div>
+                <div class="dropdown-option ${selectedPlatforms.includes('1') ? 'selected' : ''}" data-value="1">PC</div>
+                <div class="dropdown-option ${selectedPlatforms.includes('2') ? 'selected' : ''}" data-value="2">PlayStation</div>
+                <div class="dropdown-option ${selectedPlatforms.includes('3') ? 'selected' : ''}" data-value="3">Xbox</div>
+                <div class="dropdown-option ${selectedPlatforms.includes('7') ? 'selected' : ''}" data-value="7">Nintendo</div>
+                <div class="dropdown-option ${selectedPlatforms.includes('4') ? 'selected' : ''}" data-value="4">iOS</div>
+                <div class="dropdown-option ${selectedPlatforms.includes('8') ? 'selected' : ''}" data-value="8">Android</div>
               </div>
             </div>
           </div>
@@ -380,14 +386,34 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       const option = e.target.closest('.dropdown-option');
       if (!option) return;
 
-      platformMenu.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
-      option.classList.add('selected');
-
       const val = option.dataset.value;
-      container.querySelector('#filter-platform-val').value = val;
-      container.querySelector('#selected-platform-text').textContent = option.textContent.trim();
+      let currentSelected = container.querySelector('#filter-platform-val').value
+        ? container.querySelector('#filter-platform-val').value.split(',').filter(Boolean)
+        : [];
 
-      platformWrapper.classList.remove('open');
+      if (val === '') {
+        currentSelected = [];
+      } else {
+        if (currentSelected.includes(val)) {
+          currentSelected = currentSelected.filter(item => item !== val);
+        } else {
+          currentSelected.push(val);
+        }
+      }
+
+      container.querySelector('#filter-platform-val').value = currentSelected.join(',');
+
+      platformMenu.querySelectorAll('.dropdown-option').forEach(opt => {
+        const optVal = opt.dataset.value;
+        if (optVal === '') {
+          opt.classList.toggle('selected', currentSelected.length === 0);
+        } else {
+          opt.classList.toggle('selected', currentSelected.includes(optVal));
+        }
+      });
+
+      container.querySelector('#selected-platform-text').textContent = getPlatformLabelText(currentSelected);
+
       triggerSearch();
     });
 
@@ -424,7 +450,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       if (todosChip) todosChip.classList.add('active');
       genreChipsContainer.querySelectorAll('.custom-chip').forEach(chip => chip.remove());
 
-      container.querySelector('#selected-platform-text').textContent = platformLabels[''];
+      container.querySelector('#selected-platform-text').textContent = getPlatformLabelText([]);
       platformMenu.querySelectorAll('.dropdown-option').forEach(opt => {
         opt.classList.toggle('selected', opt.dataset.value === '');
       });
