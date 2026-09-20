@@ -1,6 +1,11 @@
 const API_KEY = import.meta.env.VITE_RAWG_API_KEY;
 const BASE_URL = 'https://api.rawg.io/api';
 
+const ADULT_KEYWORDS = [
+  'hentai', 'nsfw', 'erotic', 'erotica', 'sexual-content', 
+  'adult', 'boobs', 'waifu', 'sex', 'ecchi', 'furry', 'nudity'
+];
+
 export async function getGames({ 
   search = '', 
   page = 1, 
@@ -12,7 +17,8 @@ export async function getGames({
   ordering = '-rating' 
 } = {}) {
   try {
-    let url = `${BASE_URL}/games?key=${API_KEY}&page=${page}&page_size=${pageSize}&ordering=${ordering}`;
+    // Añadimos &sfw=true por estándar
+    let url = `${BASE_URL}/games?key=${API_KEY}&page=${page}&page_size=${pageSize}&ordering=${ordering}&sfw=true`;
     
     if (search) {
       url += `&search=${encodeURIComponent(search)}`;
@@ -32,7 +38,27 @@ export async function getGames({
 
     const response = await fetch(url);
     if (!response.ok) throw new Error('Error al conectar con RAWG API');
-    return await response.json();
+    
+    const data = await response.json();
+
+    // Filtro post-petición: eliminamos juegos que tengan tags o título de contenido adulto
+    if (data.results && Array.isArray(data.results)) {
+      data.results = data.results.filter(game => {
+        const title = (game.name || '').toLowerCase();
+        
+        // Comprobar si el título contiene alguna palabra NSFW
+        const hasAdultTitle = ADULT_KEYWORDS.some(kw => title.includes(kw));
+
+        // Comprobar si los tags del juego contienen alguna etiqueta NSFW
+        const hasAdultTag = game.tags && game.tags.some(tag => 
+          ADULT_KEYWORDS.some(kw => tag.slug.toLowerCase().includes(kw) || tag.name.toLowerCase().includes(kw))
+        );
+
+        return !hasAdultTitle && !hasAdultTag;
+      });
+    }
+
+    return data;
   } catch (error) {
     console.error(error);
     throw error;
