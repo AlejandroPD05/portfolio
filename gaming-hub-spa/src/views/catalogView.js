@@ -17,7 +17,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
   const currentPlatformStr = queryParams.get('parent_platforms') || '';
   const selectedPlatforms = currentPlatformStr ? currentPlatformStr.split(',').filter(Boolean) : [];
   const currentOrdering = queryParams.get('ordering') || '-rating';
-  let currentPage = 1;
+  const currentPage = parseInt(queryParams.get('page') || '1', 10);
 
   const defaultGenres = ['', 'action', 'role-playing-games-rpg', 'shooter', 'adventure', 'indie', 'strategy'];
   const customSelectedGenres = selectedGenres.filter(g => !defaultGenres.includes(g));
@@ -183,9 +183,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       ${Array(12).fill('<div class="skeleton-card"></div>').join('')}
     </section>
 
-    <div class="load-more-wrapper">
-      <button id="load-more-btn" class="btn-load-more">Mostrar más botín</button>
-    </div>
+    <div class="pagination-wrapper" id="pagination-wrapper"></div>
   `;
 
   function createGameCardHTML(game) {
@@ -258,7 +256,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     }
   }
 
-  function triggerSearch() {
+  function triggerSearch(page = 1) {
     const query = container.querySelector('#search-input').value.trim();
     const genre = container.querySelector('#filter-genre-val').value;
     const platform = container.querySelector('#filter-platform-val').value;
@@ -269,13 +267,72 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     if (genre) params.set('genres', genre);
     if (platform) params.set('parent_platforms', platform);
     if (ordering) params.set('ordering', ordering);
+    if (page > 1) params.set('page', page);
 
     window.location.hash = `#/catalog?${params.toString()}`;
   }
 
+  function renderPaginationControls(totalItems, currentPage) {
+    const paginationWrapper = container.querySelector('#pagination-wrapper');
+    const pageSize = 12;
+    const totalPages = Math.min(Math.ceil(totalItems / pageSize), 1000); // RAWG API cap
+
+    if (totalPages <= 1) {
+      paginationWrapper.innerHTML = '';
+      return;
+    }
+
+    let pages = [];
+    const maxVisible = 5;
+
+    let start = Math.max(1, currentPage - 2);
+    let end = Math.min(totalPages, start + maxVisible - 1);
+
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    let html = `
+      <button type="button" class="btn-page" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>
+        &laquo; Anterior
+      </button>
+    `;
+
+    if (start > 1) {
+      html += `<button type="button" class="btn-page" data-page="1">1</button>`;
+      if (start > 2) html += `<span class="pagination-ellipsis">&hellip;</span>`;
+    }
+
+    for (let p = start; p <= end; p++) {
+      html += `<button type="button" class="btn-page ${p === currentPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
+    }
+
+    if (end < totalPages) {
+      if (end < totalPages - 1) html += `<span class="pagination-ellipsis">&hellip;</span>`;
+      html += `<button type="button" class="btn-page" data-page="${totalPages}">${totalPages}</button>`;
+    }
+
+    html += `
+      <button type="button" class="btn-page" data-page="${currentPage + 1}" ${currentPage >= totalPages ? 'disabled' : ''}>
+        Siguiente &raquo;
+      </button>
+    `;
+
+    paginationWrapper.innerHTML = html;
+
+    paginationWrapper.querySelectorAll('.btn-page:not(:disabled)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetPage = parseInt(btn.dataset.page, 10);
+        if (targetPage && targetPage !== currentPage) {
+          triggerSearch(targetPage);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+  }
+
   setTimeout(async () => {
     const grid = container.querySelector('#games-grid');
-    const loadMoreBtn = container.querySelector('#load-more-btn');
     const genreChipsContainer = container.querySelector('#genre-chips');
     const genreSearchInput = container.querySelector('#genre-search-input');
     const genreSearchWrapper = container.querySelector('#genre-search-wrapper');
@@ -542,11 +599,8 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       }
     });
 
-    async function fetchAndAppendGames(page) {
+    async function fetchAndRenderPage(page) {
       try {
-        loadMoreBtn.disabled = true;
-        loadMoreBtn.textContent = 'Cargando juegos...';
-
         const genreVal = container.querySelector('#filter-genre-val').value;
         const platformVal = container.querySelector('#filter-platform-val').value;
         const orderingVal = container.querySelector('#filter-ordering-val').value;
@@ -576,28 +630,21 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
         }
 
         const data = await getGames(queryObj);
-
-        if (page === 1) {
-          const totalCount = data.count || 0;
-          const formattedCount = new Intl.NumberFormat('es-ES').format(totalCount);
-          resultsCountEl.textContent = `${formattedCount} ${totalCount === 1 ? 'juego encontrado' : 'juegos encontrados'}`;
-        }
+        const totalCount = data.count || 0;
+        const formattedCount = new Intl.NumberFormat('es-ES').format(totalCount);
+        resultsCountEl.textContent = `${formattedCount} ${totalCount === 1 ? 'juego encontrado' : 'juegos encontrados'}`;
 
         if (!data.results || data.results.length === 0) {
-          if (page === 1) {
-            grid.innerHTML = `
-              <div class="empty-state">
-                <p>No se ha encontrado nada en el Stash bajo ese nombre o filtros.</p>
-              </div>
-            `;
-          }
-          loadMoreBtn.style.display = 'none';
+          grid.innerHTML = `
+            <div class="empty-state">
+              <p>No se ha encontrado nada en el Stash bajo ese nombre o filtros.</p>
+            </div>
+          `;
+          container.querySelector('#pagination-wrapper').innerHTML = '';
           return;
         }
 
-        if (page === 1) {
-          grid.innerHTML = '';
-        }
+        grid.innerHTML = '';
 
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = data.results.map(createGameCardHTML).join('');
@@ -613,34 +660,20 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
         newCards.forEach(card => card.classList.remove('fresh-card'));
 
-        if (!data.next) {
-          loadMoreBtn.style.display = 'none';
-        } else {
-          loadMoreBtn.disabled = false;
-          loadMoreBtn.style.display = 'inline-block';
-          loadMoreBtn.textContent = 'Mostrar más botín';
-        }
+        renderPaginationControls(totalCount, page);
 
       } catch (err) {
-        if (page === 1) {
-          resultsCountEl.textContent = '0 juegos encontrados';
-          grid.innerHTML = `
-            <div class="error-state">
-              <p>Ocurrió un error al saquear la base de datos.</p>
-            </div>
-          `;
-        }
-        loadMoreBtn.disabled = false;
-        loadMoreBtn.textContent = 'Reintentar';
+        resultsCountEl.textContent = '0 juegos encontrados';
+        grid.innerHTML = `
+          <div class="error-state">
+            <p>Ocurrió un error al saquear la base de datos.</p>
+          </div>
+        `;
+        container.querySelector('#pagination-wrapper').innerHTML = '';
       }
     }
 
-    await fetchAndAppendGames(currentPage);
-
-    loadMoreBtn.addEventListener('click', () => {
-      currentPage++;
-      fetchAndAppendGames(currentPage);
-    });
+    await fetchAndRenderPage(currentPage);
 
   }, 0);
 
