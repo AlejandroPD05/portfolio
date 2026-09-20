@@ -146,6 +146,13 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       </form>
     </section>
 
+    <div class="results-bar" id="results-bar">
+      <span class="results-count" id="results-count">Cargando juegos...</span>
+      <button type="button" class="btn-clear-filters" id="btn-clear-filters" style="display: none;">
+        &times; Limpiar filtros
+      </button>
+    </div>
+
     <section class="games-grid" id="games-grid">
       ${Array(12).fill('<div class="skeleton-card"></div>').join('')}
     </section>
@@ -212,6 +219,19 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     `;
   }
 
+  function checkActiveFiltersState() {
+    const query = container.querySelector('#search-input').value.trim();
+    const genre = container.querySelector('#filter-genre-val').value;
+    const platform = container.querySelector('#filter-platform-val').value;
+    const ordering = container.querySelector('#filter-ordering-val').value;
+
+    const isFiltered = Boolean(query || genre || platform || (ordering && ordering !== '-rating'));
+    const clearBtn = container.querySelector('#btn-clear-filters');
+    if (clearBtn) {
+      clearBtn.style.display = isFiltered ? 'inline-flex' : 'none';
+    }
+  }
+
   function triggerSearch() {
     const query = container.querySelector('#search-input').value.trim();
     const genre = container.querySelector('#filter-genre-val').value;
@@ -234,6 +254,8 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const genreSearchInput = container.querySelector('#genre-search-input');
     const genreSearchWrapper = container.querySelector('#genre-search-wrapper');
     const genreSuggestionsMenu = container.querySelector('#genre-suggestions-menu');
+    const resultsCountEl = container.querySelector('#results-count');
+    const clearFiltersBtn = container.querySelector('#btn-clear-filters');
     
     const orderingWrapper = container.querySelector('#ordering-dropdown');
     const orderingTrigger = container.querySelector('#dropdown-trigger');
@@ -242,6 +264,8 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     const platformWrapper = container.querySelector('#platform-dropdown');
     const platformTrigger = container.querySelector('#platform-dropdown-trigger');
     const platformMenu = container.querySelector('#platform-dropdown-menu');
+
+    checkActiveFiltersState();
 
     function addGenreChipAndSearch(slug, label) {
       let existingChip = genreChipsContainer.querySelector(`.genre-chip[data-genre="${slug}"]`);
@@ -389,6 +413,30 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
       triggerSearch();
     });
 
+    clearFiltersBtn.addEventListener('click', () => {
+      container.querySelector('#search-input').value = '';
+      container.querySelector('#filter-genre-val').value = '';
+      container.querySelector('#filter-platform-val').value = '';
+      container.querySelector('#filter-ordering-val').value = '-rating';
+
+      genreChipsContainer.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+      const todosChip = genreChipsContainer.querySelector('.genre-chip[data-genre=""]');
+      if (todosChip) todosChip.classList.add('active');
+      genreChipsContainer.querySelectorAll('.custom-chip').forEach(chip => chip.remove());
+
+      container.querySelector('#selected-platform-text').textContent = platformLabels[''];
+      platformMenu.querySelectorAll('.dropdown-option').forEach(opt => {
+        opt.classList.toggle('selected', opt.dataset.value === '');
+      });
+
+      container.querySelector('#selected-ordering-text').textContent = orderingLabels['-rating'];
+      orderingMenu.querySelectorAll('.dropdown-option').forEach(opt => {
+        opt.classList.toggle('selected', opt.dataset.value === '-rating');
+      });
+
+      triggerSearch();
+    });
+
     document.addEventListener('click', (e) => {
       if (!orderingWrapper.contains(e.target)) {
         orderingWrapper.classList.remove('open');
@@ -436,6 +484,12 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
         const data = await getGames(queryObj);
 
+        if (page === 1) {
+          const totalCount = data.count || 0;
+          const formattedCount = new Intl.NumberFormat('es-ES').format(totalCount);
+          resultsCountEl.textContent = `${formattedCount} ${totalCount === 1 ? 'juego encontrado' : 'juegos encontrados'}`;
+        }
+
         if (!data.results || data.results.length === 0) {
           if (page === 1) {
             grid.innerHTML = `
@@ -476,6 +530,7 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
 
       } catch (err) {
         if (page === 1) {
+          resultsCountEl.textContent = '0 juegos encontrados';
           grid.innerHTML = `
             <div class="error-state">
               <p>Ocurrió un error al saquear la base de datos.</p>
