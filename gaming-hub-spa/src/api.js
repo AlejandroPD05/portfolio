@@ -17,7 +17,6 @@ export async function getGames({
   ordering = '-rating' 
 } = {}) {
   try {
-    // Añadimos &sfw=true por estándar
     let url = `${BASE_URL}/games?key=${API_KEY}&page=${page}&page_size=${pageSize}&ordering=${ordering}&sfw=true`;
     
     if (search) {
@@ -41,15 +40,12 @@ export async function getGames({
     
     const data = await response.json();
 
-    // Filtro post-petición: eliminamos juegos que tengan tags o título de contenido adulto
     if (data.results && Array.isArray(data.results)) {
       data.results = data.results.filter(game => {
         const title = (game.name || '').toLowerCase();
         
-        // Comprobar si el título contiene alguna palabra NSFW
         const hasAdultTitle = ADULT_KEYWORDS.some(kw => title.includes(kw));
 
-        // Comprobar si los tags del juego contienen alguna etiqueta NSFW
         const hasAdultTag = game.tags && game.tags.some(tag => 
           ADULT_KEYWORDS.some(kw => tag.slug.toLowerCase().includes(kw) || tag.name.toLowerCase().includes(kw))
         );
