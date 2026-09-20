@@ -269,13 +269,19 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     if (ordering) params.set('ordering', ordering);
     if (page > 1) params.set('page', page);
 
-    window.location.hash = `#/catalog?${params.toString()}`;
+    const newHash = `#/catalog?${params.toString()}`;
+
+    if (window.location.hash === newHash) {
+      return;
+    }
+
+    window.location.hash = newHash;
   }
 
   function renderPaginationControls(totalItems, currentPage) {
     const paginationWrapper = container.querySelector('#pagination-wrapper');
     const pageSize = 12;
-    const totalPages = Math.min(Math.ceil(totalItems / pageSize), 1000); // RAWG API cap
+    const totalPages = Math.min(Math.ceil(totalItems / pageSize), 1000);
 
     if (totalPages <= 1) {
       paginationWrapper.innerHTML = '';
@@ -321,11 +327,11 @@ export async function renderCatalogView(queryParams = new URLSearchParams()) {
     paginationWrapper.innerHTML = html;
 
     paginationWrapper.querySelectorAll('.btn-page:not(:disabled)').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const targetPage = parseInt(btn.dataset.page, 10);
         if (targetPage && targetPage !== currentPage) {
           triggerSearch(targetPage);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       });
     });

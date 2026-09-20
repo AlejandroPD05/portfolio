@@ -19,9 +19,10 @@ export class Router {
   }
 
   async handleRoute() {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
+  if (this.isTransitioning) return;
+  this.isTransitioning = true;
 
+  try {
     const rawHash = window.location.hash || '#/';
     const [path, queryString] = rawHash.split('?');
     const queryParams = new URLSearchParams(queryString || '');
@@ -32,7 +33,7 @@ export class Router {
       await window.gsap.to(this.app, {
         opacity: 0,
         y: -15,
-        duration: 0.25,
+        duration: 0.2,
         ease: 'power1.in'
       });
     }
@@ -47,10 +48,13 @@ export class Router {
       window.gsap.fromTo(
         this.app,
         { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+        { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }
       );
     }
-
+  } catch (error) {
+    console.error("Error al cambiar de ruta:", error);
+  } finally {
     this.isTransitioning = false;
   }
+}
 }
