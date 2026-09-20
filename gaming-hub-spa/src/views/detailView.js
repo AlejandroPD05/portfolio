@@ -43,7 +43,7 @@ function mergeStores(gameStores = [], apiStores = []) {
     });
   }
 
-  if (gameStores.length > 0) {
+  if (Array.isArray(gameStores) && gameStores.length > 0) {
     return gameStores.map(item => {
       const storeObj = item.store || {};
       const storeId = storeObj.id || item.store_id;
@@ -60,22 +60,26 @@ function mergeStores(gameStores = [], apiStores = []) {
     });
   }
 
-  return apiStores.map(item => {
-    const url = item.url || '#';
-    let name = 'Tienda Digital';
-    let slug = '';
+  if (Array.isArray(apiStores) && apiStores.length > 0) {
+    return apiStores.map(item => {
+      const url = item.url || '#';
+      let name = 'Tienda Digital';
+      let slug = '';
 
-    if (url.includes('steampowered.com')) { name = 'Steam'; slug = 'steam'; }
-    else if (url.includes('playstation.com')) { name = 'PlayStation Store'; slug = 'playstation'; }
-    else if (url.includes('microsoft.com') || url.includes('xbox.com')) { name = 'Xbox Store'; slug = 'xbox'; }
-    else if (url.includes('epicgames.com')) { name = 'Epic Games Store'; slug = 'epic-games'; }
-    else if (url.includes('gog.com')) { name = 'GOG'; slug = 'gog'; }
-    else if (url.includes('nintendo.com')) { name = 'Nintendo eShop'; slug = 'nintendo'; }
-    else if (url.includes('apple.com')) { name = 'App Store'; slug = 'apple'; }
-    else if (url.includes('google.com')) { name = 'Google Play'; slug = 'google-play'; }
+      if (url.includes('steampowered.com')) { name = 'Steam'; slug = 'steam'; }
+      else if (url.includes('playstation.com')) { name = 'PlayStation Store'; slug = 'playstation'; }
+      else if (url.includes('microsoft.com') || url.includes('xbox.com')) { name = 'Xbox Store'; slug = 'xbox'; }
+      else if (url.includes('epicgames.com')) { name = 'Epic Games Store'; slug = 'epic-games'; }
+      else if (url.includes('gog.com')) { name = 'GOG'; slug = 'gog'; }
+      else if (url.includes('nintendo.com')) { name = 'Nintendo eShop'; slug = 'nintendo'; }
+      else if (url.includes('apple.com')) { name = 'App Store'; slug = 'apple'; }
+      else if (url.includes('google.com')) { name = 'Google Play'; slug = 'google-play'; }
 
-    return { name, slug, url, icon: getStoreSvgIcon(slug, url) };
-  });
+      return { name, slug, url, icon: getStoreSvgIcon(slug, url) };
+    });
+  }
+
+  return [];
 }
 
 export async function renderDetailView(queryParams) {
@@ -97,7 +101,7 @@ export async function renderDetailView(queryParams) {
     ]);
 
     const rawDescription = game.description_raw || game.description || '';
-    const descriptionES = await translateToSpanish(rawDescription);
+    const descriptionES = rawDescription ? await translateToSpanish(rawDescription) : 'Sin descripción disponible.';
 
     const resolvedStores = mergeStores(game.stores, storesData?.results);
 
@@ -110,18 +114,20 @@ export async function renderDetailView(queryParams) {
         `).join('')
       : '<p class="no-data">No hay enlaces directos a tiendas disponibles.</p>';
 
+    const bgImage = game.background_image_additional || game.background_image || '';
+
     container.innerHTML = `
-      <article class="game-detail-hero" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), #07090e), url('${game.background_image_additional || game.background_image}')">
+      <article class="game-detail-hero" style="${bgImage ? `background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--bg-main)), url('${bgImage}')` : 'background: var(--bg-card)'}">
         <a href="#/" class="back-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
           Volver al Stash
         </a>
         <div class="hero-info">
-          <h1>${game.name}</h1>
+          <h1>${game.name || 'Sin título'}</h1>
           <div class="meta-tags">
             <span>Lanzamiento: ${game.released || 'N/A'}</span>
             <span>Metacritic: ${game.metacritic || 'N/A'}</span>
-            <span>Rating: ${game.rating} / 5</span>
+            <span>Rating: ${game.rating ? `${game.rating} / 5` : 'N/A'}</span>
           </div>
         </div>
       </article>
@@ -141,13 +147,13 @@ export async function renderDetailView(queryParams) {
         
         <aside class="sidebar">
           <h3>Plataformas</h3>
-          <ul>${game.platforms ? game.platforms.map(p => `<li>${p.platform.name}</li>`).join('') : 'N/A'}</ul>
+          <ul>${game.platforms && game.platforms.length > 0 ? game.platforms.map(p => `<li>${p.platform.name}</li>`).join('') : '<li class="no-data">N/A</li>'}</ul>
           
           <h3>Desarrolladores</h3>
-          <ul>${game.developers ? game.developers.map(d => `<li>${d.name}</li>`).join('') : 'N/A'}</ul>
+          <ul>${game.developers && game.developers.length > 0 ? game.developers.map(d => `<li>${d.name}</li>`).join('') : '<li class="no-data">N/A</li>'}</ul>
 
           <h3>Géneros</h3>
-          <ul>${game.genres ? game.genres.map(g => `<li>${g.name}</li>`).join('') : 'N/A'}</ul>
+          <ul>${game.genres && game.genres.length > 0 ? game.genres.map(g => `<li>${g.name}</li>`).join('') : '<li class="no-data">N/A</li>'}</ul>
         </aside>
       </section>
     `;
