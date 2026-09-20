@@ -1,5 +1,22 @@
 import { getGameDetails, getGameStores } from '../api.js';
 import { translateToSpanish } from '../services/translator.js';
+import { init3DTilt, animateLootDrop } from '../animations.js';
+
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>'"]/g, 
+    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+  );
+}
+
+function getRarityInfo(score, rating) {
+  const calcScore = score || (rating ? rating * 20 : 0);
+  if (calcScore >= 85 || rating >= 4.4) return { rarity: 'legendary', label: 'LEGENDARIO' };
+  if (calcScore >= 75 || rating >= 3.8) return { rarity: 'epic', label: 'ÉPICO' };
+  if (calcScore >= 60 || rating >= 3.0) return { rarity: 'rare', label: 'RARO' };
+  if (calcScore >= 40 || rating >= 2.0) return { rarity: 'uncommon', label: 'POCO COMÚN' };
+  return { rarity: 'common', label: 'COMÚN' };
+}
 
 function getStoreSvgIcon(slug, url = '') {
   const s = slug.toLowerCase();
@@ -78,17 +95,27 @@ function mergeStores(gameStores = [], apiStores = []) {
   });
 }
 
-export async function renderDetailView(queryParams) {
+export async function renderDetailView(queryParams = new URLSearchParams()) {
   const gameId = queryParams.get('id');
   const container = document.createElement('div');
   container.className = 'detail-page';
 
   if (!gameId) {
-    container.innerHTML = `<div class="error-state"><p>Juego no encontrado.</p><a href="#/" class="back-btn">Volver al catálogo</a></div>`;
+    container.innerHTML = `
+      <div class="error-state">
+        <p>Juego no encontrado en el Stash.</p>
+        <a href="#/catalog" class="back-btn">Volver al catálogo</a>
+      </div>
+    `;
     return container;
   }
 
-  container.innerHTML = `<div class="loader-spinner">Cargando botín...</div>`;
+  container.innerHTML = `
+    <div class="loader-wrapper">
+      <div class="loader-spinner"></div>
+      <p>Desenterrando botín legendario...</p>
+    </div>
+  `;
 
   try {
     const [game, storesData] = await Promise.all([
@@ -97,41 +124,68 @@ export async function renderDetailView(queryParams) {
     ]);
 
     const rawDescription = game.description_raw || game.description || '';
-    const descriptionES = await translateToSpanish(rawDescription);
+    const descriptionES = rawDescription ? await translateToSpanish(rawDescription) : 'Sin descripción disponible.';
 
     const resolvedStores = mergeStores(game.stores, storesData?.results);
+    const rarityInfo = getRarityInfo(game.metacritic, game.rating);
 
     const storesHTML = resolvedStores.length > 0
       ? resolvedStores.map(store => `
-          <a href="${store.url}" target="_blank" rel="noopener noreferrer" class="store-button" title="Ir a ${store.name}">
+          <a href="${escapeHTML(store.url)}" target="_blank" rel="noopener noreferrer" class="store-button tilt-card" title="Ir a ${escapeHTML(store.name)}">
             <span class="store-icon">${store.icon}</span>
-            <span>${store.name}</span>
+            <span>${escapeHTML(store.name)}</span>
           </a>
         `).join('')
-      : '<p class="no-data">No hay enlaces directos a tiendas disponibles.</p>';
+      : '<p class="no-data">No hay enlaces directos a tiendas oficiales registrados.</p>';
+
+    const platformsHTML = game.platforms && game.platforms.length > 0
+      ? game.platforms.map(p => `<li>${escapeHTML(p.platform.name)}</li>`).join('')
+      : '<li>No especificado</li>';
+
+    const developersHTML = game.developers && game.developers.length > 0
+      ? game.developers.map(d => `<li>${escapeHTML(d.name)}</li>`).join('')
+      : '<li>No especificado</li>';
+
+    const genresHTML = game.genres && game.genres.length > 0
+      ? game.genres.map(g => `<li>${escapeHTML(g.name)}</li>`).join('')
+      : '<li>Varios</li>';
+
+    const bgImage = game.background_image_additional || game.background_image || 'https://via.placeholder.com/1200x600';
 
     container.innerHTML = `
-      <article class="game-detail-hero" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), #07090e), url('${game.background_image_additional || game.background_image}')">
-        <a href="#/" class="back-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-          Volver al Stash
+      <article class="game-detail-hero" style="background-image: linear-gradient(to bottom, rgba(7, 9, 14, 0.4), #07090e), url('${escapeHTML(bgImage)}')">
+        <a href="#/catalog" class="back-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Volver al Stash</span>
         </a>
+        
         <div class="hero-info">
-          <h1>${game.name}</h1>
+          <div class="hero-header-tags">
+            <span class="rarity-badge ${rarityInfo.rarity}">${rarityInfo.label}</span>
+            ${game.metacritic ? `<span class="metacritic-pill">Metacritic: <strong>${game.metacritic}</strong></span>` : ''}
+          </div>
+          <h1>${escapeHTML(game.name)}</h1>
           <div class="meta-tags">
-            <span>Lanzamiento: ${game.released || 'N/A'}</span>
-            <span>Metacritic: ${game.metacritic || 'N/A'}</span>
-            <span>Rating: ${game.rating} / 5</span>
+            <span class="meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              ${escapeHTML(game.released || 'N/A')}
+            </span>
+            <span class="meta-item rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              ${game.rating || 'N/A'} / 5
+            </span>
           </div>
         </div>
       </article>
 
       <section class="detail-body">
-        <div class="description">
-          <h2>Descripción</h2>
-          <p>${descriptionES}</p>
+        <div class="description-column">
+          <div class="detail-card">
+            <h2>Descripción</h2>
+            <div class="description-content">${escapeHTML(descriptionES).replace(/\n/g, '<br/>')}</div>
+          </div>
 
-          <div class="stores-section">
+          <div class="detail-card stores-section">
             <h3>Conseguir copia (Tiendas Oficiales)</h3>
             <div class="stores-grid">
               ${storesHTML}
@@ -139,20 +193,37 @@ export async function renderDetailView(queryParams) {
           </div>
         </div>
         
-        <aside class="sidebar">
-          <h3>Plataformas</h3>
-          <ul>${game.platforms ? game.platforms.map(p => `<li>${p.platform.name}</li>`).join('') : 'N/A'}</ul>
+        <aside class="sidebar-column">
+          <div class="sidebar-card">
+            <h3>Plataformas</h3>
+            <ul class="detail-list">${platformsHTML}</ul>
+          </div>
           
-          <h3>Desarrolladores</h3>
-          <ul>${game.developers ? game.developers.map(d => `<li>${d.name}</li>`).join('') : 'N/A'}</ul>
+          <div class="sidebar-card">
+            <h3>Desarrolladores</h3>
+            <ul class="detail-list">${developersHTML}</ul>
+          </div>
 
-          <h3>Géneros</h3>
-          <ul>${game.genres ? game.genres.map(g => `<li>${g.name}</li>`).join('') : 'N/A'}</ul>
+          <div class="sidebar-card">
+            <h3>Géneros</h3>
+            <ul class="detail-list">${genresHTML}</ul>
+          </div>
         </aside>
       </section>
     `;
+
+    setTimeout(() => {
+      animateLootDrop('.detail-card, .sidebar-card');
+      init3DTilt('.tilt-card');
+    }, 0);
+
   } catch (error) {
-    container.innerHTML = `<div class="error-state"><p>Error al obtener la información del juego.</p><a href="#/" class="back-btn">Volver</a></div>`;
+    container.innerHTML = `
+      <div class="error-state">
+        <p>Error al saquear la base de datos para este juego.</p>
+        <a href="#/catalog" class="back-btn">Volver al catálogo</a>
+      </div>
+    `;
   }
 
   return container;
