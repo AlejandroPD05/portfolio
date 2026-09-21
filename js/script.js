@@ -240,7 +240,7 @@ if (scrollBtn) {
       const targetPosition = elementPosition + startPosition - headerOffset;
       const distance = targetPosition - startPosition;
       
-      const duration = 800;
+      const duration = 600;
       let start = null;
 
       function step(timestamp) {
