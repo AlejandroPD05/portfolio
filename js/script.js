@@ -6,31 +6,28 @@ const modeToggle = document.getElementById('modeToggle');
 let currentLang = localStorage.getItem('siteLang') || 'es';
 let currentMode = localStorage.getItem('siteMode') || 'light';
 
-// Lógica de Escritura Inicial
+const typewriterElement = document.getElementById('typewriterText') || document.getElementById('loaderText');
 const loaderElement = document.getElementById('initial-loader');
-const loaderText = document.getElementById('loaderText');
 const fullText = "Alejandro";
 let charIndex = 0;
 
 function typeWriter() {
-  if (loaderText && charIndex < fullText.length) {
-    loaderText.textContent += fullText.charAt(charIndex);
+  if (typewriterElement && charIndex < fullText.length) {
+    typewriterElement.textContent += fullText.charAt(charIndex);
     charIndex++;
     const randomDelay = Math.floor(Math.random() * (120 - 60 + 1)) + 60;
     setTimeout(typeWriter, randomDelay);
   } else {
-    // Cuando finaliza de escribir "Alejandro_"
     setTimeout(() => {
       if (loaderElement) {
         loaderElement.classList.add('loader-hidden');
       }
       document.body.classList.add('page-loaded');
       triggerScrollReveals();
-    }, 400); // Breve pausa tras escribir antes de revelar la página
+    }, 300);
   }
 }
 
-// Menú Móvil
 if (navToggle && siteNav) {
   navToggle.addEventListener('click', () => {
     const isOpen = siteNav.classList.toggle('open');

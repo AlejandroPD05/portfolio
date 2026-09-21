@@ -61,19 +61,50 @@ body.i18n-fade {
 }
 
 .site-header,
-main,
-.site-footer {
+.site-footer,
+.hero-anim,
+main section:not(#inicio) {
   opacity: 0;
   visibility: hidden;
+}
+
+.site-header,
+.site-footer,
+main section:not(#inicio) {
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
 body.page-loaded .site-header,
-body.page-loaded main,
-body.page-loaded .site-footer {
+body.page-loaded .site-footer,
+body.page-loaded main section:not(#inicio) {
   opacity: 1;
   visibility: visible;
 }
+
+.hero-anim {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.status-badge.hero-anim {
+  transform: translateY(25px) scale(0.95);
+}
+
+.hero-role.hero-anim,
+.hero-desc.hero-anim,
+.hero-actions.hero-anim {
+  transform: translateY(-25px) scale(0.95);
+}
+
+body.page-loaded .hero-anim {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+body.page-loaded .hero-anim[style*="--d:0"] { transition-delay: 0.1s; }
+body.page-loaded .hero-anim[style*="--d:2"] { transition-delay: 0.1s; }
+body.page-loaded .hero-anim[style*="--d:3"] { transition-delay: 0.25s; }
+body.page-loaded .hero-anim[style*="--d:4"] { transition-delay: 0.4s; }
 
 #initial-loader {
   position: fixed;
