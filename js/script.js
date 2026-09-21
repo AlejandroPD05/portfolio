@@ -7,7 +7,7 @@ const typewriterElement = document.getElementById('typewriterText');
 let currentLang = localStorage.getItem('siteLang') || 'es';
 let currentMode = localStorage.getItem('siteMode') || 'light';
 
-const fullText = "Alejandro";
+const fullText = "alejandro";
 let charIndex = 0;
 let isTyping = false;
 
