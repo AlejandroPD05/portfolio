@@ -4,10 +4,8 @@ const langToggle = document.getElementById('langToggle');
 const modeToggle = document.getElementById('modeToggle');
 const typewriterElement = document.getElementById('typewriterText');
 
-localStorage.removeItem('siteMode');
-
 let currentLang = localStorage.getItem('siteLang') || 'es';
-let currentMode = 'light';
+let currentMode = localStorage.getItem('siteMode') || 'light';
 
 const fullText = "Alejandro";
 let charIndex = 0;
@@ -17,7 +15,9 @@ function typeWriter() {
   if (typewriterElement && charIndex < fullText.length) {
     typewriterElement.textContent += fullText.charAt(charIndex);
     charIndex++;
-    setTimeout(typeWriter, 120);
+    
+    const randomDelay = Math.floor(Math.random() * (120 - 50 + 1)) + 50;
+    setTimeout(typeWriter, randomDelay);
   }
 }
 
@@ -26,7 +26,7 @@ function startTypewriter() {
     isTyping = true;
     typewriterElement.textContent = "";
     charIndex = 0;
-    setTimeout(typeWriter, 200);
+    setTimeout(typeWriter, 350);
   }
 }
 
@@ -215,6 +215,6 @@ if (modeToggle) {
 
 document.addEventListener("DOMContentLoaded", () => {
   swapLanguageContent(currentLang);
-  applyMode('light');
+  applyMode(currentMode);
   startTypewriter();
 });
