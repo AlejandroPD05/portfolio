@@ -2,18 +2,47 @@ const navToggle = document.getElementById('navToggle');
 const siteNav = document.getElementById('siteNav');
 const langToggle = document.getElementById('langToggle');
 const modeToggle = document.getElementById('modeToggle');
+const typewriterElement = document.getElementById('typewriterText');
 
-navToggle.addEventListener('click', () => {
-  const isOpen = siteNav.classList.toggle('open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-});
+localStorage.removeItem('siteMode');
 
-siteNav.querySelectorAll('.nav-link').forEach((link) => {
-  link.addEventListener('click', () => {
-    siteNav.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', 'false');
+let currentLang = localStorage.getItem('siteLang') || 'es';
+let currentMode = 'light';
+
+const fullText = "Alejandro";
+let charIndex = 0;
+let isTyping = false;
+
+function typeWriter() {
+  if (typewriterElement && charIndex < fullText.length) {
+    typewriterElement.textContent += fullText.charAt(charIndex);
+    charIndex++;
+    setTimeout(typeWriter, 120);
+  }
+}
+
+function startTypewriter() {
+  if (typewriterElement && !isTyping) {
+    isTyping = true;
+    typewriterElement.textContent = "";
+    charIndex = 0;
+    setTimeout(typeWriter, 200);
+  }
+}
+
+if (navToggle && siteNav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
   });
-});
+
+  siteNav.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      siteNav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
 const sections = document.querySelectorAll('main section[id]');
 const navLinks = document.querySelectorAll('.nav-link');
@@ -61,14 +90,14 @@ const translations = {
   heroStatus: { es: 'Disponible para nuevas oportunidades', en: 'Available for new opportunities' },
   heroDesc: {
     es: 'Resuelvo incidencias del lado del usuario y construyo la interfaz que las previene. Un perfil a medio camino entre el soporte técnico y el desarrollo web.',
-    en: 'I resolve incidents from the user\u2019s side and build the interface that prevents them. A profile halfway between technical support and web development.'
+    en: 'I resolve incidents from the user’s side and build the interface that prevents them. A profile halfway between technical support and web development.'
   },
   btnVerProyectos: { es: 'Ver proyectos', en: 'View projects' },
   btnContactar: { es: 'Contactar', en: 'Get in touch' },
   titleSobreMi: { es: 'Sobre mí', en: 'About Me' },
   aboutP1: {
     es: 'Empecé resolviendo incidencias de soporte N1: usuarios bloqueados, redes que fallan, aplicaciones que no arrancan y tickets que hay que priorizar y cerrar contra reloj. Ese contacto diario con el problema real de quien usa la tecnología es lo que me llevó a querer construir yo mismo las herramientas, no solo repararlas.',
-    en: 'I started out resolving L1 support incidents: locked-out users, failing networks, apps that won\u2019t start, and tickets that have to be prioritized and closed against the clock. That daily contact with the real problems of the people using the technology is what made me want to build the tools myself, not just fix them.'
+    en: 'I started out resolving L1 support incidents: locked-out users, failing networks, apps that won’t start, and tickets that have to be prioritized and closed against the clock. That daily contact with the real problems of the people using the technology is what made me want to build the tools myself, not just fix them.'
   },
   aboutP2: {
     es: 'Hoy combino esa experiencia con el desarrollo de aplicaciones web: maquetación responsiva, interactividad con JavaScript y las bases de backend necesarias para que una idea funcione de principio a fin. Sigo aprendiendo cada día, con la misma disciplina con la que se cierra un ticket bien documentado.',
@@ -115,57 +144,77 @@ const translations = {
   titleContacto: { es: 'Contacto', en: 'Contact' },
   contactDesc: {
     es: '¿Buscas a alguien que entienda tanto el ticket como el código que lo evita? Hablemos.',
-    en: 'Looking for someone who understands both the ticket and the code that prevents it? Let\u2019s talk.'
+    en: 'Looking for someone who understands both the ticket and the code that prevents it? Let’s talk.'
   },
   labelCorreo: { es: 'Correo', en: 'Email' },
   footerBuilt: { es: 'Construido con HTML, CSS y JavaScript', en: 'Built with HTML, CSS and JavaScript' }
 };
 
-let currentLang = localStorage.getItem('siteLang') || 'es';
-let currentMode = localStorage.getItem('siteMode') || 'dark';
-
 const applyMode = (mode) => {
-  document.documentElement.classList.toggle('light-mode', mode === 'light');
-  const label = mode === 'dark'
-    ? (currentLang === 'es' ? 'Cambiar a modo día' : 'Switch to day mode')
-    : (currentLang === 'es' ? 'Cambiar a modo noche' : 'Switch to night mode');
-  modeToggle.setAttribute('aria-label', label);
-  localStorage.setItem('siteMode', mode);
   currentMode = mode;
+  const isDark = mode === 'dark';
+
+  document.documentElement.classList.toggle('dark-mode', isDark);
+  document.documentElement.classList.toggle('light-mode', !isDark);
+  document.body.classList.toggle('dark-mode', isDark);
+  document.body.classList.toggle('light-mode', !isDark);
+
+  if (modeToggle) {
+    const label = isDark
+      ? (currentLang === 'es' ? 'Cambiar a modo día' : 'Switch to day mode')
+      : (currentLang === 'es' ? 'Cambiar a modo noche' : 'Switch to night mode');
+    modeToggle.setAttribute('aria-label', label);
+  }
+
+  localStorage.setItem('siteMode', mode);
 };
 
 const swapLanguageContent = (lang) => {
+  currentLang = lang;
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const entry = translations[el.dataset.i18n];
     if (entry && entry[lang]) {
       el.textContent = entry[lang];
     }
   });
+
   document.documentElement.lang = lang;
-  langToggle.setAttribute('aria-label', lang === 'es' ? 'View page in English' : 'Ver página en español');
-  navToggle.setAttribute('aria-label', lang === 'es' ? 'Abrir menú' : 'Open menu');
+  if (langToggle) {
+    langToggle.setAttribute('aria-label', lang === 'es' ? 'View page in English' : 'Ver página en español');
+  }
+  if (navToggle) {
+    navToggle.setAttribute('aria-label', lang === 'es' ? 'Abrir menú' : 'Open menu');
+  }
+
   localStorage.setItem('siteLang', lang);
-  currentLang = lang;
-  applyMode(currentMode);
 };
 
 const applyLanguage = (lang) => {
   document.body.classList.add('i18n-fade');
-  window.setTimeout(() => {
+  setTimeout(() => {
     swapLanguageContent(lang);
-    window.setTimeout(() => {
+    applyMode(currentMode);
+    setTimeout(() => {
       document.body.classList.remove('i18n-fade');
     }, 20);
   }, 250);
 };
 
-langToggle.addEventListener('click', () => {
-  applyLanguage(currentLang === 'es' ? 'en' : 'es');
-});
+if (langToggle) {
+  langToggle.addEventListener('click', () => {
+    applyLanguage(currentLang === 'es' ? 'en' : 'es');
+  });
+}
 
-modeToggle.addEventListener('click', () => {
-  applyMode(currentMode === 'dark' ? 'light' : 'dark');
-});
+if (modeToggle) {
+  modeToggle.addEventListener('click', () => {
+    const nextMode = currentMode === 'dark' ? 'light' : 'dark';
+    applyMode(nextMode);
+  });
+}
 
-applyMode(currentMode);
-swapLanguageContent(currentLang);
+document.addEventListener("DOMContentLoaded", () => {
+  swapLanguageContent(currentLang);
+  applyMode('light');
+  startTypewriter();
+});
