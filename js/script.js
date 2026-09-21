@@ -3,6 +3,7 @@ const siteNav = document.getElementById('siteNav');
 const langToggle = document.getElementById('langToggle');
 const modeToggle = document.getElementById('modeToggle');
 const typewriterElement = document.getElementById('typewriterText');
+const mainContent = document.querySelector('main');
 
 let currentLang = localStorage.getItem('siteLang') || 'es';
 let currentMode = localStorage.getItem('siteMode') || 'light';
@@ -18,6 +19,11 @@ function typeWriter() {
     
     const randomDelay = Math.floor(Math.random() * (120 - 50 + 1)) + 50;
     setTimeout(typeWriter, randomDelay);
+  } else {
+    if (mainContent) {
+      mainContent.classList.add('content-ready');
+    }
+    triggerScrollReveals();
   }
 }
 
@@ -80,7 +86,17 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
 );
 
-revealTargets.forEach((el) => revealObserver.observe(el));
+function triggerScrollReveals() {
+  revealTargets.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom >= 0) {
+      el.classList.add('revealed');
+      revealObserver.unobserve(el);
+    } else {
+      revealObserver.observe(el);
+    }
+  });
+}
 
 const translations = {
   navInicio: { es: 'Inicio', en: 'Home' },

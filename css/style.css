@@ -766,3 +766,16 @@ section {
     width: 38px;
   }
 }
+
+main.wait-for-typewriter {
+  opacity: 0;
+  transform: translateY(15px);
+  pointer-events: none;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+main.content-ready {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
