@@ -225,20 +225,42 @@ document.addEventListener("DOMContentLoaded", () => {
   swapLanguageContent(currentLang);
   applyMode(currentMode);
   typeWriter();
-  
+
   const scrollBtn = document.querySelector('.scroll-indicator');
 
-  if (scrollBtn) {
-    scrollBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetSection = document.querySelector('#sobre-mi');
+if (scrollBtn) {
+  scrollBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetSection = document.querySelector('#sobre-mi');
 
-      if (targetSection) {
-        targetSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+    if (targetSection) {
+      const headerOffset = 72;
+      const elementPosition = targetSection.getBoundingClientRect().top;
+      const startPosition = window.pageYOffset || document.documentElement.scrollTop;
+      const targetPosition = elementPosition + startPosition - headerOffset;
+      const distance = targetPosition - startPosition;
+      
+      const duration = 800;
+      let start = null;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const time = Math.min(progress / duration, 1);
+
+        const ease = time < 0.5 
+          ? 4 * time * time * time 
+          : 1 - Math.pow(-2 * time + 2, 3) / 2;
+
+        window.scrollTo(0, startPosition + distance * ease);
+
+        if (progress < duration) {
+          window.requestAnimationFrame(step);
+        }
       }
-    });
-  }
+
+      window.requestAnimationFrame(step);
+    }
+  });
+}
 });
