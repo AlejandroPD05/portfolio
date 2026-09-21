@@ -7,7 +7,7 @@ const typewriterElement = document.getElementById('typewriterText');
 let currentLang = localStorage.getItem('siteLang') || 'es';
 let currentMode = localStorage.getItem('siteMode') || 'light';
 
-const fullText = "alejandro";
+const fullText = "Alejandro";
 let charIndex = 0;
 let isTyping = false;
 
@@ -16,14 +16,8 @@ function typeWriter() {
     typewriterElement.textContent += fullText.charAt(charIndex);
     charIndex++;
     
-    const randomDelay = Math.floor(Math.random() * (90 - 40 + 1)) + 40;
+    const randomDelay = Math.floor(Math.random() * (110 - 50 + 1)) + 50;
     setTimeout(typeWriter, randomDelay);
-  } else {
-    const mainContent = document.querySelector('main');
-    if (mainContent) {
-      mainContent.classList.add('content-ready');
-    }
-    triggerScrollReveals();
   }
 }
 
@@ -233,5 +227,6 @@ if (modeToggle) {
 document.addEventListener("DOMContentLoaded", () => {
   swapLanguageContent(currentLang);
   applyMode(currentMode);
+  triggerScrollReveals();
   startTypewriter();
 });
