@@ -225,4 +225,20 @@ document.addEventListener("DOMContentLoaded", () => {
   swapLanguageContent(currentLang);
   applyMode(currentMode);
   typeWriter();
+  
+  const scrollBtn = document.querySelector('.scroll-indicator');
+
+  if (scrollBtn) {
+    scrollBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetSection = document.querySelector('#sobre-mi');
+
+      if (targetSection) {
+        targetSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  }
 });
