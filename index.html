@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light-mode">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,14 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<div class="site-loader" id="siteLoader">
+  <div class="loader-content">
+    <span class="loader-logo">alejandro<span class="logo-dot">.dev</span></span>
+    <div class="loader-bar"><div class="loader-progress"></div></div>
+  </div>
+</div>
+
 <header class="site-header" id="topbar">
 <div class="container header-inner">
 <a href="#inicio" class="logo">alejandro<span class="logo-dot">.dev</span></a>
@@ -26,7 +34,7 @@
 <span class="lang-code lang-en">EN</span>
 <span class="lang-code lang-es">ES</span>
 </button>
-<button class="icon-toggle mode-toggle" id="modeToggle" aria-label="Cambiar a modo día">
+<button class="icon-toggle mode-toggle" id="modeToggle" aria-label="Cambiar a modo noche">
 <span class="mode-icon icon-sun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></span>
 <span class="mode-icon icon-moon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 1020.354 15.354z"></path></svg></span>
 </button>
@@ -78,7 +86,7 @@ perfil_actual.status
 <dd data-i18n="statEnfoqueValue">Desarrollo Web Frontend</dd>
 </div>
 <div class="status-row">
-<dt>stack</dt>
+<dt>lenguajes</dt>
 <dd>HTML · CSS · JavaScript · SQL · Java</dd>
 </div>
 <div class="status-row">
@@ -87,7 +95,7 @@ perfil_actual.status
 </div>
 <div class="status-row">
 <dt data-i18n="statUbicacionLabel">ubicación</dt>
-<dd data-i18n="statUbicacionValue">España</dd>
+<dd data-i18n="statUbicacionValue">Madrid, España</dd>
 </div>
 </dl>
 </aside>
@@ -177,7 +185,7 @@ perfil_actual.status
     <span class="ticket-id">#006</span>
     <span class="tag tag-frontend">Frontend · SPA / API</span>
   </div>
-  <h3>LOOTDEX — Gaming Hub</h3>
+  <h3>GAMESTASH — Gaming Hub</h3>
   <p>Aplicación Single Page App (SPA) para explorar videojuegos consumiendo la API de RAWG. Incluye buscador en tiempo real, filtros, paginación, enrutamiento dinámico y consumo seguro de API Keys mediante Vite.</p>
   <div class="card-tags">
     <span class="pill">JavaScript ES6+</span>
@@ -191,7 +199,6 @@ perfil_actual.status
 </div>
 </div>
 </section>
-
 
 <section id="contacto" class="contact">
 <div class="container">
