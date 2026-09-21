@@ -92,7 +92,8 @@ body.page-loaded main section:not(#inicio) {
 
 .hero-role.hero-anim,
 .hero-desc.hero-anim,
-.hero-actions.hero-anim {
+.hero-actions.hero-anim,
+.scroll-indicator.hero-anim {
   transform: translateY(-25px) scale(0.95);
 }
 
@@ -106,6 +107,7 @@ body.page-loaded .hero-anim[style*="--d:0"] { transition-delay: 0.1s; }
 body.page-loaded .hero-anim[style*="--d:2"] { transition-delay: 0.1s; }
 body.page-loaded .hero-anim[style*="--d:3"] { transition-delay: 0.25s; }
 body.page-loaded .hero-anim[style*="--d:4"] { transition-delay: 0.4s; }
+body.page-loaded .hero-anim[style*="--d:5"] { transition-delay: 0.55s; }
 
 #initial-loader {
   position: fixed;
@@ -361,6 +363,7 @@ section {
 }
 
 .hero {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -373,6 +376,38 @@ section {
 
 .hero-inner {
   max-width: 760px;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transition: color var(--t-fast) ease;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  animation: bounceSmooth 2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.scroll-indicator:hover {
+  color: var(--accent);
+}
+
+@keyframes bounceSmooth {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
 }
 
 .reveal {
