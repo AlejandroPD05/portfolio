@@ -2,31 +2,31 @@ const navToggle = document.getElementById('navToggle');
 const siteNav = document.getElementById('siteNav');
 const langToggle = document.getElementById('langToggle');
 const modeToggle = document.getElementById('modeToggle');
-const typewriterElement = document.getElementById('typewriterText');
 
 let currentLang = localStorage.getItem('siteLang') || 'es';
 let currentMode = localStorage.getItem('siteMode') || 'light';
 
+// Lógica de Escritura Inicial
+const loaderElement = document.getElementById('initial-loader');
+const loaderText = document.getElementById('loaderText');
 const fullText = "Alejandro";
 let charIndex = 0;
-let isTyping = false;
 
 function typeWriter() {
-  if (typewriterElement && charIndex < fullText.length) {
-    typewriterElement.textContent += fullText.charAt(charIndex);
+  if (loaderText && charIndex < fullText.length) {
+    loaderText.textContent += fullText.charAt(charIndex);
     charIndex++;
-    
-    const randomDelay = Math.floor(Math.random() * (110 - 50 + 1)) + 50;
+    const randomDelay = Math.floor(Math.random() * (120 - 60 + 1)) + 60;
     setTimeout(typeWriter, randomDelay);
-  }
-}
-
-function startTypewriter() {
-  if (typewriterElement && !isTyping) {
-    isTyping = true;
-    typewriterElement.textContent = "";
-    charIndex = 0;
-    typeWriter();
+  } else {
+    // Cuando finaliza de escribir "Alejandro_"
+    setTimeout(() => {
+      if (loaderElement) {
+        loaderElement.classList.add('loader-hidden');
+      }
+      document.body.classList.add('page-loaded');
+      triggerScrollReveals();
+    }, 400); // Breve pausa tras escribir antes de revelar la página
   }
 }
 
@@ -78,7 +78,7 @@ const revealObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+  { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
 );
 
 function triggerScrollReveals() {
@@ -227,6 +227,5 @@ if (modeToggle) {
 document.addEventListener("DOMContentLoaded", () => {
   swapLanguageContent(currentLang);
   applyMode(currentMode);
-  triggerScrollReveals();
-  startTypewriter();
+  typeWriter();
 });
