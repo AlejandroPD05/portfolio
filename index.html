@@ -10,14 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
-<div class="site-loader" id="siteLoader">
-  <div class="loader-content">
-    <span class="loader-logo">alejandro<span class="logo-dot">.dev</span></span>
-    <div class="loader-bar"><div class="loader-progress"></div></div>
-  </div>
-</div>
+<body class="light-mode">
 
 <header class="site-header" id="topbar">
 <div class="container header-inner">
@@ -53,7 +46,9 @@
 <span class="status-dot status-ok"></span>
 <span data-i18n="heroStatus">Disponible para nuevas oportunidades</span>
 </div>
-<h1 class="hero-name hero-anim" style="--d:1">Alejandro<span class="cursor">_</span></h1>
+
+<h1 class="hero-name"><span id="typewriterText"></span><span class="cursor">_</span></h1>
+
 <p class="hero-role hero-anim" style="--d:2">Helpdesk IT & Junior Web Developer</p>
 <p class="hero-desc hero-anim" style="--d:3" data-i18n="heroDesc">Resuelvo incidencias del lado del usuario y construyo la interfaz que las previene. Un perfil a medio camino entre el soporte técnico y el desarrollo web.</p>
 <div class="hero-actions hero-anim" style="--d:4">
