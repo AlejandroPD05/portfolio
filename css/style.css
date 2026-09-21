@@ -71,7 +71,7 @@ main section:not(#inicio) {
 .site-header,
 .site-footer,
 main section:not(#inicio) {
-  transition: opacity 0.8s ease, visibility 0.8s ease;
+  transition: opacity 1s ease, visibility 1s ease;
 }
 
 body.page-loaded .site-header,
@@ -79,6 +79,7 @@ body.page-loaded .site-footer,
 body.page-loaded main section:not(#inicio) {
   opacity: 1;
   visibility: visible;
+  transition-delay: 0.6s;
 }
 
 .hero-anim {
