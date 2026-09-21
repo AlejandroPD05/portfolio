@@ -3,7 +3,6 @@ const siteNav = document.getElementById('siteNav');
 const langToggle = document.getElementById('langToggle');
 const modeToggle = document.getElementById('modeToggle');
 const typewriterElement = document.getElementById('typewriterText');
-const mainContent = document.querySelector('main');
 
 let currentLang = localStorage.getItem('siteLang') || 'es';
 let currentMode = localStorage.getItem('siteMode') || 'light';
@@ -17,9 +16,10 @@ function typeWriter() {
     typewriterElement.textContent += fullText.charAt(charIndex);
     charIndex++;
     
-    const randomDelay = Math.floor(Math.random() * (120 - 50 + 1)) + 50;
+    const randomDelay = Math.floor(Math.random() * (90 - 40 + 1)) + 40;
     setTimeout(typeWriter, randomDelay);
   } else {
+    const mainContent = document.querySelector('main');
     if (mainContent) {
       mainContent.classList.add('content-ready');
     }
@@ -32,10 +32,11 @@ function startTypewriter() {
     isTyping = true;
     typewriterElement.textContent = "";
     charIndex = 0;
-    setTimeout(typeWriter, 350);
+    typeWriter();
   }
 }
 
+// Menú Móvil
 if (navToggle && siteNav) {
   navToggle.addEventListener('click', () => {
     const isOpen = siteNav.classList.toggle('open');
