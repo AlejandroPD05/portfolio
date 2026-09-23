@@ -2,3 +2,10 @@
 .env.local
 node_modules/
 dist/
+src/config.js
+gaming-hub-spa/.env
+gaming-hub-spa/.env.local
+gaming-hub-spa/node_modules/
+gaming-hub-spa/dist/
+gaming-hub-spa/src/config.js
+.DS_Store
