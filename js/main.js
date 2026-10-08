@@ -23,6 +23,7 @@ import { initScrollChrome } from './effects/chrome.js';
 import { initCursor } from './effects/cursor.js';
 import { initMagnetic } from './effects/magnet.js';
 import { initTilt } from './effects/tilt.js';
+import { initAmbient } from './effects/ambient.js';
 
 const HERO_READY_DELAY_MS = 60;
 /* Safety net: if the intro overlay ever fails to report completion, the page
@@ -88,13 +89,16 @@ function boot() {
   initTilt();
 
   /* Content stays hidden behind the boot overlay until it lifts, so the
-     scroll reveals and the hero entrance fire exactly when the page appears. */
+     scroll reveals and the hero entrance fire exactly when the page appears.
+     The ambient-glow budget starts here too: its frame probe must time the
+     settled page, never the boot overlay that is still animating. */
   let started = false;
   const startPage = () => {
     if (started) return;
     started = true;
     observeReveals(document);
     revealHero();
+    initAmbient();
   };
 
   runIntro(startPage);
