@@ -241,11 +241,16 @@ export const projects = [
   },
 
   /* --------------------------------------------------------------------- */
-  /* Archive — creative pieces, games and tools, all with public code      */
+  /* Archive — creative pieces, games and tools, all with public code.     */
+  /*                                                                        */
+  /* Only TekBowFix is published in this section right now: the entries     */
+  /* below are kept with `hidden: true` so the copy is not lost — delete    */
+  /* that single line to bring one back.                                    */
   /* --------------------------------------------------------------------- */
   {
     id: 'huapi-web',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'CSS',
     categories: ['frontend'],
@@ -260,6 +265,7 @@ export const projects = [
   {
     id: 'ramo-3d',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'JavaScript',
     categories: ['creative'],
@@ -271,6 +277,7 @@ export const projects = [
   {
     id: 'baraja',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML · CSS',
     categories: ['creative'],
@@ -282,6 +289,7 @@ export const projects = [
   {
     id: 'plataformas',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML · Canvas',
     categories: ['game', 'creative'],
@@ -296,6 +304,7 @@ export const projects = [
   {
     id: 'mapa-estelar',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML',
     categories: ['creative', 'frontend'],
@@ -307,6 +316,7 @@ export const projects = [
   {
     id: 'mesario',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'JavaScript',
     categories: ['creative'],
@@ -318,6 +328,7 @@ export const projects = [
   {
     id: 'nuestra-historia',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML',
     categories: ['creative'],
@@ -329,6 +340,7 @@ export const projects = [
   {
     id: 'ramo-para-ti',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'JavaScript',
     categories: ['creative'],
@@ -340,6 +352,7 @@ export const projects = [
   {
     id: 'sant-jordi-minimalista',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML',
     categories: ['creative', 'frontend'],
@@ -351,6 +364,7 @@ export const projects = [
   {
     id: 'sant-jordi-rosa',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML',
     categories: ['creative'],
@@ -362,6 +376,7 @@ export const projects = [
   {
     id: 'portal-candado',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML',
     categories: ['tool'],
@@ -376,6 +391,7 @@ export const projects = [
   {
     id: 'universo',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'HTML',
     categories: ['creative'],
@@ -387,6 +403,7 @@ export const projects = [
   {
     id: 'poema-web',
     tier: 'archive',
+    hidden: true,
     year: 2026,
     language: 'CSS',
     categories: ['creative'],

@@ -74,7 +74,7 @@ export function createProjectCard(project, lang) {
     'article',
     {
       class: 'project-card reveal',
-      dataset: { featured: 'true', id: project.id, categories: project.categories.join(' ') },
+      dataset: { id: project.id, categories: project.categories.join(' ') },
     },
     [
       createHeader(project, lang),

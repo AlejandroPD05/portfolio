@@ -395,6 +395,14 @@ html.js .hero.is-ready .hero-name .ch {
 
 /* --- Responsive ---------------------------------------------------------- */
 
+/* Below this the four stack cards drop to 2 per row; auto-fit would otherwise
+   pick 3 and leave one card orphaned on the last row. */
+@media (max-width: 1080px) {
+  .stack-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 980px) {
   .about-grid {
     grid-template-columns: 1fr;
@@ -459,10 +467,6 @@ html.js .hero.is-ready .hero-name .ch {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .project-card[data-featured="true"] {
-    grid-column: span 1;
-  }
-
   .filter-bar {
     gap: var(--space-4);
   }
@@ -486,6 +490,13 @@ html.js .hero.is-ready .hero-name .ch {
 
   .hero-meta {
     gap: var(--space-4) var(--space-5);
+  }
+}
+
+/* Single column once two cards would drop below ~240px of usable width. */
+@media (max-width: 560px) {
+  .stack-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
