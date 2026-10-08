@@ -393,6 +393,183 @@ html.js .hero.is-ready .hero-name .ch {
   color: var(--accent);
 }
 
+/* --- Curriculum ---------------------------------------------------------- */
+
+.cv-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+/* Mirrors the PDF: a narrow rail for profile, languages, availability and
+   contact, and the wider column for experience, education and skills. */
+.cv-sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.42fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.cv-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.cv-block {
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.cv-block-title {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px dashed var(--border);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cv-block p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.cv-block p + p {
+  margin-top: var(--space-3);
+}
+
+.cv-block .cv-lead {
+  color: var(--text);
+}
+
+.cv-entry + .cv-entry {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.cv-entry-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.cv-entry-meta {
+  margin-top: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.cv-entry-sub {
+  margin-top: var(--space-3);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cv-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.cv-list > li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.cv-list > li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.cv-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-5);
+}
+
+.cv-skills-head {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Skill chips wrap rather than overflowing: `nowrap` was what punched long
+   labels out of the stack cards on narrow columns. */
+.cv-list-tags {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.cv-list-tags > li {
+  padding: var(--space-1) 10px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.cv-list-tags > li::before {
+  content: none;
+}
+
+.cv-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cv-badge {
+  padding: 2px 9px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.cv-contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cv-contact a {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.cv-contact a:hover {
+  color: var(--accent);
+}
+
 /* --- Responsive ---------------------------------------------------------- */
 
 /* Below this the four stack cards drop to 2 per row; auto-fit would otherwise
@@ -407,6 +584,10 @@ html.js .hero.is-ready .hero-name .ch {
   .about-grid {
     grid-template-columns: 1fr;
     gap: var(--space-7);
+  }
+
+  .cv-sheet {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .project-grid {

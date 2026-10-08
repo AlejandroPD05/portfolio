@@ -133,6 +133,7 @@
       <nav class="site-nav" aria-label="Principal">
         <a href="#inicio" class="nav-link" data-section="inicio" data-i18n="navHome">Inicio</a>
         <a href="#sobre-mi" class="nav-link" data-section="sobre-mi" data-i18n="navAbout">Sobre mí</a>
+        <a href="#cv" class="nav-link" data-section="cv" data-i18n="navCv">CV</a>
         <a href="#proyectos" class="nav-link" data-section="proyectos" data-i18n="navProjects">Proyectos</a>
         <a href="#tecnologias" class="nav-link" data-section="tecnologias" data-i18n="navStack">Tecnologías</a>
         <a href="#contacto" class="nav-link" data-section="contacto" data-i18n="navContact">Contacto</a>
@@ -182,6 +183,7 @@
       <div class="hero-actions hero-anim" style="--d:4">
         <a href="#proyectos" class="btn btn-primary" data-i18n="btnViewProjects">Ver proyectos</a>
         <a href="#contacto" class="btn btn-outline" data-i18n="btnContact">Contactar</a>
+        <a href="assets/cv-alejandro-prieto.pdf" download="CV-Alejandro-Prieto-2026.pdf" class="btn btn-ghost" data-i18n="btnDownloadCv">Descargar CV</a>
       </div>
 
       <dl class="hero-meta hero-anim" style="--d:5">
@@ -257,6 +259,112 @@
     </div>
   </section>
 
+  <!-- ===================== CV ===================== -->
+  <section id="cv" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" data-i18n="titleCv">CV</h2>
+        <p class="section-note" data-i18n="cvNote">Versión web del currículum · también en PDF</p>
+      </div>
+
+      <div class="cv-toolbar reveal">
+        <a class="btn btn-primary" href="assets/cv-alejandro-prieto.pdf" download="CV-Alejandro-Prieto-2026.pdf" data-i18n="btnDownloadCvFull">Descargar CV (PDF)</a>
+        <button type="button" class="btn btn-outline" id="printCvButton" data-i18n="btnPrintCv">Imprimir o guardar como PDF</button>
+      </div>
+
+      <div class="cv-sheet">
+        <div class="cv-col">
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvProfileTitle">Perfil</h3>
+            <p class="cv-lead" data-i18n="cvProfileP1">Técnico de soporte informático junior con experiencia en gestión de incidencias y soporte N1 en entorno empresarial.</p>
+            <p data-i18n="cvProfileP2">Formación en sistemas microinformáticos y redes, con conocimientos en Active Directory, servicios de red (DNS, DHCP) y entornos Windows.</p>
+            <p data-i18n="cvProfileP3">Acostumbrado a trabajar con usuarios finales, documentar incidencias y colaborar con otros departamentos técnicos para la resolución de problemas.</p>
+          </div>
+
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvLangTitle">Idiomas</h3>
+            <p class="cv-line"><span data-i18n="cvLangEnglish">Inglés</span> <span class="cv-badge">B2</span></p>
+          </div>
+
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvAvailTitle">Disponibilidad</h3>
+            <p data-i18n="cvAvailValue">Completa hasta septiembre, turno de tarde y/o noche en septiembre.</p>
+          </div>
+
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvContactTitle">Contacto</h3>
+            <ul class="cv-contact">
+              <li><a href="mailto:alejandroprietodiez05@gmail.com">alejandroprietodiez05@gmail.com</a></li>
+              <li><a href="https://github.com/AlejandroPD05" target="_blank" rel="noopener noreferrer">github.com/AlejandroPD05</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cv-col">
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvExperienceTitle">Experiencia laboral</h3>
+            <article class="cv-entry">
+              <h4 class="cv-entry-title" data-i18n="cvJobTitle">Técnico de Gestión de Incidencias Informáticas</h4>
+              <p class="cv-entry-meta"><span data-i18n="cvJobPlace">Centribal</span> · <span data-i18n="cvJobDates">Marzo 2024 – Junio 2025</span></p>
+              <p class="cv-entry-sub" data-i18n="cvJobDuties">Funciones:</p>
+              <ul class="cv-list">
+                <li data-i18n="cvJobF1">Gestión y resolución de incidencias informáticas mediante sistema de ticketing.</li>
+                <li data-i18n="cvJobF2">Soporte técnico de primer nivel a usuarios en entorno Windows.</li>
+                <li data-i18n="cvJobF3">Resolución de incidencias de hardware y software.</li>
+                <li data-i18n="cvJobF4">Gestión básica de Active Directory (usuarios y permisos).</li>
+                <li data-i18n="cvJobF5">Soporte en incidencias de red, impresoras y accesos.</li>
+                <li data-i18n="cvJobF6">Documentación de incidencias y soluciones aplicadas.</li>
+                <li data-i18n="cvJobF7">Colaboración con otros departamentos técnicos para la detección de problemas recurrentes.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvEducationTitle">Formación</h3>
+            <article class="cv-entry">
+              <h4 class="cv-entry-title" data-i18n="cvEdu1Title">Grado superior en Desarrollo de aplicaciones web</h4>
+              <p class="cv-entry-meta" data-i18n="cvEdu1Place">IES El Cañaveral</p>
+            </article>
+            <article class="cv-entry">
+              <h4 class="cv-entry-title" data-i18n="cvEdu2Title">Grado medio en Sistemas microinformáticos y redes</h4>
+              <p class="cv-entry-meta" data-i18n="cvEdu2Place">ES El Cañaveral</p>
+            </article>
+          </div>
+
+          <div class="cv-block reveal">
+            <h3 class="cv-block-title" data-i18n="cvSkillsTitle">Competencias técnicas</h3>
+            <div class="cv-skills">
+              <div class="cv-skills-group">
+                <p class="cv-skills-head" data-i18n="cvSkillsSystems">Sistemas y redes</p>
+                <ul class="cv-list cv-list-tags">
+                  <li>Windows 10 / 11</li>
+                  <li>Active Directory</li>
+                  <li>LDAP</li>
+                  <li>DNS / DHCP</li>
+                  <li>TCP/IP</li>
+                  <li data-i18n="cvSkillNet">Conectividad de red</li>
+                  <li data-i18n="cvSkillPrinters">Impresoras de red</li>
+                </ul>
+              </div>
+              <div class="cv-skills-group">
+                <p class="cv-skills-head" data-i18n="cvSkillsSupport">Soporte IT y hardware</p>
+                <ul class="cv-list cv-list-tags">
+                  <li>Helpdesk N1</li>
+                  <li data-i18n="cvSkillTicket">Gestión de incidencias y ticketing</li>
+                  <li data-i18n="cvSkillUsers">Atención a usuarios finales</li>
+                  <li data-i18n="cvSkillDocs">Documentación técnica</li>
+                  <li data-i18n="cvSkillFix">Diagnóstico y resolución de averías</li>
+                  <li data-i18n="cvSkillInstall">Instalación y configuración de equipos</li>
+                  <li data-i18n="cvSkillHw">Hardware y software</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== Proyectos ===================== -->
   <section id="proyectos" class="section">
     <div class="container">
@@ -324,6 +432,7 @@
           <button type="button" class="btn btn-outline" id="copyEmailButton" data-i18n="contactCopyEmail">Copiar correo</button>
           <span class="copy-feedback" id="copyEmailFeedback" role="status" aria-live="polite"></span>
         </span>
+        <a class="btn btn-outline" href="assets/cv-alejandro-prieto.pdf" download="CV-Alejandro-Prieto-2026.pdf" data-i18n="btnDownloadCv">Descargar CV</a>
       </div>
 
       <ul class="contact-list">

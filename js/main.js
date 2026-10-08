@@ -15,6 +15,7 @@ import { initNav } from './nav.js';
 import { initProjects } from './projects.js';
 import { initStack } from './stack.js';
 import { initContact } from './contact.js';
+import { initCv } from './cv.js';
 import { observeReveals } from './reveal.js';
 import { initScramble } from './effects/scramble.js';
 import { initCounters } from './effects/counters.js';
@@ -78,6 +79,7 @@ function boot() {
   initProjects();
   initStack();
   initContact();
+  initCv();
   initScrollChrome();
   initScramble();
   initCounters();

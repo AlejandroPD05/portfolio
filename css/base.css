@@ -179,11 +179,61 @@ html.js .reveal.is-visible {
 }
 
 @media print {
-  .site-header,
-  .site-footer,
-  .skip-link,
-  .filter-bar {
+  /* Prefixed with `html` on purpose: these elements are styled by
+     sections.css / components.css, which load after base.css, so a plain
+     `.site-header` here would lose the cascade tie and stay on the page. */
+  html .site-header,
+  html .site-footer,
+  html .skip-link,
+  html .filter-bar,
+  html .scroll-indicator,
+  html .scroll-progress,
+  html .standalone-warning,
+  html .intro {
     display: none;
+  }
+
+  /* Reveals are painted by JS; never print an un-scrolled section blank. */
+  html.js .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html,
+  body {
+    background: #fff;
+  }
+}
+
+/* "Imprimir CV" sets html.print-cv before window.print(), so only the
+   résumé is laid out. A plain Ctrl+P still prints the whole page. */
+@media print {
+  html.print-cv main > section:not(#cv),
+  html.print-cv .cv-toolbar,
+  html.print-cv .scroll-progress {
+    display: none !important;
+  }
+
+  html.print-cv body,
+  html.print-cv main,
+  html.print-cv #cv {
+    padding: 0;
+    border: 0;
+    background: #fff;
+  }
+
+  html.print-cv #cv .container {
+    max-width: none;
+    padding: 0;
+  }
+
+  html.print-cv .cv-sheet {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.42fr);
+  }
+
+  html.print-cv .cv-block,
+  html.print-cv .cv-col {
+    gap: var(--space-4);
   }
 }
 

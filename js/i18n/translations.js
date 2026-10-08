@@ -19,6 +19,7 @@ export const translations = {
   /* --- Navigation & header ---------------------------------------------- */
   navHome: { es: 'Inicio', en: 'Home' },
   navAbout: { es: 'Sobre mí', en: 'About' },
+  navCv: { es: 'CV', en: 'CV' },
   navProjects: { es: 'Proyectos', en: 'Projects' },
   navStack: { es: 'Tecnologías', en: 'Tech stack' },
   navContact: { es: 'Contacto', en: 'Contact' },
@@ -53,6 +54,9 @@ export const translations = {
   },
   btnViewProjects: { es: 'Ver proyectos', en: 'View projects' },
   btnContact: { es: 'Contactar', en: 'Get in touch' },
+  btnDownloadCv: { es: 'Descargar CV', en: 'Download CV' },
+  btnDownloadCvFull: { es: 'Descargar CV (PDF)', en: 'Download CV (PDF)' },
+  btnPrintCv: { es: 'Imprimir o guardar como PDF', en: 'Print or save as PDF' },
   statProjects: { es: 'proyectos publicados', en: 'published projects' },
   statDemos: { es: 'con demo en vivo', en: 'with a live demo' },
   statFeatured: { es: 'destacados con ficha técnica', en: 'featured with a technical brief' },
@@ -82,6 +86,108 @@ export const translations = {
     es: 'Jornada completa · híbrido o remoto',
     en: 'Full time · hybrid or remote',
   },
+
+  /* --- Curriculum -------------------------------------------------------- */
+  titleCv: { es: 'CV', en: 'Résumé' },
+  cvNote: {
+    es: 'Versión web del currículum · también en PDF',
+    en: 'Web version of the résumé · also available as PDF',
+  },
+
+  cvProfileTitle: { es: 'Perfil', en: 'Profile' },
+  cvProfileP1: {
+    es: 'Técnico de soporte informático junior con experiencia en gestión de incidencias y soporte N1 en entorno empresarial.',
+    en: 'Junior IT support technician with experience in incident management and L1 support in a corporate environment.',
+  },
+  cvProfileP2: {
+    es: 'Formación en sistemas microinformáticos y redes, con conocimientos en Active Directory, servicios de red (DNS, DHCP) y entornos Windows.',
+    en: 'Training in computer systems and networking, with knowledge of Active Directory, network services (DNS, DHCP) and Windows environments.',
+  },
+  cvProfileP3: {
+    es: 'Acostumbrado a trabajar con usuarios finales, documentar incidencias y colaborar con otros departamentos técnicos para la resolución de problemas.',
+    en: 'Used to working with end users, documenting incidents and collaborating with other technical departments to resolve problems.',
+  },
+
+  cvLangTitle: { es: 'Idiomas', en: 'Languages' },
+  cvLangEnglish: { es: 'Inglés', en: 'English' },
+
+  cvAvailTitle: { es: 'Disponibilidad', en: 'Availability' },
+  cvAvailValue: {
+    es: 'Completa hasta septiembre, turno de tarde y/o noche en septiembre.',
+    en: 'Full time until September; evening and/or night shift in September.',
+  },
+
+  cvContactTitle: { es: 'Contacto', en: 'Contact' },
+
+  cvExperienceTitle: { es: 'Experiencia laboral', en: 'Work experience' },
+  cvJobTitle: {
+    es: 'Técnico de Gestión de Incidencias Informáticas',
+    en: 'IT Incident Management Technician',
+  },
+  cvJobPlace: { es: 'Centribal', en: 'Centribal' },
+  cvJobDates: { es: 'Marzo 2024 – Junio 2025', en: 'March 2024 – June 2025' },
+  cvJobDuties: { es: 'Funciones:', en: 'Key duties:' },
+  cvJobF1: {
+    es: 'Gestión y resolución de incidencias informáticas mediante sistema de ticketing.',
+    en: 'Managing and resolving IT incidents through a ticketing system.',
+  },
+  cvJobF2: {
+    es: 'Soporte técnico de primer nivel a usuarios en entorno Windows.',
+    en: 'L1 technical support to users on Windows.',
+  },
+  cvJobF3: {
+    es: 'Resolución de incidencias de hardware y software.',
+    en: 'Resolving hardware and software incidents.',
+  },
+  cvJobF4: {
+    es: 'Gestión básica de Active Directory (usuarios y permisos).',
+    en: 'Basic Active Directory administration (users and permissions).',
+  },
+  cvJobF5: {
+    es: 'Soporte en incidencias de red, impresoras y accesos.',
+    en: 'Support for network, printer and access incidents.',
+  },
+  cvJobF6: {
+    es: 'Documentación de incidencias y soluciones aplicadas.',
+    en: 'Documenting incidents and the solutions applied.',
+  },
+  cvJobF7: {
+    es: 'Colaboración con otros departamentos técnicos para la detección de problemas recurrentes.',
+    en: 'Collaborating with other technical departments to spot recurring problems.',
+  },
+
+  cvEducationTitle: { es: 'Formación', en: 'Education' },
+  cvEdu1Title: {
+    es: 'Grado superior en Desarrollo de aplicaciones web',
+    en: 'Higher National Diploma in Web Application Development',
+  },
+  cvEdu1Place: { es: 'IES El Cañaveral', en: 'IES El Cañaveral' },
+  cvEdu2Title: {
+    es: 'Grado medio en Sistemas microinformáticos y redes',
+    en: 'Intermediate Vocational Training in Computer Systems and Networking',
+  },
+  cvEdu2Place: { es: 'ES El Cañaveral', en: 'ES El Cañaveral' },
+
+  cvSkillsTitle: { es: 'Competencias técnicas', en: 'Technical skills' },
+  cvSkillsSystems: { es: 'Sistemas y redes', en: 'Systems and networking' },
+  cvSkillsSupport: { es: 'Soporte IT y hardware', en: 'IT support and hardware' },
+  cvSkillNet: { es: 'Conectividad de red', en: 'Network connectivity' },
+  cvSkillPrinters: { es: 'Impresoras de red', en: 'Network printers' },
+  cvSkillTicket: {
+    es: 'Gestión de incidencias y ticketing',
+    en: 'Incident and ticket management',
+  },
+  cvSkillUsers: { es: 'Atención a usuarios finales', en: 'End-user support' },
+  cvSkillDocs: { es: 'Documentación técnica', en: 'Technical documentation' },
+  cvSkillFix: {
+    es: 'Diagnóstico y resolución de averías',
+    en: 'Fault diagnosis and repair',
+  },
+  cvSkillInstall: {
+    es: 'Instalación y configuración de equipos',
+    en: 'Equipment installation and configuration',
+  },
+  cvSkillHw: { es: 'Hardware y software', en: 'Hardware and software' },
 
   /* --- Projects --------------------------------------------------------- */
   titleProjects: { es: 'Proyectos', en: 'Projects' },
