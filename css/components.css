@@ -1,0 +1,783 @@
+/* ==========================================================================
+   Components — reusable, presentation-only UI pieces.
+   ========================================================================== */
+
+/* --- Buttons -------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 13px 26px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: transform var(--t-fast) ease, border-color var(--t-fast) ease,
+    background-color var(--t-fast) ease, color var(--t-fast) ease,
+    box-shadow var(--t-fast) ease;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.38) 50%,
+    transparent 68%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.7s var(--ease-out);
+  pointer-events: none;
+}
+
+.btn-primary:hover::after,
+.btn-primary:focus-visible::after {
+  transform: translateX(130%);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -8px var(--shadow-accent);
+}
+
+.btn-outline {
+  border-color: var(--border);
+  color: var(--text);
+  background: transparent;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px var(--shadow-accent);
+}
+
+.btn-ghost {
+  padding: var(--space-2) var(--space-3);
+  border-color: var(--border-soft);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-family: var(--font-display);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* --- Icon buttons (header toggles) --------------------------------------- */
+
+.icon-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--t-fast) ease, color var(--t-fast) ease,
+    background-color var(--t-fast) ease, box-shadow var(--t-fast) ease,
+    transform var(--t-fast) ease;
+}
+
+.icon-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 8px 18px -6px var(--shadow-accent);
+  transform: translateY(-1px);
+}
+
+.icon-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-toggle .stack-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--t-mode) ease, transform var(--t-mode) ease;
+}
+
+/* language toggle: shows the code of the language you would switch TO */
+.lang-toggle .lang-code-en {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lang-toggle .lang-code-es {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+html[lang="en"] .lang-toggle .lang-code-en {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+html[lang="en"] .lang-toggle .lang-code-es {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* theme toggle: sun is shown in dark mode, moon in light mode */
+.mode-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+.mode-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+html.dark-mode .mode-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+html.dark-mode .mode-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.6);
+}
+
+/* --- Tags, pills, badges -------------------------------------------------- */
+
+.tag {
+  display: inline-block;
+  padding: var(--space-1) 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.pill {
+  display: inline-block;
+  padding: var(--space-1) 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  white-space: nowrap;
+}
+
+.pill-stack {
+  border-style: dashed;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--shadow-accent);
+  flex-shrink: 0;
+}
+
+/* --- Link arrow ----------------------------------------------------------- */
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: color var(--t-fast) ease, gap var(--t-fast) ease;
+}
+
+.link-arrow svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.link-arrow:hover {
+  color: var(--accent);
+  gap: 10px;
+}
+
+/* --- Project card --------------------------------------------------------- */
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  transition: transform var(--t-fast) ease, border-color var(--t-fast) ease,
+    box-shadow var(--t-fast) ease;
+}
+
+/* Cards in the same row enter in sequence instead of all at once: the
+   reveal transition (base.css) picks up the per-child delay. The delay lists
+   one value per property — opacity, transform, border-color, box-shadow — so
+   only the entrance is staggered and hover reactions stay instant. */
+html.js .project-grid .project-card.reveal {
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out),
+    border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+html.js .project-grid .project-card:nth-child(3n + 2) {
+  transition-delay: 90ms, 90ms, 0s, 0s;
+}
+
+html.js .project-grid .project-card:nth-child(3n + 3) {
+  transition-delay: 180ms, 180ms, 0s, 0s;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  border-left-color: var(--accent-strong);
+  box-shadow: 0 18px 34px -18px var(--shadow-accent);
+}
+
+.project-card[data-featured="true"] {
+  grid-column: span 2;
+  background: linear-gradient(135deg, var(--surface) 60%, var(--surface-2));
+}
+
+.card-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.card-index {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+}
+
+.card-subtitle {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  margin-top: -6px;
+}
+
+.card-desc {
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
+.card-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.card-highlights li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.card-highlights li::before {
+  content: "▸";
+  color: var(--accent);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+/* --- Filter bar ----------------------------------------------------------- */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.filter-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-right: var(--space-1);
+}
+
+.chip {
+  padding: 6px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease,
+    color var(--t-fast) ease;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.chip-count {
+  opacity: 0.65;
+  font-size: 0.72rem;
+  margin-left: 4px;
+}
+
+/* --- Empty state ---------------------------------------------------------- */
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: var(--space-7) var(--space-5);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* --- Archive list --------------------------------------------------------- */
+
+.archive-list {
+  border-top: 1px solid var(--border);
+}
+
+.archive-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  padding: var(--space-4) var(--space-2);
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--t-fast) ease, padding-left var(--t-fast) ease;
+}
+
+.archive-row:hover {
+  background: var(--accent-soft);
+  padding-left: var(--space-4);
+}
+
+.archive-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.archive-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.archive-desc {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.archive-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+}
+
+.archive-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  align-items: center;
+}
+
+.archive-links .link-arrow {
+  font-size: var(--fs-xs);
+}
+
+/* --- Copy-to-clipboard ---------------------------------------------------- */
+
+.copy-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.copy-feedback {
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  font-family: var(--font-display);
+  min-height: 1.2em;
+}
+
+/* --- Stack (skills) ------------------------------------------------------ */
+
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-5);
+}
+
+.stack-card {
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.stack-card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  color: var(--accent);
+}
+
+.stack-card-head svg {
+  width: 16px;
+  height: 16px;
+}
+
+.stack-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* --- Status panel (about) ------------------------------------------------ */
+
+.status-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.status-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.status-list {
+  padding: 6px var(--space-5) var(--space-4);
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 11px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: var(--fs-sm);
+}
+
+.status-row:last-child {
+  border-bottom: none;
+}
+
+.status-row dt {
+  font-family: var(--font-display);
+  color: var(--text-muted);
+}
+
+.status-row dd {
+  text-align: right;
+}
+
+/* --- Contact rows -------------------------------------------------------- */
+
+.contact-list {
+  border-top: 1px solid var(--border);
+}
+
+.contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  padding: var(--space-5) var(--space-1);
+  border-bottom: 1px solid var(--border);
+  transition: padding-left var(--t-fast) ease, color var(--t-fast) ease,
+    background-color var(--t-fast) ease;
+}
+
+.contact-row:hover {
+  padding-left: var(--space-4);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.contact-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.contact-label svg {
+  width: 18px;
+  height: 18px;
+}
+
+.contact-value {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  word-break: break-word;
+}
+
+.contact-row:hover .contact-value {
+  color: var(--accent);
+}
+
+/* --- Search field --------------------------------------------------------- */
+
+.search-input {
+  min-width: 220px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.search-input:hover {
+  border-color: var(--accent);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* --- Archive footer link -------------------------------------------------- */
+
+.archive-foot {
+  margin-top: var(--space-5);
+}
+
+/* --- Standalone (file://) warning ---------------------------------------- */
+
+.standalone-warning {
+  margin: var(--space-4) auto 0;
+  max-width: var(--maxw);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: var(--fs-sm);
+}
+
+.standalone-warning code {
+  font-family: var(--font-display);
+  font-size: 0.85em;
+}
+
+/* --- Contact list -------------------------------------------------------- */
+
+.contact-list li:last-child .contact-row {
+  border-bottom: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   Micro-details — the small touches that make the page feel alive.
+   ========================================================================== */
+
+/* --- Text selection ------------------------------------------------------- */
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* --- Soft glow behind focused controls ----------------------------------- */
+
+.btn:focus-visible,
+.icon-toggle:focus-visible,
+.chip:focus-visible,
+.search-input:focus-visible,
+.nav-link:focus-visible {
+  box-shadow: 0 0 0 5px var(--accent-soft);
+}
+
+/* --- Pulsing "available" dot --------------------------------------------- */
+
+.status-dot {
+  position: relative;
+}
+
+.status-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: statusPulse 2.4s ease-out infinite;
+}
+
+@keyframes statusPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+/* --- Tag / pill hover lift ------------------------------------------------ */
+
+.tag,
+.pill,
+.chip {
+  transition: transform var(--t-fast) var(--ease-out), border-color var(--t-fast) ease,
+    background-color var(--t-fast) ease, color var(--t-fast) ease;
+}
+
+.tag:hover,
+.pill:hover {
+  transform: translateY(-2px);
+}
+
+/* --- Scrollbar ------------------------------------------------------------ */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 2px solid var(--bg);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}

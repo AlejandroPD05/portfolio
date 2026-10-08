@@ -1,0 +1,202 @@
+/* ==========================================================================
+   Intro — terminal boot overlay, visible once per page load.
+
+   Class contract (everything JS toggles is listed here for review):
+     html.intro-active          page scroll locked while the intro plays
+     .intro.is-done             exit: clip-path wipe upward (~0.55s, --ease-out)
+     .intro-line                one typed line (element created by JS)
+     .intro-line.is-active      line being typed: --accent text + block cursor
+
+   Static markup from index.html: .intro, .intro-inner, .intro-logo,
+   .intro-logo-dot, .intro-lines, .intro-bar, .intro-bar-fill, .intro-skip.
+   ========================================================================== */
+
+/* --- JS gate: without JS there is nothing to dismiss, so never show it ---- */
+
+html:not(.js) .intro {
+  display: none !important;
+}
+
+/* --- Overlay ------------------------------------------------------------- */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300; /* above .site-header (100) and .skip-link (200) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background: var(--bg);
+  clip-path: inset(0 0 0 0);
+  user-select: none;
+  overscroll-behavior: contain;
+  transition: clip-path 0.55s var(--ease-out);
+}
+
+/* Faint dotted grid so the white field reads as a screen, not empty space. */
+.intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--border-soft) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Exit: the bottom edge sweeps up, so the overlay lifts away off-screen. */
+.intro.is-done {
+  clip-path: inset(0 0 100% 0);
+  pointer-events: none;
+}
+
+/* --- Inner block --------------------------------------------------------- */
+
+.intro-inner {
+  position: relative;
+  z-index: 1;
+  width: min(540px, 100%);
+  transition: opacity 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+}
+
+.intro.is-done .intro-inner {
+  opacity: 0;
+  transform: translateY(-16px);
+}
+
+.intro-logo {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: var(--space-5);
+  animation: intro-rise 0.5s var(--ease-out);
+}
+
+.intro-logo-dot {
+  color: var(--accent);
+}
+
+/* --- Typed log ----------------------------------------------------------- */
+
+.intro-lines {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+  color: var(--text-muted);
+  /* Six lines reserved up front: the bar and skip hint never shift position. */
+  min-height: calc(6 * 1.75em);
+  margin-bottom: var(--space-5);
+}
+
+.intro-line {
+  color: var(--text-muted); /* completed lines stay muted */
+  word-break: break-word;
+}
+
+.intro-line.is-active {
+  color: var(--accent); /* the line currently being typed */
+}
+
+/* Blinking block cursor, appended in CSS so JS only manages text. */
+.intro-line.is-active::after {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.14em;
+  background: currentColor;
+  animation: intro-blink 1.05s step-end infinite;
+}
+
+/* --- Progress bar -------------------------------------------------------- */
+
+.intro-bar {
+  height: 3px;
+  width: 100%;
+  background: var(--border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.intro-bar-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--shadow-accent);
+  /* js/intro.js overrides this inline with the exact typing duration. */
+  transition: width 0.4s var(--ease-out);
+}
+
+/* --- Skip hint ----------------------------------------------------------- */
+
+.intro-skip {
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  animation: intro-fade 0.5s var(--ease-out) 0.6s forwards;
+}
+
+/* --- Scroll lock (set on <html> by js/intro.js) -------------------------- */
+
+html.intro-active,
+html.intro-active body {
+  overflow: hidden;
+}
+
+/* --- Keyframes ----------------------------------------------------------- */
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes intro-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes intro-fade {
+  to {
+    opacity: 0.7;
+  }
+}
+
+/* --- Motion preferences ---------------------------------------------------
+   :not(.force-motion) keeps `?motion=on` (mirrored onto <html> by the head
+   script) out of the OS-level preference. */
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.force-motion) .intro,
+  html:not(.force-motion) .intro-inner,
+  html:not(.force-motion) .intro-logo,
+  html:not(.force-motion) .intro-skip,
+  html:not(.force-motion) .intro-bar-fill,
+  html:not(.force-motion) .intro-line.is-active::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+  }
+}
+
+@media print {
+  .intro {
+    display: none !important;
+  }
+}

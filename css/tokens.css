@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Design tokens — single source of truth for colour, type, space and motion.
+   Palette is the original green/terminal identity of the portfolio.
+   ========================================================================== */
+
+:root {
+  /* --- Brand palette (light) -------------------------------------------- */
+  --bg: #ffffff;
+  --bg-alt: #f2faf5;
+  --surface: #f7fcf9;
+  --surface-2: #eaf5ee;
+  --border: #a9ccb8;
+  --border-soft: rgba(169, 204, 184, 0.5);
+  --text: #000000;
+  --text-muted: #2e4b3d;
+  --accent: #0b7a3c;
+  --accent-strong: #085c2c;
+  --accent-soft: rgba(11, 122, 60, 0.13);
+  --shadow-accent: rgba(11, 122, 60, 0.3);
+  --on-accent: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.86);
+
+  /* --- Type ------------------------------------------------------------- */
+  --font-display: "IBM Plex Mono", "Courier New", monospace;
+  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --fs-hero: clamp(2.6rem, 7vw, 4.6rem);
+  --fs-h2: clamp(1.6rem, 3vw, 2.1rem);
+  --fs-h3: 1.18rem;
+  --fs-body: 1rem;
+  --fs-sm: 0.92rem;
+  --fs-xs: 0.78rem;
+
+  /* --- Space ------------------------------------------------------------ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --section-y: clamp(72px, 10vw, 120px);
+
+  /* --- Shape ------------------------------------------------------------ */
+  --radius: 4px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+  --maxw: 1120px;
+  --header-h: 72px;
+
+  /* --- Motion ----------------------------------------------------------- */
+  --t-fast: 0.3s;
+  --t-mode: 0.5s;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.dark-mode {
+  --bg: #000000;
+  --bg-alt: #030a05;
+  --surface: #0c1f16;
+  --surface-2: #11281c;
+  --border: #2f6b4c;
+  --border-soft: rgba(47, 107, 76, 0.55);
+  --text: #ffffff;
+  --text-muted: #cfe3d7;
+  --accent: #6fffb0;
+  --accent-strong: #3fe28a;
+  --accent-soft: rgba(11, 255, 176, 0.16);
+  --shadow-accent: rgba(11, 255, 176, 0.4);
+  --on-accent: #00110a;
+  --header-bg: rgba(6, 11, 8, 0.82);
+}

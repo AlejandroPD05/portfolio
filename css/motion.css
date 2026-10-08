@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Motion — scroll-driven page chrome, counter support and reduced motion.
+
+   Everything here styles hooks that js/effects/* adds at runtime, and every
+   rule that changes the default page behaviour is gated behind `html.js`:
+   without JavaScript the header keeps its plain, always-visible treatment and
+   the progress track stays an inert, invisible element.
+
+   Class contract (all toggled by js/effects/chrome.js):
+     html.js .site-header.is-scrolled  scrolled past a few pixels
+     html.js .site-header.is-hidden    auto-hidden while scrolling down
+     html.js .scroll-progress.is-active progress bar visible (scrollY > 2px)
+
+   Only design tokens are used, so the dark-mode flip stays in sync.
+   ========================================================================== */
+
+/* --- Header: snappy hide/show + stronger glass when scrolled ------------- */
+
+html.js .site-header {
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out),
+    border-color var(--t-mode) ease, background-color var(--t-mode) ease;
+}
+
+html.js .site-header.is-scrolled {
+  /* The surface already paints var(--header-bg); a deeper blur plus a soft
+     accent shadow is what makes the header read as "lifted" while reading. */
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 14px 26px -20px var(--shadow-accent);
+}
+
+html.js .site-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+/* --- Scroll progress: 2px track pinned to the header's bottom edge -------- */
+
+html.js .scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px; /* sits on top of the header's 1px border */
+  height: 2px;
+  z-index: 1; /* header creates its own stacking context at z-index 100 */
+  background: var(--border-soft);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-fast) ease;
+}
+
+html.js .scroll-progress.is-active {
+  opacity: 1;
+}
+
+html.js .scroll-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+  box-shadow: 0 0 8px var(--shadow-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform; /* the scroll handler only writes transforms */
+}
+
+/* --- Hero statistics: no digit jitter while the counters run ------------- */
+
+.hero-stat strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Motion preferences ---------------------------------------------------
+   Scoped with :not(.force-motion) so `?motion=on` (mirrored onto <html> by
+   the head script) can re-enable motion against an OS-level preference. -- */
+
+@media (prefers-reduced-motion: reduce) {
+  /* The header must never auto-hide: JS skips the logic, CSS enforces it. */
+  html.js:not(.force-motion) .site-header {
+    transform: none !important;
+    transition: border-color var(--t-mode) ease, background-color var(--t-mode) ease;
+  }
+
+  html.js:not(.force-motion) .site-header.is-scrolled {
+    box-shadow: none;
+  }
+
+  /* The bar itself is not motion, but its fades/glue must not animate. */
+  html.js:not(.force-motion) .scroll-progress,
+  html.js:not(.force-motion) .scroll-progress span {
+    transition: none;
+    will-change: auto;
+  }
+}

@@ -1,0 +1,216 @@
+/* ==========================================================================
+   Base — reset, document defaults, layout primitives, motion preferences.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--t-mode) ease, color var(--t-mode) ease;
+}
+
+body.is-swapping-lang {
+  opacity: 0.4;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* --- Layout primitives ---------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+.section {
+  padding: var(--section-y) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  letter-spacing: -0.01em;
+}
+
+.section-title::after {
+  content: "_";
+  color: var(--accent);
+}
+
+.section-note {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-family: var(--font-display);
+}
+
+/* --- Accessibility -------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-4);
+  z-index: 200;
+  padding: var(--space-3) var(--space-4);
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: top var(--t-fast) ease;
+}
+
+.skip-link:focus {
+  top: var(--space-3);
+}
+
+/* --- Scroll reveal: only hidden when JS is confirmed available ------------ */
+
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+html.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Motion & contrast preferences ---------------------------------------
+   Every rule inside the reduce block is scoped with :not(.force-motion):
+   CSS cannot read the URL, so the head script mirrors `?motion=on` onto
+   <html> and here the OS preference is skipped only for that session. ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.force-motion) {
+    scroll-behavior: auto;
+  }
+
+  html:not(.force-motion),
+  html:not(.force-motion) *,
+  html:not(.force-motion)::before,
+  html:not(.force-motion)::after,
+  html:not(.force-motion) *::before,
+  html:not(.force-motion) *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  html.js:not(.force-motion) .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .filter-bar {
+    display: none;
+  }
+}
+
+/* Theme switch: animated cross-fade (js/theme.js uses the View Transitions
+   API when available; older browsers fall back to the plain 0.5s colour
+   transition on <body>). Unconditional on purpose: the API is only invoked
+   when motion is allowed — including under `?motion=on` — and these
+   pseudo-elements cannot be scoped with a class while still matching the
+   root, so the media query would also drop the forced session. ---------- */
+
+::view-transition-old(root) {
+  animation: themeFadeOut 0.25s ease both;
+}
+
+::view-transition-new(root) {
+  animation: themeFadeIn 0.35s var(--ease-out) both;
+}
+
+@keyframes themeFadeOut {
+  to {
+    opacity: 0;
+    filter: blur(3px);
+  }
+}
+
+@keyframes themeFadeIn {
+  from {
+    opacity: 0;
+  }
+}

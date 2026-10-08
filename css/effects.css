@@ -1,0 +1,239 @@
+/* ==========================================================================
+   Effects — custom cursor, magnetic controls and 3D card tilt.
+
+   Everything here styles runtime hooks added by js/effects/*, and every rule
+   is gated behind `html.js` and/or `html.has-custom-cursor`: without
+   JavaScript — or in sessions where the modules bail out because the pointer
+   is coarse or reduced motion is preferred — the page is pixel-identical to
+   one that never loaded this file.
+
+   Class / custom-property contract (nothing else is toggled by the modules):
+
+     html.has-custom-cursor        native cursor replaced (cursor.js)
+     .fx-cursor-dot                instant pointer dot
+     .fx-cursor-ring               lerped trailing ring
+       .is-visible                 pointer is over the document
+       .is-hovering                pointer is over a / button / input / [role]
+       .is-pressed                 a pointer button is held down
+     .btn / .icon-toggle / .chip
+       .is-magnetic                magnetic pull (inline translate, <= 10px)
+     .project-card / .status-panel
+       .is-tilting                 active tilt; JS writes --mx / --my (%)
+
+   Only design tokens are used, so html.dark-mode flips the whole effect
+   palette for free, and the closing media blocks neutralise this file's own
+   motion for reduced pointers, coarse pointers and print.
+   ========================================================================== */
+
+/* --- Custom cursor: retire the native pointer ----------------------------- */
+
+html.has-custom-cursor,
+html.has-custom-cursor body,
+html.has-custom-cursor a,
+html.has-custom-cursor button,
+html.has-custom-cursor [role="button"] {
+  cursor: none;
+}
+
+/* Typeable fields keep their caret — an I-beam is the affordance there, so
+   every input (notably #projectSearch) opts back into the text cursor. */
+html.has-custom-cursor input,
+html.has-custom-cursor textarea {
+  cursor: text;
+}
+
+/* --- Custom cursor: the two pointer layers -------------------------------- */
+
+html.has-custom-cursor .fx-cursor-dot,
+html.has-custom-cursor .fx-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 250; /* above .site-header (100) and .skip-link (200) */
+  pointer-events: none;
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  will-change: transform; /* both layers are written transform-only */
+  transition: opacity var(--t-fast) ease, background-color var(--t-fast) ease,
+    border-color var(--t-fast) ease;
+}
+
+html.has-custom-cursor .fx-cursor-dot {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px; /* centre the layer on the pointer coordinate */
+  background: var(--accent);
+}
+
+html.has-custom-cursor .fx-cursor-ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1px solid var(--accent);
+  background: transparent;
+}
+
+html.has-custom-cursor .fx-cursor-dot.is-visible,
+html.has-custom-cursor .fx-cursor-ring.is-visible {
+  opacity: 1;
+}
+
+/* Over a link, button or field the ring loosens into a dashed accent halo. */
+html.has-custom-cursor .fx-cursor-ring.is-hovering {
+  border-style: dashed;
+  background: var(--accent-soft);
+}
+
+/* On press the JS shrinks both layers; the deeper accent confirms the click. */
+html.has-custom-cursor .fx-cursor-dot.is-pressed {
+  background: var(--accent-strong);
+}
+
+html.has-custom-cursor .fx-cursor-ring.is-pressed {
+  border-color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+/* --- Magnetic controls ---------------------------------------------------- */
+
+/* The pull is an inline translate; this class only supplies the easing and
+   the compositing hint. Outlines, focus glow and selection stay untouched,
+   so :focus-visible rings and drag-select keep working mid-pull. */
+html.js .btn.is-magnetic,
+html.js .icon-toggle.is-magnetic,
+html.js .chip.is-magnetic {
+  transition: transform var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) ease, background-color var(--t-fast) ease,
+    color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+  will-change: transform; /* the pointermove handler only writes transforms */
+}
+
+/* --- 3D tilt + glare ------------------------------------------------------ */
+
+html.js .project-card,
+html.js .status-panel {
+  position: relative; /* anchors the ::after glare layer */
+
+  /* opacity/transform mirror the reveal timing in base.css exactly, so
+     entrances are untouched; the border/shadow entries restore what
+     components.css asks of .project-card and let the panel's tilt-lift
+     ease in and out. */
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out),
+    border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+/* Resting glare layer: a pointer-following accent sheen that stays fully
+   transparent until JS tilts the card (--mx / --my default to the centre). */
+html.js .project-card::after,
+html.js .status-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle 320px at var(--mx, 50%) var(--my, 50%),
+    var(--accent-soft),
+    transparent 72%
+  );
+  transition: opacity var(--t-fast) var(--ease-out);
+}
+
+html.js .project-card.is-tilting,
+html.js .status-panel.is-tilting {
+  z-index: 2; /* the card being tilted wins over its resting siblings */
+  will-change: transform;
+  box-shadow: 0 18px 34px -18px var(--shadow-accent);
+
+  /* No `transform` entry on purpose: the rAF loop owns the motion, frame by
+     frame. Opacity stays listed so a card caught mid-reveal keeps easing in. */
+  transition: opacity 0.8s var(--ease-out), border-color var(--t-fast) ease,
+    box-shadow var(--t-fast) ease;
+}
+
+html.js .status-panel.is-tilting {
+  border-color: var(--accent);
+}
+
+html.js .project-card.is-tilting::after,
+html.js .status-panel.is-tilting::after {
+  opacity: 1;
+}
+
+/* --- Safety: no custom cursor or transforms without a fine pointer -------- */
+
+@media (hover: none) {
+  /* The modules never arm on coarse pointers, but a pen session (fine
+     pointer, no hover) could — hand the native cursor back and drop the
+     layers so a pointer is always visible. */
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role="button"] {
+    cursor: revert;
+  }
+
+  html.has-custom-cursor .fx-cursor-dot,
+  html.has-custom-cursor .fx-cursor-ring {
+    display: none;
+  }
+
+  html.js .btn.is-magnetic,
+  html.js .icon-toggle.is-magnetic,
+  html.js .chip.is-magnetic,
+  html.js .project-card.is-tilting,
+  html.js .status-panel.is-tilting {
+    will-change: auto;
+    transition: none;
+  }
+}
+
+/* --- Motion preferences ---------------------------------------------------
+   :not(.force-motion) keeps `?motion=on` (mirrored onto <html> by the head
+   script) out of the OS-level preference. */
+
+@media (prefers-reduced-motion: reduce) {
+  /* base.css already flattens every transition globally; the contract is
+     restated here so this file stays inert even if that rule ever changes. */
+  html:not(.force-motion).has-custom-cursor,
+  html:not(.force-motion).has-custom-cursor body,
+  html:not(.force-motion).has-custom-cursor a,
+  html:not(.force-motion).has-custom-cursor button,
+  html:not(.force-motion).has-custom-cursor [role="button"] {
+    cursor: revert;
+  }
+
+  html:not(.force-motion).has-custom-cursor .fx-cursor-dot,
+  html:not(.force-motion).has-custom-cursor .fx-cursor-ring {
+    display: none;
+  }
+
+  html.js:not(.force-motion) .btn.is-magnetic,
+  html.js:not(.force-motion) .icon-toggle.is-magnetic,
+  html.js:not(.force-motion) .chip.is-magnetic,
+  html.js:not(.force-motion) .project-card,
+  html.js:not(.force-motion) .status-panel,
+  html.js:not(.force-motion) .project-card.is-tilting,
+  html.js:not(.force-motion) .status-panel.is-tilting,
+  html.js:not(.force-motion) .project-card::after,
+  html.js:not(.force-motion) .status-panel::after {
+    transition: none;
+    will-change: auto;
+  }
+
+  html.js:not(.force-motion) .project-card.is-tilting::after,
+  html.js:not(.force-motion) .status-panel.is-tilting::after {
+    opacity: 0;
+  }
+}
+
+/* --- Print: the pointer layers are screen furniture ---------------------- */
+
+@media print {
+  html.has-custom-cursor .fx-cursor-dot,
+  html.has-custom-cursor .fx-cursor-ring {
+    display: none;
+  }
+}
