@@ -715,6 +715,27 @@ html.js .project-grid .project-card:nth-child(3n + 3) {
   font-size: 0.85em;
 }
 
+/* --- <noscript> fallback ---------------------------------------------------
+   The project grid is rendered by ES modules, so with JS disabled the page is
+   otherwise empty. This gives visitors a way out. */
+
+.noscript-note {
+  margin: var(--space-4) auto 0;
+  max-width: var(--maxw);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: var(--fs-sm);
+}
+
+.noscript-note a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 /* --- Contact list -------------------------------------------------------- */
 
 .contact-list li:last-child .contact-row {
