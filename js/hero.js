@@ -4,7 +4,7 @@
  */
 
 import { qs } from './core/dom.js';
-import { getFeaturedProjects, getLiveDemoCount, getProjectCount } from './data/projects.js';
+import { getFeaturedProjects, getTotalDemoCount, getTotalRepoCount } from './data/projects.js';
 
 function setStat(selector, value) {
   const node = qs(selector);
@@ -12,7 +12,7 @@ function setStat(selector, value) {
 }
 
 export function initHero() {
-  setStat('#statProjectCount', getProjectCount());
-  setStat('#statDemoCount', getLiveDemoCount());
+  setStat('#statProjectCount', getTotalRepoCount());
+  setStat('#statDemoCount', getTotalDemoCount());
   setStat('#statFeaturedCount', getFeaturedProjects().length);
 }

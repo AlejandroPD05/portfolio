@@ -13,6 +13,7 @@ import {
   getCategoryCounts,
   getFeaturedProjects,
   getProjectCount,
+  getTotalRepoCount,
   GITHUB_PROFILE,
 } from './data/projects.js';
 import { createProjectCard } from './ui/project-card.js';
@@ -139,7 +140,7 @@ function renderResults() {
 
 function renderNote() {
   elements.note.textContent = t('projectsNote', {
-    total: getProjectCount(),
+    total: getTotalRepoCount(),
     featured: getFeaturedProjects().length,
   });
 }
@@ -154,7 +155,7 @@ function renderAll() {
 function renderArchiveLink() {
   if (!elements.allRepos) return;
   elements.allRepos.href = GITHUB_PROFILE;
-  elements.allRepos.textContent = t('viewAllRepos', { n: getProjectCount() });
+  elements.allRepos.textContent = t('viewAllRepos', { n: getTotalRepoCount() });
 }
 
 function onSearchInput(event) {

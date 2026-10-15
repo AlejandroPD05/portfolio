@@ -44,26 +44,26 @@ export const projects = [
     categories: ['backend'],
     repo: repoUrl('ticketing'),
     demo: pagesUrl('ticketing'),
-    demoLabelKey: 'linkSchema',
-    title: { es: 'Simulador de Ticketing', en: 'Ticketing simulator' },
-    kicker: { es: 'Helpdesk · modelo de datos', en: 'Helpdesk · data model' },
+    demoLabelKey: 'linkLive',
+    title: { es: 'Helpdesk RoyalTown — Sistema de tickets', en: 'RoyalTown Helpdesk — Ticketing system' },
+    kicker: { es: 'MySQL + Java/JDBC · máquina de estados', en: 'MySQL + Java/JDBC · state machine' },
     summary: {
-      es: 'Réplica funcional de un sistema de helpdesk: usuarios con rol de empleado o técnico, categorías de incidencia, tickets con prioridad y estado, e hilos de comentarios por ticket.',
-      en: 'A working replica of a helpdesk system: users with an employee or technician role, incident categories, tickets with priority and status, and comment threads per ticket.',
+      es: 'Sistema de tickets completo: esquema MySQL con ciclo de vida trazable, capa de servicios en Java con JDBC y transacciones, CLI de demostración por roles y 21 pruebas JUnit que corren sobre el mismo script.',
+      en: 'Complete ticketing system: a traceable MySQL schema, a Java service layer over JDBC with real transactions, a role-based demo CLI and 21 JUnit tests running against the same script.',
     },
     highlights: {
       es: [
-        'Esquema relacional completo: usuarios, roles, categorías, prioridades, estados y comentarios',
-        'Ciclo de vida del ticket trazable de principio a fin, con historial de cambios',
-        'Diseñado para escalar a una aplicación Java con JDBC y capa de servicios',
+        '11 tablas, 4 vistas de KPI y una matriz de transiciones validada en base de datos',
+        'Capa de servicios Java con permisos, SLA y auditoría campo a campo en Historial_Ticket',
+        '21 pruebas JUnit sobre H2 en modo MySQL y CLI demo con usuarios de prueba',
       ],
       en: [
-        'Complete relational schema: users, roles, categories, priorities, statuses and comments',
-        'Ticket lifecycle traceable end to end, with a change history',
-        'Designed to scale into a Java application with JDBC and a service layer',
+        '11 tables, 4 KPI views and a transition matrix enforced at the database level',
+        'Java service layer with permissions, SLAs and field-level auditing in Historial_Ticket',
+        '21 JUnit tests on H2 in MySQL mode and a demo CLI with seeded users',
       ],
     },
-    stack: ['SQL', 'Java', 'Modelo relacional', 'Diagrama entidad-relación', 'Helpdesk'],
+    stack: ['MySQL', 'Java 21', 'JDBC', 'Maven', 'JUnit', 'bcrypt'],
   },
   {
     id: 'gamestash',
@@ -435,6 +435,11 @@ export const getVisibleProjects = () => projects.filter(isVisible);
 export const getFeaturedProjects = () => getVisibleProjects().filter(isFeatured);
 export const getProjectCount = () => getVisibleProjects().length;
 export const getLiveDemoCount = () => getVisibleProjects().filter((p) => Boolean(p.demo)).length;
+
+/* Headline numbers count the whole catalogue (all repos on GitHub), while the
+   grid and the filter chips count only the projects with a visible card. */
+export const getTotalRepoCount = () => projects.length;
+export const getTotalDemoCount = () => projects.filter((p) => Boolean(p.demo)).length;
 
 /** Category ids mapped to how many projects use them. */
 export function getCategoryCounts() {
