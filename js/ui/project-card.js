@@ -65,6 +65,25 @@ function createActions(project) {
 }
 
 /**
+ * Cover image shown at the top of featured cards. Decorative: the project
+ * title sits right below, so an empty alt avoids screen readers repeating it.
+ */
+function createCover(project) {
+  if (!project.image) return null;
+
+  return el('div', { class: 'card-cover' }, [
+    el('img', {
+      src: project.image,
+      alt: '',
+      width: '1280',
+      height: '800',
+      loading: 'lazy',
+      decoding: 'async',
+    }),
+  ]);
+}
+
+/**
  * @param {object} project entry from `js/data/projects.js`
  * @param {string} lang    current language code
  * @returns {HTMLElement} a fully rendered card
@@ -77,6 +96,7 @@ export function createProjectCard(project, lang) {
       dataset: { id: project.id, categories: project.categories.join(' ') },
     },
     [
+      createCover(project),
       createHeader(project, lang),
       el('h3', { class: 'card-title', text: localized(project.title, lang) }),
       el('p', { class: 'card-desc', text: localized(project.summary, lang) }),

@@ -44,6 +44,7 @@ export const projects = [
     categories: ['backend'],
     repo: repoUrl('ticketing'),
     demo: pagesUrl('ticketing'),
+    image: 'assets/projects/ticketing.webp',
     demoLabelKey: 'linkLive',
     title: { es: 'Helpdesk RoyalTown — Sistema de tickets', en: 'RoyalTown Helpdesk — Ticketing system' },
     kicker: { es: 'MySQL + Java/JDBC · máquina de estados', en: 'MySQL + Java/JDBC · state machine' },
@@ -74,6 +75,7 @@ export const projects = [
     categories: ['api', 'frontend'],
     repo: repoUrl('GameStash'),
     demo: 'https://gamestash.vercel.app/',
+    image: 'assets/projects/gamestash.webp',
     title: { es: 'GameStash — Hub de videojuegos', en: 'GameStash — game hub' },
     kicker: { es: 'SPA · consumo de API REST', en: 'SPA · REST API consumer' },
     summary: {
@@ -103,6 +105,7 @@ export const projects = [
     categories: ['api', 'frontend'],
     repo: repoUrl('cinematch'),
     demo: 'https://cinematch-lemon.vercel.app/',
+    image: 'assets/projects/cinematch.webp',
     title: { es: 'Cinematch — registro de películas', en: 'Cinematch — film tracker' },
     kicker: { es: 'React · Google Sheets como base de datos', en: 'React · Google Sheets as a database' },
     summary: {
@@ -132,6 +135,7 @@ export const projects = [
     categories: ['frontend'],
     repo: repoUrl('huapi'),
     demo: pagesUrl('huapi'),
+    image: 'assets/projects/huapi.webp',
     title: { es: 'Carta Digital — Huapi', en: 'Digital menu — Huapi' },
     kicker: { es: 'Frontend · mobile first', en: 'Frontend · mobile first' },
     summary: {
@@ -161,6 +165,7 @@ export const projects = [
     categories: ['game'],
     repo: repoUrl('JuegoNaves'),
     demo: pagesUrl('JuegoNaves'),
+    image: 'assets/projects/asteroides.webp',
     title: { es: 'Juego de asteroides', en: 'Asteroids game' },
     kicker: { es: 'Canvas · bucle de juego', en: 'Canvas · game loop' },
     summary: {
@@ -190,6 +195,7 @@ export const projects = [
     categories: ['creative', 'frontend'],
     repo: repoUrl('web-animada'),
     demo: pagesUrl('web-animada'),
+    image: 'assets/projects/webanimada.webp',
     title: { es: 'Web animada', en: 'Animated web page' },
     kicker: { es: 'CSS · animación al hacer scroll', en: 'CSS · scroll animation' },
     summary: {
@@ -219,6 +225,7 @@ export const projects = [
     categories: ['frontend', 'creative'],
     repo: repoUrl('temaUI'),
     demo: pagesUrl('temaUI'),
+    image: 'assets/projects/temaui.webp',
     title: { es: 'Script de UI — StreamBox', en: 'UI theme script — StreamBox' },
     kicker: { es: 'Theming en runtime · inyección CSS', en: 'Runtime theming · CSS injection' },
     summary: {
