@@ -55,13 +55,13 @@ export const projects = [
     highlights: {
       es: [
         'API REST con Spring Boot y PostgreSQL: JWT en cookie httpOnly, permisos en la capa de servicio y errores RFC 7807 en un único formato',
-        '57 pruebas (35 de API + 22 de SPA) sobre las mismas migraciones Flyway que usa producción',
-        'SPA en React 19 + TypeScript con accesibilidad AA y despliegue en un solo contenedor',
+        '66 pruebas (35 de API + 31 de SPA) sobre las mismas migraciones Flyway que usa producción',
+        'SPA en React 19 + TypeScript con accesibilidad AA, tema claro/oscuro y despliegue en un solo contenedor',
       ],
       en: [
         'REST API on Spring Boot and PostgreSQL: JWT in an httpOnly cookie, service-layer permissions and RFC 7807 errors everywhere',
-        '57 tests (35 API + 22 SPA) running against the same Flyway migrations production uses',
-        'React 19 + TypeScript SPA with AA accessibility and a single-container deployment',
+        '66 tests (35 API + 31 SPA) running against the same Flyway migrations production uses',
+        'React 19 + TypeScript SPA with AA accessibility, light/dark theme and a single-container deployment',
       ],
     },
     stack: ['Java 21', 'Spring Boot', 'PostgreSQL', 'Flyway', 'React 19', 'TypeScript', 'TanStack Query', 'Docker'],
