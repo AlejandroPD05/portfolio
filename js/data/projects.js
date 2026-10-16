@@ -43,6 +43,8 @@ export const projects = [
     language: 'Java · TypeScript',
     categories: ['backend', 'frontend'],
     repo: repoUrl('mesa2'),
+    demo: 'https://mesa2.onrender.com',
+    demoLabelKey: 'linkLive',
     image: 'assets/projects/mesa2.webp',
     title: { es: 'Mesa 2.0 — Portal de soporte IT', en: 'Mesa 2.0 — IT support portal' },
     kicker: { es: 'Spring Boot + React 19 · autoservicio y helpdesk', en: 'Spring Boot + React 19 · self-service & helpdesk' },
@@ -53,12 +55,12 @@ export const projects = [
     highlights: {
       es: [
         'API REST con Spring Boot y PostgreSQL: JWT en cookie httpOnly, permisos en la capa de servicio y errores RFC 7807 en un único formato',
-        '47 pruebas (25 de API + 22 de SPA) sobre las mismas migraciones Flyway que usa producción',
+        '57 pruebas (35 de API + 22 de SPA) sobre las mismas migraciones Flyway que usa producción',
         'SPA en React 19 + TypeScript con accesibilidad AA y despliegue en un solo contenedor',
       ],
       en: [
         'REST API on Spring Boot and PostgreSQL: JWT in an httpOnly cookie, service-layer permissions and RFC 7807 errors everywhere',
-        '47 tests (25 API + 22 SPA) running against the same Flyway migrations production uses',
+        '57 tests (35 API + 22 SPA) running against the same Flyway migrations production uses',
         'React 19 + TypeScript SPA with AA accessibility and a single-container deployment',
       ],
     },
