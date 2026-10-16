@@ -36,6 +36,35 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'mesa2',
+    ticket: '008',
+    tier: 'featured',
+    year: 2026,
+    language: 'Java · TypeScript',
+    categories: ['backend', 'frontend'],
+    repo: repoUrl('mesa2'),
+    image: 'assets/projects/mesa2.webp',
+    title: { es: 'Mesa 2.0 — Portal de soporte IT', en: 'Mesa 2.0 — IT support portal' },
+    kicker: { es: 'Spring Boot + React 19 · autoservicio y helpdesk', en: 'Spring Boot + React 19 · self-service & helpdesk' },
+    summary: {
+      es: 'Portal de autoservicio y mesa de ayuda completo: centro de conocimiento con feedback, tickets con SLA, bandeja técnica con notas internas, panel de indicadores y administración de la base de conocimiento — React 19 delante y Spring Boot + PostgreSQL detrás.',
+      en: 'A complete self-service portal and helpdesk: a knowledge centre with feedback, SLA-driven tickets, a support desk with internal notes, a KPI dashboard and knowledge-base administration — React 19 in front, Spring Boot + PostgreSQL behind.',
+    },
+    highlights: {
+      es: [
+        'API REST con Spring Boot y PostgreSQL: JWT en cookie httpOnly, permisos en la capa de servicio y errores RFC 7807 en un único formato',
+        '47 pruebas (25 de API + 22 de SPA) sobre las mismas migraciones Flyway que usa producción',
+        'SPA en React 19 + TypeScript con accesibilidad AA y despliegue en un solo contenedor',
+      ],
+      en: [
+        'REST API on Spring Boot and PostgreSQL: JWT in an httpOnly cookie, service-layer permissions and RFC 7807 errors everywhere',
+        '47 tests (25 API + 22 SPA) running against the same Flyway migrations production uses',
+        'React 19 + TypeScript SPA with AA accessibility and a single-container deployment',
+      ],
+    },
+    stack: ['Java 21', 'Spring Boot', 'PostgreSQL', 'Flyway', 'React 19', 'TypeScript', 'TanStack Query', 'Docker'],
+  },
+  {
     id: 'ticketing',
     ticket: '004',
     tier: 'featured',
