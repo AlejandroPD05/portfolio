@@ -67,6 +67,37 @@ export const projects = [
     stack: ['Java 21', 'Spring Boot', 'PostgreSQL', 'Flyway', 'React 19', 'TypeScript', 'TanStack Query', 'Docker'],
   },
   {
+    id: 'volta-x1',
+    ticket: '009',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript',
+    categories: ['creative', 'frontend'],
+    repo: repoUrl('volta-x1'),
+    demo: pagesUrl('volta-x1'),
+    image: 'assets/projects/volta.webp',
+    demoLabelKey: 'linkLive',
+    title: { es: 'VOLTA X1 — Landing 3D interactiva', en: 'VOLTA X1 — Interactive 3D landing' },
+    kicker: { es: 'React + three.js · despiece 3D guiado por scroll', en: 'React + three.js · scroll-driven 3D teardown' },
+    summary: {
+      es: 'Landing de producto para un ratón gaming ficticio: el ratón se renderiza en 3D y se descompone en seis capas al hacer scroll, con hotspots anclados a cada pieza que abren su ficha técnica. Incluye rotación 360°, intro cinematográfica y tres acentos neón que tiñen escena e interfaz.',
+      en: 'A product landing page for a fictional gaming mouse: the mouse is rendered in 3D and comes apart into six layers as you scroll, with hotspots anchored to each part that open its spec sheet. It includes 360° rotation, a cinematic intro and three neon accents that tint both scene and interface.',
+    },
+    highlights: {
+      es: [
+        'Despiece de seis capas controlado por scroll, slider o botones, con ensamblaje inverso al continuar',
+        'Geometría 100 % procedural en React Three Fiber — sin modelos externos — con hotspots anclados a cada pieza',
+        'Estado por frame fuera de React, canvas único bajo el DOM y reduced-motion respetado para mantener los 60 FPS',
+      ],
+      en: [
+        'Six-layer teardown driven by scroll, slider or buttons, with reverse assembly as you continue',
+        '100% procedural geometry in React Three Fiber — no external models — with hotspots anchored to each part',
+        'Per-frame state kept out of React, a single canvas under the DOM layer and reduced-motion support to hold 60 FPS',
+      ],
+    },
+    stack: ['React 19', 'TypeScript', 'three.js', 'React Three Fiber', 'GSAP', 'Framer Motion', 'Tailwind CSS v4', 'Vite', 'Zustand'],
+  },
+  {
     id: 'ticketing',
     ticket: '004',
     tier: 'featured',
