@@ -36,6 +36,35 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'dinodle',
+    ticket: '010',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript · SQL',
+    categories: ['frontend', 'backend', 'game'],
+    repo: repoUrl('dinodle'),
+    image: 'assets/projects/dinodle.webp',
+    title: { es: 'Dinodle — el dinosaurio del día', en: 'Dinodle — the daily dinosaur' },
+    kicker: { es: 'React + Supabase · sprites procedurales', en: 'React + Supabase · procedural sprites' },
+    summary: {
+      es: 'Un dinosaurio secreto cada día: búscalo por nombre, compara cinco pistas por intento y añádelo a tu DinoDex. Detrás del juego hay un estudio procedural que dibuja el sprite de pixel art de los 288 dinosaurios — seis animaciones cada uno — y una galería pública para explorarlos, animarlos y descargarlos.',
+      en: 'A secret dinosaur every day: search for it by name, compare five clues per guess and add it to your DinoDex. Behind the game sits a procedural studio that draws a pixel-art sprite for each of the 288 dinosaurs — six animations each — plus a public gallery to browse, animate and download them.',
+    },
+    highlights: {
+      es: [
+        'Estudio de sprites determinista en Node: 288 dinosaurios con seis animaciones, encoder GIF89a propio sin dependencias y verificación automática de márgenes y determinismo',
+        'El dinosaurio del día nunca llega al navegador: las pistas se calculan en Edge Functions con la service role y el cliente solo ve políticas de lectura',
+        'Juego completo con intentos ilimitados, rachas, DinoDex, perfil con calendario y estadísticas, y galería pública en /sprites',
+      ],
+      en: [
+        'A deterministic sprite studio in Node: 288 dinosaurs with six animations, a hand-rolled dependency-free GIF89a encoder and automated margin and determinism checks',
+        'The daily dinosaur never reaches the browser: clues are computed in Edge Functions with the service role, while the client only sees read-only policies',
+        'A complete game with unlimited guesses, streaks, a DinoDex, a profile with calendar and stats, and a public gallery at /sprites',
+      ],
+    },
+    stack: ['React 19', 'TypeScript', 'Vite', 'Supabase', 'PostgreSQL', 'Edge Functions', 'Vitest'],
+  },
+  {
     id: 'mesa2',
     ticket: '008',
     tier: 'featured',
