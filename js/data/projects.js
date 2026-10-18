@@ -35,6 +35,39 @@ export const projects = [
   /* --------------------------------------------------------------------- */
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
+  /* Repositorio y despliegue públicos en camino: cuando existan, añade
+     `repo` y `demo` a la ficha de Centinela. */
+  {
+    id: 'centinela',
+    ticket: '011',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript · SQL',
+    categories: ['backend', 'frontend', 'api'],
+    image: 'assets/projects/centinela.webp',
+    title: { es: 'Centinela — monitorización de uptime', en: 'Centinela — uptime monitoring' },
+    kicker: {
+      es: 'Fastify + PostgreSQL · status page pública',
+      en: 'Fastify + PostgreSQL · public status page',
+    },
+    summary: {
+      es: 'Plataforma de monitorización auto-alojada que vigila todos mis proyectos desplegados: checks HTTP y TCP, histórico contable, incidencias con línea de tiempo, caducidad de certificados SSL y latidos de entrada. Incluye panel de operador, status page pública con avisos en vivo, insignias SVG para los READMEs y un servidor MCP para preguntar el estado desde un asistente.',
+      en: 'A self-hosted monitoring platform watching over every project I deploy: HTTP and TCP checks, accountable history, incidents with a timeline, SSL certificate expiry and inbound heartbeats. It includes an operator panel, a public status page with live updates, SVG badges for READMEs and an MCP server so an assistant can query the status.',
+    },
+    highlights: {
+      es: [
+        'Motor de checks con la guarda SSRF pegada al socket y cola de trabajo con SKIP LOCKED: varias instancias se reparten los checks sin pisarse',
+        'Avisos en vivo con LISTEN/NOTIFY y SSE, status page pública, insignias SVG y widget embebible servidos desde un solo origen',
+        '191 pruebas de API y MCP más 4 de extremo a extremo con servidor víctima sobre PostgreSQL real, y una semilla reproducible con 90 días de histórico',
+      ],
+      en: [
+        'Check engine with the SSRF guard pinned to the socket and a SKIP LOCKED work queue: several instances share the checks without stepping on each other',
+        'Live updates over LISTEN/NOTIFY and SSE, a public status page, SVG badges and an embeddable widget — all served from a single origin',
+        '191 API and MCP tests plus 4 end-to-end ones with a victim server against a real PostgreSQL, and a reproducible seed with 90 days of history',
+      ],
+    },
+    stack: ['TypeScript', 'Fastify', 'PostgreSQL', 'Drizzle', 'React 19', 'Tailwind CSS v4', 'SSE', 'Playwright', 'MCP', 'Docker'],
+  },
   {
     id: 'dinodle',
     ticket: '010',
