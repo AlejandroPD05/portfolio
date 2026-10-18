@@ -35,8 +35,8 @@ export const projects = [
   /* --------------------------------------------------------------------- */
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
-  /* Repositorio y despliegue públicos en camino: cuando existan, añade
-     `repo` y `demo` a la ficha de Centinela. */
+  /* Falta la demo pública: cuando el despliegue de Render esté en marcha,
+     añade `demo` a esta ficha. */
   {
     id: 'centinela',
     ticket: '011',
@@ -44,6 +44,7 @@ export const projects = [
     year: 2026,
     language: 'TypeScript · SQL',
     categories: ['backend', 'frontend', 'api'],
+    repo: repoUrl('centinela'),
     image: 'assets/projects/centinela.webp',
     title: { es: 'Centinela — monitorización de uptime', en: 'Centinela — uptime monitoring' },
     kicker: {
