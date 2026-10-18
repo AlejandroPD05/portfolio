@@ -61,6 +61,8 @@ function createActions(project) {
     actions.push(createActionLink(project.repo, t('linkCode'), 'github'));
   }
 
+  if (actions.length === 0) return null;
+
   return el('div', { class: 'card-actions' }, actions);
 }
 
