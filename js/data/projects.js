@@ -35,8 +35,6 @@ export const projects = [
   /* --------------------------------------------------------------------- */
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
-  /* Falta la demo pública: cuando el despliegue de Render esté en marcha,
-     añade `demo` a esta ficha. */
   {
     id: 'centinela',
     ticket: '011',
@@ -45,6 +43,8 @@ export const projects = [
     language: 'TypeScript · SQL',
     categories: ['backend', 'frontend', 'api'],
     repo: repoUrl('centinela'),
+    demo: 'https://centinela-90g3.onrender.com/status/demo',
+    demoLabelKey: 'linkLive',
     image: 'assets/projects/centinela.webp',
     title: { es: 'Centinela — monitorización de uptime', en: 'Centinela — uptime monitoring' },
     kicker: {
