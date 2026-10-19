@@ -43,7 +43,7 @@ export const projects = [
     language: 'TypeScript · SQL',
     categories: ['backend', 'frontend', 'api'],
     repo: repoUrl('centinela'),
-    demo: 'https://centinela-90g3.onrender.com/status/demo',
+    demo: 'https://centinela-lake.vercel.app/status/demo',
     demoLabelKey: 'linkLive',
     image: 'assets/projects/centinela.webp',
     title: { es: 'Centinela — monitorización de uptime', en: 'Centinela — uptime monitoring' },
