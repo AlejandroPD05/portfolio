@@ -140,14 +140,19 @@ html.js .status-panel::after {
   transition: opacity var(--t-fast) var(--ease-out);
 }
 
-html.js .project-card.is-tilting,
+/* `.project-grid .project-card.reveal` in components.css is more specific than
+   the base card rule, so the active state has to match its weight. Without the
+   grid prefix the reveal transition keeps `transform` (and its 0/90/180 ms
+   stagger) alive, so only the undelayed left column reacts immediately. */
+html.js .project-grid .project-card.is-tilting,
 html.js .status-panel.is-tilting {
   z-index: 2; /* the card being tilted wins over its resting siblings */
   will-change: transform;
   box-shadow: 0 18px 34px -18px var(--shadow-accent);
 
   /* No `transform` entry on purpose: the rAF loop owns the motion, frame by
-     frame. Opacity stays listed so a card caught mid-reveal keeps easing in. */
+     frame. Opacity stays listed so a card caught mid-reveal keeps easing in.
+     Resetting the shorthand also clears the per-column reveal delays. */
   transition: opacity 0.8s var(--ease-out), border-color var(--t-fast) ease,
     box-shadow var(--t-fast) ease;
 }
@@ -183,7 +188,7 @@ html.js .status-panel.is-tilting::after {
   html.js .btn.is-magnetic,
   html.js .icon-toggle.is-magnetic,
   html.js .chip.is-magnetic,
-  html.js .project-card.is-tilting,
+  html.js .project-grid .project-card.is-tilting,
   html.js .status-panel.is-tilting {
     will-change: auto;
     transition: none;
