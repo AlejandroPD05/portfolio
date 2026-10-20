@@ -27,7 +27,7 @@ import { prefersReducedMotion } from '../core/dom.js';
 /** Surfaces that tilt: project cards first, the about panel second. */
 const TILT_SELECTOR = '.project-card, .status-panel';
 /** Maximum combined rotation magnitude, in degrees. */
-const MAX_TILT_DEGREE = 5.5;
+const MAX_TILT_DEGREE = 3.5;
 /** Perspective baked into the transform string, in px. */
 const PERSPECTIVE = 900;
 /** Slight scale that sells the lift without moving any layout. */
