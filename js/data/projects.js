@@ -36,6 +36,40 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'modulo-ms01',
+    ticket: '012',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript',
+    categories: ['creative', 'frontend'],
+    repo: repoUrl('modulo-ms01'),
+    demo: pagesUrl('modulo-ms01'),
+    demoLabelKey: 'linkLive',
+    image: 'assets/projects/modulo.webp',
+    title: { es: 'MÓDULO MS-01 — Sintetizador polifónico', en: 'MÓDULO MS-01 — Polyphonic synthesizer' },
+    kicker: {
+      es: 'React + Web Audio API · sintetizador de bolsillo',
+      en: 'React + Web Audio API · pocket synthesizer',
+    },
+    summary: {
+      es: 'Un sintetizador polifónico de ocho voces que vive en el navegador y se presenta como un módulo de hardware de sobremesa. Dos osciladores, filtro, envolvente ADSR, delay, presets, teclado, demo, grabación y MIDI; todo el sonido se genera en tiempo real, sin samples ni backend.',
+      en: 'An eight-voice polyphonic synthesizer that lives in the browser and presents itself as a desktop hardware module. Two oscillators, filter, ADSR envelope, delay, presets, keyboard, demo, recording and MIDI; all sound is generated in real time, with no samples or backend.',
+    },
+    highlights: {
+      es: [
+        'Motor propio sobre Web Audio API: 8 voces con robo de la nota más antigua, dos osciladores, filtro biquad, ADSR, delay, compresor y analizador',
+        'Interfaz 2.5D en React con perillas accesibles por teclado, dos octavas, seis presets, demo integrada y grabación de la salida master',
+        'Patches compartibles comprimidos en la URL, MIDI opcional y 10 pruebas Vitest sobre el motor y el modelo de parámetros',
+      ],
+      en: [
+        'A custom Web Audio API engine: 8 voices with oldest-note stealing, two oscillators, biquad filter, ADSR, delay, compressor and analyser',
+        'A 2.5D interface in React with keyboard-accessible knobs, two octaves, six presets, a built-in demo and master output recording',
+        'Shareable patches compressed into the URL, optional MIDI and 10 Vitest tests covering the engine and parameter model',
+      ],
+    },
+    stack: ['React 19', 'TypeScript', 'Vite', 'Zustand', 'Web Audio API', 'CSS', 'Vitest', 'GitHub Pages'],
+  },
+  {
     id: 'centinela',
     ticket: '011',
     tier: 'featured',
