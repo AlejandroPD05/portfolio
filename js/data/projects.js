@@ -77,6 +77,7 @@ export const projects = [
     language: 'TypeScript · SQL',
     categories: ['frontend', 'backend', 'game'],
     repo: repoUrl('dinodle'),
+    demo: 'https://dinodle.vercel.app/',
     image: 'assets/projects/dinodle.webp',
     title: { es: 'Dinodle — el dinosaurio del día', en: 'Dinodle — the daily dinosaur' },
     kicker: { es: 'React + Supabase · sprites procedurales', en: 'React + Supabase · procedural sprites' },
