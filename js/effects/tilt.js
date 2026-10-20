@@ -12,8 +12,11 @@
  *
  * `is-tilting` (css/effects.css) hands the card will-change, the z-index
  * bump and the ::after glare; the transform itself is written inline as
- * `perspective(900px) rotateX(..deg) rotateY(..deg) scale(1.015)` capped at
- * MAX_DEGREE. Nothing here ever calls preventDefault or stopPropagation, so
+ * `perspective(900px) rotateX(..deg) rotateY(..deg) scale(1.015)` with the
+ * combined rotation capped at MAX_TILT_DEGREE. The geometry is captured once
+ * per activation because measuring the transformed rect would make the
+ * cursor fall outside its own card near the top/bottom edges. Nothing here
+ * ever calls preventDefault or stopPropagation, so
  * links and buttons inside the cards keep working; `pointerleave` on <html>,
  * an isConnected guard and an out-of-bounds check all reset a card cleanly
  * even mid-animation. Coarse pointers and reduced motion bail out first.
@@ -23,8 +26,8 @@ import { prefersReducedMotion } from '../core/dom.js';
 
 /** Surfaces that tilt: project cards first, the about panel second. */
 const TILT_SELECTOR = '.project-card, .status-panel';
-/** Maximum rotation on either axis, in degrees. */
-const MAX_DEGREE = 7;
+/** Maximum combined rotation magnitude, in degrees. */
+const MAX_TILT_DEGREE = 5.5;
 /** Perspective baked into the transform string, in px. */
 const PERSPECTIVE = 900;
 /** Slight scale that sells the lift without moving any layout. */
@@ -59,6 +62,10 @@ export function initTilt() {
   /** Last known pointer position, in viewport coordinates. */
   let pointerX = 0;
   let pointerY = 0;
+  /** Untransformed geometry captured when the active card is entered. */
+  let baseRect = null;
+  let baseScrollX = 0;
+  let baseScrollY = 0;
   /** Values being written, easing toward the pointer-derived target. */
   let rotateX = 0;
   let rotateY = 0;
@@ -84,6 +91,7 @@ export function initTilt() {
     active.style.removeProperty('--mx');
     active.style.removeProperty('--my');
     active = null;
+    baseRect = null;
 
     rotateX = 0;
     rotateY = 0;
@@ -146,16 +154,18 @@ export function initTilt() {
       return;
     }
 
-    /* Read before any write: transforms never dirty layout, so pulling the
-       rect once per frame stays a cheap geometry query. */
-    const rect = active.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      schedule();
+    /* Use the geometry captured on entry and follow scroll with deltas. The
+       live rect is already transformed, so re-measuring it would shrink the
+       hit area as the card tilts and make edge hovers flicker. */
+    if (!baseRect || baseRect.width === 0 || baseRect.height === 0) {
+      reset();
       return;
     }
 
-    const rawX = (pointerX - rect.left) / rect.width;
-    const rawY = (pointerY - rect.top) / rect.height;
+    const left = baseRect.left - (window.scrollX - baseScrollX);
+    const top = baseRect.top - (window.scrollY - baseScrollY);
+    const rawX = (pointerX - left) / baseRect.width;
+    const rawY = (pointerY - top) / baseRect.height;
 
     /* Safety net for scroll: if the card slid out from under a still
        pointer no pointermove will ever arrive to reset it. */
@@ -173,9 +183,15 @@ export function initTilt() {
     const py = clamp(rawY, 0, 1);
 
     /* The card's face turns toward the pointer: above centre tilts the top
-       back, right of centre turns the right edge away. */
-    rotateX += ((0.5 - py) * 2 * MAX_DEGREE - rotateX) * SMOOTHING;
-    rotateY += ((px - 0.5) * 2 * MAX_DEGREE - rotateY) * SMOOTHING;
+       back, right of centre turns the right edge away. Normalise diagonals so
+       a corner caps the combined rotation instead of stacking both axes. */
+    const dx = (px - 0.5) * 2;
+    const dy = (0.5 - py) * 2;
+    const distance = Math.hypot(dx, dy);
+    const attenuation = distance > 1 ? 1 / distance : 1;
+
+    rotateX += (dy * MAX_TILT_DEGREE * attenuation - rotateX) * SMOOTHING;
+    rotateY += (dx * MAX_TILT_DEGREE * attenuation - rotateY) * SMOOTHING;
     scale += (HOVER_SCALE - scale) * SMOOTHING;
 
     write(px, py);
@@ -199,10 +215,20 @@ export function initTilt() {
     if (target === null) return;
 
     active = target;
+    baseRect = target.getBoundingClientRect();
+    baseScrollX = window.scrollX;
+    baseScrollY = window.scrollY;
+
+    if (baseRect.width === 0 || baseRect.height === 0) {
+      reset();
+      return;
+    }
+
     active.classList.add('is-tilting');
     schedule();
   }
 
   document.addEventListener('pointermove', onPointerMove, { passive: true });
   document.documentElement.addEventListener('pointerleave', reset);
+  window.addEventListener('resize', reset, { passive: true });
 }
