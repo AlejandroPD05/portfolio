@@ -36,6 +36,40 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'atalaya',
+    ticket: '013',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript · Canvas 2D',
+    categories: ['frontend', 'creative'],
+    repo: repoUrl('atalaya'),
+    demo: pagesUrl('atalaya'),
+    demoLabelKey: 'linkLive',
+    image: 'assets/projects/atalaya.webp',
+    title: { es: 'Atalaya — observatorio anual de disponibilidad', en: 'Atalaya — annual availability observatory' },
+    kicker: {
+      es: 'React + Canvas 2D · un año, torre a torre',
+      en: 'React + Canvas 2D · a year, tower by tower',
+    },
+    summary: {
+      es: 'Un observatorio anual para Centinela que convierte 365 días de monitorización en un skyline isométrico. La altura mide el p95, el color el estado del servicio y los faros coral marcan incidencias; calendario, inspector y línea del año permiten pasar del año completo al detalle de un día sin perder contexto. Demo determinista, bilingüe, con temas claro/oscuro y accesibilidad AA.',
+      en: 'An annual observatory for Centinela that turns 365 days of monitoring into an isometric skyline. Height encodes p95 latency, colour encodes aggregate service state and coral beacons mark incidents; calendar, inspector and year rail move from the full year to a single day without losing context. A deterministic bilingual demo with light/dark themes and AA accessibility.',
+    },
+    highlights: {
+      es: [
+        'Renderer isométrico propio sobre Canvas 2D: 365 torres en una cuadrícula 31 × 12, escala robusta de p95, orden de pintado por profundidad y hit testing por tapa y caras',
+        'Tres formas de recorrer el mismo año —skyline, calendario con roving tabindex y rail nativo— con reproducción, inspector e incidencias en UTC',
+        '39 pruebas Vitest, snapshot determinista verificable por hash y Lighthouse 1,00 en accesibilidad, buenas prácticas y SEO en tres estados',
+      ],
+      en: [
+        'A custom Canvas 2D isometric renderer: 365 towers on a 31 × 12 grid, a robust p95 scale, depth-sorted painting and top/face hit testing',
+        'Three ways through the same year — skyline, roving-tabindex calendar and native range rail — with playback, inspector and incidents in UTC',
+        '39 Vitest tests, a deterministic hash-verifiable snapshot and Lighthouse 1.00 for accessibility, best practices and SEO across three states',
+      ],
+    },
+    stack: ['React 19', 'TypeScript', 'Vite', 'Canvas 2D', 'CSS', 'Vitest', 'GitHub Pages'],
+  },
+  {
     id: 'modulo-ms01',
     ticket: '012',
     tier: 'featured',
