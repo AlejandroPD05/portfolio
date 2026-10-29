@@ -36,6 +36,40 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'atlas',
+    ticket: '014',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript',
+    categories: ['frontend', 'api'],
+    repo: repoUrl('atlas'),
+    demo: 'https://atlas-explorador.pages.dev',
+    demoLabelKey: 'linkLive',
+    image: 'assets/projects/atlas.webp',
+    title: { es: 'ATLAS — Explorador de rutas y lugares', en: 'ATLAS — routes and places explorer' },
+    kicker: {
+      es: 'React + MapLibre GL · satélite, rutas y lugares',
+      en: 'React + MapLibre GL · satellite, routes & places',
+    },
+    summary: {
+      es: 'Explorador cartográfico en español sobre MapLibre GL: satélite realista con relieve 3D, búsqueda de lugares reales de OpenStreetMap, fichas con los datos publicados, planificación de rutas en coche con OSRM y radio de puntos de interés con Overpass. Cuando una fuente no puede dar un dato, la interfaz lo dice en lugar de inventarlo.',
+      en: 'A Spanish-language map explorer built on MapLibre GL: realistic satellite imagery with 3D terrain, search over real OpenStreetMap places, detail sheets with published data, OSRM driving routes and a points-of-interest radius via Overpass. When a source cannot provide a value, the interface says so instead of making it up.',
+    },
+    highlights: {
+      es: [
+        'Mapa satelital con relieve 3D, etiquetas y estilos vectoriales alternativos sobre MapLibre GL, con proveedores configurables y atribución siempre visible',
+        'Búsqueda real en Nominatim a una petición por segundo, rutas OSRM con hasta cuatro paradas reordenables y exportación a GPX y GeoJSON',
+        '74 pruebas Vitest sobre geografía, cámara y serialización, desplegado en Cloudflare Pages con CSP estricta, fallback de SPA y caché inmutable',
+      ],
+      en: [
+        'Satellite map with 3D terrain, labels and alternative vector styles on MapLibre GL, with configurable providers and attribution always visible',
+        'Real Nominatim search at one request per second, OSRM routes with up to four reorderable stops and GPX/GeoJSON export',
+        '74 Vitest tests covering geography, camera and serialisation, deployed to Cloudflare Pages with a strict CSP, SPA fallback and immutable caching',
+      ],
+    },
+    stack: ['React 19', 'TypeScript', 'Vite', 'MapLibre GL', 'Zustand', 'OSRM', 'Nominatim', 'Overpass', 'Vitest', 'Cloudflare Pages'],
+  },
+  {
     id: 'atalaya',
     ticket: '013',
     tier: 'featured',
