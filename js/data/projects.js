@@ -36,6 +36,42 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'teamfinder',
+    ticket: '016',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript · SQL',
+    categories: ['frontend', 'backend'],
+    repo: repoUrl('teamFinder'),
+    demo: 'https://teamfinder-seven.vercel.app',
+    demoLabelKey: 'linkLive',
+    image: 'assets/projects/teamfinder.webp',
+    title: { es: 'TeamFinder — compañeros para VALORANT (beta)', en: 'TeamFinder — VALORANT teammate finder (beta)' },
+    kicker: {
+      es: 'Next.js 16 + Supabase · perfiles, búsqueda, grupos y chat en tiempo real',
+      en: 'Next.js 16 + Supabase · profiles, search, groups and realtime chat',
+    },
+    summary: {
+      es: 'Web para encontrar gente con la que hacer stack en VALORANT. Cada jugador describe su rango, roles, pool de agentes, modos, idiomas y horarios, y decide quién ve cada dato. Se buscan jugadores con filtros combinables, se crean grupos DuoQ, TrioQ o FiveStack con solicitudes para unirse, se coordina la partida en un chat de grupo en tiempo real y, al terminar, cada miembro deja karma a sus compañeros. Incluye bloqueo, denuncias y un panel de moderación. El rango lo introduce el jugador y se muestra como tal: no hay integración con Riot.',
+      en: 'A site to find people to stack with in VALORANT. Each player describes their rank, roles, agent pool, modes, languages and schedule, and decides who sees each field. Players are found with combinable filters, DuoQ, TrioQ or FiveStack groups take join requests, the match is coordinated in a realtime group chat and, afterwards, members leave karma for each other. It includes blocking, reports and a moderation panel. Ranks are self-reported and labelled as such: there is no Riot integration.',
+    },
+    highlights: {
+      es: [
+        'Privacidad por campo resuelta en la base de datos: las tablas solo las lee su dueño y el resto consulta vistas que ocultan cada dato según quién mira, así que filtrar por un campo oculto nunca revela a nadie',
+        'Grupos con plazas garantizadas por funciones de PostgreSQL con bloqueo de fila: dos aceptaciones simultáneas para la última plaza no pueden pasarse del cupo, y hay un test que lo demuestra',
+        'Chat con Supabase Realtime limitado a miembros por RLS, límites anti-spam, bloqueo bidireccional, denuncias con copia del mensaje y karma de una valoración por compañero',
+        '96 pruebas Vitest (unitarias y de RLS contra Postgres local) y 40 de Playwright en escritorio y móvil, con auditoría WCAG A/AA automática; CI en GitHub Actions y despliegue en Vercel',
+      ],
+      en: [
+        'Per-field privacy enforced in the database: tables are owner-only and everyone else reads views that mask each field by viewer, so filtering on a hidden field never reveals anyone',
+        'Group slots guaranteed by PostgreSQL functions with row locks: two simultaneous accepts for the last slot cannot overfill a group, and a test proves it',
+        'Supabase Realtime chat restricted to members by RLS, anti-spam limits, two-way blocking, reports that snapshot the message and one karma vote per teammate',
+        '96 Vitest tests (unit and RLS against local Postgres) and 40 Playwright tests on desktop and mobile, with automated WCAG A/AA audits; CI on GitHub Actions and deployed on Vercel',
+      ],
+    },
+    stack: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS v4', 'Supabase', 'PostgreSQL', 'Realtime', 'Zod', 'Vitest', 'Playwright', 'Vercel'],
+  },
+  {
     id: 'sensconverter',
     ticket: '015',
     tier: 'featured',
