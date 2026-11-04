@@ -36,6 +36,40 @@ export const projects = [
   /* Featured                                                              */
   /* --------------------------------------------------------------------- */
   {
+    id: 'sensconverter',
+    ticket: '015',
+    tier: 'featured',
+    year: 2026,
+    language: 'TypeScript · SQL',
+    categories: ['frontend', 'backend', 'tool'],
+    repo: repoUrl('sensconverter'),
+    demo: 'https://sensicore-zeta.vercel.app',
+    demoLabelKey: 'linkLive',
+    image: 'assets/projects/sensconverter.webp',
+    title: { es: 'SensConverter — conversor de sensibilidad', en: 'SensConverter — mouse sensitivity converter' },
+    kicker: {
+      es: 'Next.js 16 + Supabase · cm/360, FOV real y miras',
+      en: 'Next.js 16 + Supabase · cm/360, real FOV & scopes',
+    },
+    summary: {
+      es: 'Conversor de sensibilidad de ratón entre shooters basado en el cm/360 como referencia física. Convierte el FOV de cada juego al que se ve en tu monitor, ofrece distancia 360°, focal length y distancia de monitor horizontal o vertical, y calcula las miras solo donde hay un modelo con fuente. Funciona sin cuenta; con cuenta guarda perfiles en Supabase. Si un dato no está verificado, lo dice en lugar de inventarlo.',
+      en: 'A mouse sensitivity converter for shooters built on cm/360 as the physical reference. It turns each game\'s FOV into what your monitor actually shows, offers 360° distance, focal length and horizontal or vertical monitor distance, and only computes scopes where a sourced model exists. It works without an account; signing in saves profiles to Supabase. When a value is not verified, it says so instead of making it up.',
+    },
+    highlights: {
+      es: [
+        'Motor de conversión aislado y registro de juegos por datos: cada constante, convención de FOV y modelo de zoom lleva su fuente y su estado de verificación',
+        'Cuentas opcionales con Supabase Auth, perfiles con RLS y borrado de cuenta seguro mediante una función security definer, sin exponer la service key',
+        '33 pruebas Vitest y 37 de Playwright en escritorio, móvil y sin backend, incluido el aislamiento RLS entre usuarios; desplegado en Vercel',
+      ],
+      en: [
+        'Isolated conversion engine and a data-driven game registry: every constant, FOV convention and zoom model carries its source and verification status',
+        'Optional accounts with Supabase Auth, RLS-protected profiles and safe account deletion through a security definer function, without exposing the service key',
+        '33 Vitest and 37 Playwright tests across desktop, mobile and a no-backend build, including cross-user RLS isolation; deployed on Vercel',
+      ],
+    },
+    stack: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS v4', 'Supabase', 'PostgreSQL', 'Zod', 'Vitest', 'Playwright', 'Vercel'],
+  },
+  {
     id: 'atlas',
     ticket: '014',
     tier: 'featured',
