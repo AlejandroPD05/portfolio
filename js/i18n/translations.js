@@ -111,18 +111,12 @@ export const translations = {
   cvLangTitle: { es: 'Idiomas', en: 'Languages' },
   cvLangEnglish: { es: 'Inglés', en: 'English' },
 
-  cvAvailTitle: { es: 'Disponibilidad', en: 'Availability' },
-  cvAvailValue: {
-    es: 'Completa hasta septiembre, turno de tarde y/o noche en septiembre.',
-    en: 'Full time until September; evening and/or night shift in September.',
-  },
-
   cvContactTitle: { es: 'Contacto', en: 'Contact' },
 
   cvExperienceTitle: { es: 'Experiencia laboral', en: 'Work experience' },
   cvJobTitle: {
-    es: 'Técnico de Gestión de Incidencias Informáticas',
-    en: 'IT Incident Management Technician',
+    es: 'Técnico de Soporte IT – Gestión de Incidencias (Helpdesk N1)',
+    en: 'IT Support Technician – Incident Management (Helpdesk L1)',
   },
   cvJobPlace: { es: 'Centribal', en: 'Centribal' },
   cvJobDates: { es: 'Marzo 2024 – Junio 2025', en: 'March 2024 – June 2025' },
@@ -161,12 +155,12 @@ export const translations = {
     es: 'Grado superior en Desarrollo de aplicaciones web',
     en: 'Higher National Diploma in Web Application Development',
   },
-  cvEdu1Place: { es: 'IES El Cañaveral', en: 'IES El Cañaveral' },
+  cvEdu1Place: { es: 'IES El Cañaveral · 2024 – actualidad', en: 'IES El Cañaveral · 2024 – present' },
   cvEdu2Title: {
     es: 'Grado medio en Sistemas microinformáticos y redes',
     en: 'Intermediate Vocational Training in Computer Systems and Networking',
   },
-  cvEdu2Place: { es: 'ES El Cañaveral', en: 'ES El Cañaveral' },
+  cvEdu2Place: { es: 'IES El Cañaveral · 2022 – 2024', en: 'IES El Cañaveral · 2022 – 2024' },
 
   cvSkillsTitle: { es: 'Competencias técnicas', en: 'Technical skills' },
   cvSkillsSystems: { es: 'Sistemas y redes', en: 'Systems and networking' },
